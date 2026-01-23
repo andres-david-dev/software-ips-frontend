@@ -1,0 +1,24 @@
+[
+    {
+        "codigo": "1",
+        "nombre": "Directores y gerentes",
+        "subgrupos_principales": [
+            {
+                "codigo": "11",
+                "nombre": "Directores ejecutivos, funcionarios y legisladores",
+                "subgrupos": [
+                    {
+                        "codigo": "111",
+                        "nombre": "Directores ejecutivos",
+                        "ocupaciones": [
+                            {
+                                "codigo": "1110",
+                                "nombre": "Directores ejecutivos"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

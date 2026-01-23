@@ -1,17 +1,32 @@
 ﻿"use client";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [logoError, setLogoError] = useState(false);
+  const [usuario, setUsuario] = useState("");
+  const [contrasena, setContrasena] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const nextPath = useMemo(() => {
+    const next = searchParams.get("next");
+    return next && next.startsWith("/") ? next : "/nuevo-servicio";
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const hasSession = document.cookie
+      .split(";")
+      .some((c) => c.trim().startsWith("somedi_session=1"));
+    if (hasSession) router.replace("/nuevo-servicio");
+  }, [router]);
   const logoCandidates = [
-    "/images/logo.png",
-    "/images/logo.jpg",
     "/images/logo.jpeg",
-    "/images/logo.webp",
-    "/images/logo.svg",
   ];
   const [logoIndex, setLogoIndex] = useState(0);
 
@@ -40,7 +55,19 @@ export default function Home() {
           <p className="text-zinc-600 text-center">Software para Seguridad y Salud Laboral</p>
         </div>
 
-        <form className="mt-8 space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form
+          className="mt-8 space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (submitting) return;
+            setSubmitting(true);
+
+            // Auth mock (local): cookie-based session for protected routes.
+            document.cookie = "somedi_session=1; Path=/; SameSite=Lax";
+            router.push(nextPath);
+            router.refresh();
+          }}
+        >
           <div className="relative">
             <label htmlFor="usuario" className="sr-only">Usuario</label>
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
@@ -54,6 +81,8 @@ export default function Home() {
               type="text"
               placeholder="Usuario"
               autoComplete="username"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
               className="w-full h-12 pl-10 pr-4 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
             />
           </div>
@@ -71,6 +100,8 @@ export default function Home() {
               type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               autoComplete="current-password"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
               className="w-full h-12 pl-10 pr-10 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
             />
             <button
@@ -93,18 +124,19 @@ export default function Home() {
 
           <button
             type="submit"
+            disabled={submitting}
             className="w-full h-12 rounded-xl bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white font-semibold shadow-lg hover:opacity-95 transition-opacity"
           >
-            Ingresar
+            {submitting ? "Ingresando..." : "Ingresar"}
           </button>
         </form>
 
         <p className="mt-6 text-sm text-center text-zinc-600">
           Al hacer clic en ingresar está aceptando nuestros
           {" "}
-          <Link href="/terminos-y-condiciones" className="text-blue-600 hover:underline">Términos y Condiciones del servicio</Link>
+          <Link href="/legal/terminos-y-condiciones" className="text-blue-600 hover:underline">Términos y Condiciones del servicio</Link>
           {" "}y está aceptando nuestra{" "}
-          <Link href="/politica-de-datos" className="text-blue-600 hover:underline">Política de tratamiento de datos</Link>.
+          <Link href="/legal/politica-de-datos" className="text-blue-600 hover:underline">Política de tratamiento de datos</Link>.
         </p>
       </main>
     </div>

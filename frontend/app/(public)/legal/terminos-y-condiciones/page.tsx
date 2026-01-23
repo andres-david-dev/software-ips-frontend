@@ -16,7 +16,7 @@ export default function TerminosCondiciones() {
               <span className="text-xl font-bold text-zinc-900">Somedi IPS</span>
             ) : (
               <Image
-                src="/images/logo.png"
+                src="/images/logo.jpeg"
                 alt="Somedi IPS"
                 width={150}
                 height={60}
@@ -166,11 +166,11 @@ export default function TerminosCondiciones() {
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className="text-zinc-600 text-sm mb-2">© 2026 SOMEDI IPS. Todos los derechos reservados.</p>
           <div className="flex justify-center gap-4 text-sm">
-            <Link href="/terminos-y-condiciones" className="text-blue-600 hover:underline">
+            <Link href="/legal/terminos-y-condiciones" className="text-blue-600 hover:underline">
               Términos y Condiciones
             </Link>
             <span className="text-zinc-400">|</span>
-            <Link href="/politica-de-datos" className="text-blue-600 hover:underline">
+            <Link href="/legal/politica-de-datos" className="text-blue-600 hover:underline">
               Política de Datos
             </Link>
           </div>
