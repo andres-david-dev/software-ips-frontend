@@ -1,64 +1,111 @@
+﻿"use client";
+import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [logoError, setLogoError] = useState(false);
+  const logoCandidates = [
+    "/images/logo.png",
+    "/images/logo.jpg",
+    "/images/logo.jpeg",
+    "/images/logo.webp",
+    "/images/logo.svg",
+  ];
+  const [logoIndex, setLogoIndex] = useState(0);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <div className="min-h-screen w-full flex items-center justify-center px-4">
+      <main className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
+        <div className="flex flex-col items-center space-y-4">
+          {logoError ? (
+            <h1 className="text-3xl font-semibold text-zinc-900">Somedi IPS</h1>
+          ) : (
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src={logoCandidates[logoIndex]}
+              alt="Logo Somedi IPS"
+              width={260}
+              height={120}
+              priority
+              onError={() => {
+                if (logoIndex < logoCandidates.length - 1) {
+                  setLogoIndex((i) => i + 1);
+                } else {
+                  setLogoError(true);
+                }
+              }}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          )}
+          <p className="text-zinc-600 text-center">Software para Seguridad y Salud Laboral</p>
         </div>
+
+        <form className="mt-8 space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <div className="relative">
+            <label htmlFor="usuario" className="sr-only">Usuario</label>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.418 0-8 2.239-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.761-3.582-5-8-5Z" fill="#9ca3af" />
+              </svg>
+            </span>
+            <input
+              id="usuario"
+              name="usuario"
+              type="text"
+              placeholder="Usuario"
+              autoComplete="username"
+              className="w-full h-12 pl-10 pr-4 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+            />
+          </div>
+
+          <div className="relative">
+            <label htmlFor="contrasena" className="sr-only">Contraseña</label>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10a4 4 0 1 1 8 0v2h1a1 1 0 0 1 1 1v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6a1 1 0 0 1 1-1h1v-2Zm2 2h4v-2a2 2 0 1 0-4 0v2Z" fill="#9ca3af" />
+              </svg>
+            </span>
+            <input
+              id="contrasena"
+              name="contrasena"
+              type={showPassword ? "text" : "password"}
+              placeholder="Contraseña"
+              autoComplete="current-password"
+              className="w-full h-12 pl-10 pr-10 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+            />
+            <button
+              type="button"
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+            >
+              {showPassword ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.15 3.15a1 1 0 0 1 1.41 0l16.3 16.3a1 1 0 0 1-1.41 1.41l-2.28-2.28A12 12 0 0 1 12 20C6 20 1.73 15.64.37 12.94a2.2 2.2 0 0 1 0-1.88 14.3 14.3 0 0 1 5.3-5.59L3.15 4.56a1 1 0 0 1 0-1.41ZM12 6a6 6 0 0 1 6 6c0 .87-.16 1.7-.47 2.47l-2.01-2.01A3.99 3.99 0 0 0 12 8c-.37 0-.73.05-1.07.14L9.43 6.64A5.9 5.9 0 0 1 12 6Z" fill="#9ca3af" />
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 4C6 4 1.73 8.36.37 11.06a2.2 2.2 0 0 0 0 1.88C1.73 15.64 6 20 12 20s10.27-4.36 11.63-7.06a2.2 2.2 0 0 0 0-1.88C22.27 8.36 18 4 12 4Zm0 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z" fill="#9ca3af" />
+                </svg>
+              )}
+            </button>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full h-12 rounded-xl bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white font-semibold shadow-lg hover:opacity-95 transition-opacity"
+          >
+            Ingresar
+          </button>
+        </form>
+
+        <p className="mt-6 text-sm text-center text-zinc-600">
+          Al hacer clic en ingresar está aceptando nuestros
+          {" "}
+          <Link href="/terminos-y-condiciones" className="text-blue-600 hover:underline">Términos y Condiciones del servicio</Link>
+          {" "}y está aceptando nuestra{" "}
+          <Link href="/politica-de-datos" className="text-blue-600 hover:underline">Política de tratamiento de datos</Link>.
+        </p>
       </main>
     </div>
   );
