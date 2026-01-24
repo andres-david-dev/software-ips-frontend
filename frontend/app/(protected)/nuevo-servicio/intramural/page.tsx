@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Fuse from "fuse.js";
 
@@ -1567,9 +1567,56 @@ function Paso3Summary({
   const [showAsignar, setShowAsignar] = useState(false);
   const [selectedExamen, setSelectedExamen] = useState<string>("");
   const [selectedFecha, setSelectedFecha] = useState("Miércoles, 21 de Enero de 2026");
+  const [showFirmaModal, setShowFirmaModal] = useState(false);
+  const [showFotoModal, setShowFotoModal] = useState(false);
+  const [firmaDataUrl, setFirmaDataUrl] = useState<string>("");
+  const [fotoDataUrl, setFotoDataUrl] = useState<string>("");
+  const [noSabeFirmar, setNoSabeFirmar] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const drawingRef = useRef(false);
   const examenes = paso2.examenesParaclinicos.length > 0
     ? paso2.examenesParaclinicos
     : ["Evaluación Médica Ocupacional (20min)"];
+
+  const startDraw = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!canvasRef.current) return;
+    drawingRef.current = true;
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(event.clientX - rect.left, event.clientY - rect.top);
+  };
+
+  const draw = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!drawingRef.current || !canvasRef.current) return;
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    ctx.lineTo(event.clientX - rect.left, event.clientY - rect.top);
+    ctx.strokeStyle = "#1f2937";
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+  };
+
+  const endDraw = () => {
+    drawingRef.current = false;
+  };
+
+  const clearFirma = () => {
+    if (!canvasRef.current) return;
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  };
+
+  const saveFirma = () => {
+    if (!canvasRef.current) return;
+    setFirmaDataUrl(canvasRef.current.toDataURL("image/png"));
+    setShowFirmaModal(false);
+  };
 
   return (
     <div className="mt-6 space-y-4">
@@ -1667,6 +1714,67 @@ function Paso3Summary({
         </SummaryCard>
       </div>
 
+      <SummaryCard title="Registro de Firma y Foto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="rounded-xl border border-zinc-200 bg-white">
+            <div className="px-4 py-3 border-b border-zinc-200 text-xs font-semibold text-zinc-600 uppercase tracking-wide">
+              Firma Usuario
+            </div>
+            <div className="p-4">
+              {firmaDataUrl ? (
+                <img src={firmaDataUrl} alt="Firma registrada" className="h-28 w-full object-contain rounded-lg bg-zinc-50" />
+              ) : (
+                <div className="h-28 w-full rounded-lg border border-dashed border-zinc-200 bg-zinc-50 flex items-center justify-center text-xs text-zinc-500">
+                  Sin firma registrada
+                </div>
+              )}
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowFirmaModal(true)}
+                  className="h-9 px-4 rounded-lg text-sm font-semibold text-white bg-[var(--brand-blue)] hover:opacity-95"
+                >
+                  Registrar Firma
+                </button>
+                <label className="flex items-center gap-2 text-xs text-zinc-600">
+                  <input
+                    type="checkbox"
+                    checked={noSabeFirmar}
+                    onChange={(e) => setNoSabeFirmar(e.target.checked)}
+                    className="h-4 w-4 accent-[var(--brand-blue)]"
+                  />
+                  Manifiesta NO saber firmar
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-zinc-200 bg-white">
+            <div className="px-4 py-3 border-b border-zinc-200 text-xs font-semibold text-zinc-600 uppercase tracking-wide">
+              Foto Usuario
+            </div>
+            <div className="p-4">
+              {fotoDataUrl ? (
+                <img src={fotoDataUrl} alt="Foto registrada" className="h-28 w-full object-cover rounded-lg bg-zinc-50" />
+              ) : (
+                <div className="h-28 w-full rounded-lg border border-dashed border-zinc-200 bg-zinc-50 flex items-center justify-center text-xs text-zinc-500">
+                  Sin foto registrada
+                </div>
+              )}
+              <div className="mt-3 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowFotoModal(true)}
+                  className="h-9 px-4 rounded-lg text-sm font-semibold text-white bg-emerald-600 hover:opacity-95"
+                >
+                  Registrar Foto
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </SummaryCard>
+
       <div className="rounded-2xl border border-zinc-200 bg-white p-5">
         <div className="text-xs text-zinc-500 uppercase tracking-wide">Observaciones</div>
         <div className="text-sm text-zinc-900 mt-2 whitespace-pre-wrap">
@@ -1738,6 +1846,127 @@ function Paso3Summary({
           </div>
         </div>
       </div>
+
+      {showFirmaModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 p-4">
+          <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-zinc-200">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white rounded-t-2xl">
+              <div className="font-semibold">Registrar Firma</div>
+              <button
+                type="button"
+                onClick={() => setShowFirmaModal(false)}
+                className="h-8 w-8 rounded-full hover:bg-white/20"
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-5">
+              <div className="text-sm text-zinc-700 mb-3">
+                {`${paso2.primerNombre} ${paso2.segundoNombre} ${paso2.primerApellido} ${paso2.segundoApellido}`
+                  .replace(/\s+/g, " ")
+                  .trim()}
+              </div>
+              <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-3">
+                <canvas
+                  ref={canvasRef}
+                  width={720}
+                  height={220}
+                  onPointerDown={startDraw}
+                  onPointerMove={draw}
+                  onPointerUp={endDraw}
+                  onPointerLeave={endDraw}
+                  className="w-full h-48 rounded-lg bg-white"
+                />
+              </div>
+            </div>
+            <div className="px-5 py-4 border-t border-zinc-200 flex justify-between gap-3">
+              <button
+                type="button"
+                onClick={clearFirma}
+                className="h-10 px-4 rounded-xl text-sm font-semibold text-zinc-700 border border-zinc-200 hover:bg-zinc-50"
+              >
+                Borrar firma
+              </button>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowFirmaModal(false)}
+                  className="h-10 px-4 rounded-xl text-sm font-semibold text-zinc-700 border border-zinc-200 hover:bg-zinc-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={saveFirma}
+                  className="h-10 px-5 rounded-xl text-sm font-semibold text-white bg-[var(--brand-blue)]"
+                >
+                  Registrar Firma
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showFotoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 p-4">
+          <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl border border-zinc-200">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white rounded-t-2xl">
+              <div className="font-semibold">Registrar Foto</div>
+              <button
+                type="button"
+                onClick={() => setShowFotoModal(false)}
+                className="h-8 w-8 rounded-full hover:bg-white/20"
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-5">
+              <div className="text-sm text-zinc-700 mb-3">
+                {`${paso2.primerNombre} ${paso2.segundoNombre} ${paso2.primerApellido} ${paso2.segundoApellido}`
+                  .replace(/\s+/g, " ")
+                  .trim()}
+              </div>
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 flex flex-col items-center gap-3">
+                {fotoDataUrl ? (
+                  <img src={fotoDataUrl} alt="Foto registrada" className="h-60 w-auto max-w-full rounded-lg object-cover" />
+                ) : (
+                  <div className="h-60 w-full rounded-lg border border-dashed border-zinc-300 flex items-center justify-center text-xs text-zinc-500">
+                    Sin foto registrada
+                  </div>
+                )}
+                <label className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 cursor-pointer hover:bg-zinc-50">
+                  Capturar foto
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="user"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = () => setFotoDataUrl(String(reader.result || ""));
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="px-5 py-4 border-t border-zinc-200 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowFotoModal(false)}
+                className="h-10 px-4 rounded-xl text-sm font-semibold text-zinc-700 border border-zinc-200 hover:bg-zinc-50"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showAsignar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 p-4">

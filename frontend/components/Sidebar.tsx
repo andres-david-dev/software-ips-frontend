@@ -66,18 +66,39 @@ const modalidades: NavItem[] = [
   { label: "Modalidad Telesalud", href: "/nuevo-servicio/telesalud" },
 ];
 
+const agendaItems: NavItem[] = [
+  { label: "Ver Agenda", href: "/agenda/ver-agenda" },
+  { label: "Reasignar", href: "/agenda/reasignar" },
+  { label: "Reservar", href: "/agenda/reservar" },
+  { label: "Bloquear Agenda", href: "/agenda/bloquear" },
+];
+
+const borrarItems: NavItem[] = [
+  { label: "Temporales", href: "/agenda/borrar-citas/temporales" },
+  { label: "Reservas", href: "/agenda/borrar-citas/reservas" },
+];
+
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
   const isNuevoServicio = pathname.startsWith("/nuevo-servicio");
+  const isAgenda = pathname.startsWith("/agenda");
   const [menuOpen, setMenuOpen] = useState(isNuevoServicio);
+  const [agendaOpen, setAgendaOpen] = useState(isAgenda);
+  const [borrarOpen, setBorrarOpen] = useState(isAgenda);
 
   useEffect(() => {
     if (isNuevoServicio) {
       setMenuOpen(true);
     }
   }, [isNuevoServicio]);
+
+  useEffect(() => {
+    if (isAgenda) {
+      setAgendaOpen(true);
+    }
+  }, [isAgenda]);
 
   return (
     <aside className="w-[280px] shrink-0 border-r border-zinc-200 bg-white">
@@ -128,6 +149,88 @@ export default function Sidebar() {
                   </Link>
                 );
               })}
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-1 mt-2">
+          <button
+            type="button"
+            onClick={() => setAgendaOpen((prev) => !prev)}
+            className={cn(
+              "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              isAgenda
+                ? "bg-zinc-100 text-zinc-900"
+                : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900",
+            )}
+            aria-expanded={agendaOpen}
+            aria-controls="menu-agenda"
+          >
+            <span className="inline-flex h-4 w-4 items-center justify-center text-zinc-700">⏱</span>
+            <span className="flex-1 text-left">Agenda</span>
+            <IconChevron
+              className={cn(
+                "h-4 w-4 text-zinc-500 transition-transform",
+                agendaOpen && "rotate-90",
+              )}
+            />
+          </button>
+
+          {agendaOpen && (
+            <div className="mt-1 ml-2 border-l border-zinc-200 pl-2 space-y-1" id="menu-agenda">
+              {agendaItems.map((item) => {
+                const active = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "block rounded-lg px-3 py-2 text-sm transition-colors",
+                      active
+                        ? "bg-zinc-100 text-zinc-900"
+                        : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+
+              <button
+                type="button"
+                onClick={() => setBorrarOpen((prev) => !prev)}
+                className="w-full flex items-center justify-between rounded-lg px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
+              >
+                <span>Borrar Citas</span>
+                <IconChevron
+                  className={cn(
+                    "h-3.5 w-3.5 text-zinc-500 transition-transform",
+                    borrarOpen && "rotate-90",
+                  )}
+                />
+              </button>
+
+              {borrarOpen && (
+                <div className="ml-2 border-l border-zinc-200 pl-2 space-y-1">
+                  {borrarItems.map((item) => {
+                    const active = pathname === item.href;
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "block rounded-lg px-3 py-2 text-sm transition-colors",
+                          active
+                            ? "bg-zinc-100 text-zinc-900"
+                            : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900",
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
         </div>

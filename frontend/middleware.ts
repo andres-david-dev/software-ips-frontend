@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
   if (PUBLIC_PATHS.has(pathname)) return NextResponse.next();
 
   // Protected routes (current app area)
-  const isProtectedArea = pathname.startsWith("/nuevo-servicio");
+  const isProtectedArea = pathname.startsWith("/nuevo-servicio") || pathname.startsWith("/agenda");
   if (!isProtectedArea) return NextResponse.next();
 
   const hasSession = request.cookies.get(SESSION_COOKIE)?.value === "1";
