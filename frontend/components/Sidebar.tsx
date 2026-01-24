@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -70,7 +71,13 @@ export default function Sidebar() {
   const router = useRouter();
 
   const isNuevoServicio = pathname.startsWith("/nuevo-servicio");
-  const isBase = pathname === "/nuevo-servicio";
+  const [menuOpen, setMenuOpen] = useState(isNuevoServicio);
+
+  useEffect(() => {
+    if (isNuevoServicio) {
+      setMenuOpen(true);
+    }
+  }, [isNuevoServicio]);
 
   return (
     <aside className="w-[280px] shrink-0 border-r border-zinc-200 bg-white">
@@ -80,26 +87,29 @@ export default function Sidebar() {
 
       <nav className="p-3">
         <div className="space-y-1">
-          <Link
-            href="/nuevo-servicio"
+          <button
+            type="button"
+            onClick={() => setMenuOpen((prev) => !prev)}
             className={cn(
               "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
               isNuevoServicio
                 ? "bg-zinc-100 text-zinc-900"
                 : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900",
             )}
+            aria-expanded={menuOpen}
+            aria-controls="menu-nuevo-servicio"
           >
             <IconPlus className="h-4 w-4 text-zinc-700" />
-            <span className="flex-1">Nuevo Servicio</span>
+            <span className="flex-1 text-left">Nuevo Servicio</span>
             <IconChevron
               className={cn(
                 "h-4 w-4 text-zinc-500 transition-transform",
-                isNuevoServicio && !isBase && "rotate-90",
+                menuOpen && "rotate-90",
               )}
             />
-          </Link>
+          </button>
 
-          {isNuevoServicio && (
+          {menuOpen && (
             <div className="mt-1 ml-2 border-l border-zinc-200 pl-2 space-y-1">
               {modalidades.map((item) => {
                 const active = pathname === item.href;

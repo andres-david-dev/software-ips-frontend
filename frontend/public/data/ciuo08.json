@@ -1,24 +1,2920 @@
 [
     {
-        "codigo": "1",
-        "nombre": "Directores y gerentes",
-        "subgrupos_principales": [
-            {
-                "codigo": "11",
-                "nombre": "Directores ejecutivos, funcionarios y legisladores",
-                "subgrupos": [
-                    {
-                        "codigo": "111",
-                        "nombre": "Directores ejecutivos",
-                        "ocupaciones": [
-                            {
-                                "codigo": "1110",
-                                "nombre": "Directores ejecutivos"
+        "0": {
+            "codigo": "0",
+            "nombre": "Fuerzas Militares",
+            "subgrupos_principales": {
+                "01": {
+                    "codigo": "01",
+                    "nombre": "Oficiales de las Fuerzas Militares",
+                    "subgrupos": {
+                        "011": {
+                            "codigo": "011",
+                            "nombre": "Oficiales de las Fuerzas Militares",
+                            "grupos_primarios": {
+                                "0110": {
+                                    "codigo": "0110",
+                                    "nombre": "Oficiales de las Fuerzas Militares"
+                                }
                             }
-                        ]
+                        }
                     }
-                ]
+                }
             }
-        ]
+        }
+    },
+    {
+        "1": {
+            "codigo": "1",
+            "nombre": "Directores y gerentes",
+            "subgrupos_principales": {
+                "11": {
+                    "codigo": "11",
+                    "nombre": "Directores ejecutivos, personal directivo de la administración y legislativos",
+                    "subgrupos": {
+                        "111": {
+                            "codigo": "111",
+                            "nombre": "Miembros del poder ejecutivo y de los cuerpos legislativos",
+                            "grupos_primarios": {
+                                "1111": {
+                                    "codigo": "1111",
+                                    "nombre": "Directores formuladores de políticas y normas"
+                                },
+                                "1112": {
+                                    "codigo": "1112",
+                                    "nombre": "Directores del gobierno"
+                                },
+                                "1113": {
+                                    "codigo": "1113",
+                                    "nombre": "Jefes de comunidades étnicas"
+                                },
+                                "1114": {
+                                    "codigo": "1114",
+                                    "nombre": "Dirigentes de organizaciones con un interés específico (partidos políticos, sindicatos y organizaciones sociales)"
+                                }
+                            }
+                        },
+                        "112": {
+                            "codigo": "112",
+                            "nombre": "Directores y gerentes generales",
+                            "grupos_primarios": {
+                                "1120": {
+                                    "codigo": "1120",
+                                    "nombre": "Directores y gerentes generales"
+                                }
+                            }
+                        }
+                    }
+                },
+                "12": {
+                    "codigo": "12",
+                    "nombre": "Directores administrativos y comerciales",
+                    "subgrupos": {
+                        "121": {
+                            "codigo": "121",
+                            "nombre": "Directores de administración y servicios",
+                            "grupos_primarios": {
+                                "1211": {
+                                    "codigo": "1211",
+                                    "nombre": "Directores financieros"
+                                },
+                                "1212": {
+                                    "codigo": "1212",
+                                    "nombre": "Directores de recursos humanos"
+                                },
+                                "1213": {
+                                    "codigo": "1213",
+                                    "nombre": "Directores de políticas y planeación"
+                                },
+                                "1219": {
+                                    "codigo": "1219",
+                                    "nombre": "Directores de administración y servicios no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "122": {
+                            "codigo": "122",
+                            "nombre": "Directores de ventas, comercialización y desarrollo",
+                            "grupos_primarios": {
+                                "1221": {
+                                    "codigo": "1221",
+                                    "nombre": "Directores de ventas y comercialización"
+                                },
+                                "1222": {
+                                    "codigo": "1222",
+                                    "nombre": "Directores de publicidad y relaciones públicas"
+                                },
+                                "1223": {
+                                    "codigo": "1223",
+                                    "nombre": "Directores de investigación y desarrollo"
+                                }
+                            }
+                        }
+                    }
+                },
+                "13": {
+                    "codigo": "13",
+                    "nombre": "Directores y gerentes en sectores de producción y servicios",
+                    "subgrupos": {
+                        "131": {
+                            "codigo": "131",
+                            "nombre": "Directores de producción agropecuaria, silvicultura y pesca",
+                            "grupos_primarios": {
+                                "1311": {
+                                    "codigo": "1311",
+                                    "nombre": "Directores de producción agropecuaria y silvicultura"
+                                },
+                                "1312": {
+                                    "codigo": "1312",
+                                    "nombre": "Directores de producción de piscicultura y pesca"
+                                }
+                            }
+                        },
+                        "132": {
+                            "codigo": "132",
+                            "nombre": "Directores de industrias manufactureras, minería, construcción y distribución",
+                            "grupos_primarios": {
+                                "1321": {
+                                    "codigo": "1321",
+                                    "nombre": "Directores de industrias manufactureras"
+                                },
+                                "1322": {
+                                    "codigo": "1322",
+                                    "nombre": "Directores de explotaciones de minería"
+                                },
+                                "1323": {
+                                    "codigo": "1323",
+                                    "nombre": "Directores de empresas de construcción"
+                                },
+                                "1324": {
+                                    "codigo": "1324",
+                                    "nombre": "Directores de empresas de abastecimiento, distribución y afines"
+                                }
+                            }
+                        },
+                        "133": {
+                            "codigo": "133",
+                            "nombre": "Directores de servicios de tecnología de la información y las comunicaciones",
+                            "grupos_primarios": {
+                                "1330": {
+                                    "codigo": "1330",
+                                    "nombre": "Directores de servicios de tecnología de la información y las comunicaciones"
+                                }
+                            }
+                        },
+                        "134": {
+                            "codigo": "134",
+                            "nombre": "Directores y gerentes de servicios profesionales",
+                            "grupos_primarios": {
+                                "1341": {
+                                    "codigo": "1341",
+                                    "nombre": "Directores de servicios de cuidados infantiles"
+                                },
+                                "1342": {
+                                    "codigo": "1342",
+                                    "nombre": "Directores de servicios de salud"
+                                },
+                                "1343": {
+                                    "codigo": "1343",
+                                    "nombre": "Directores de servicios de atención a personas mayores"
+                                },
+                                "1344": {
+                                    "codigo": "1344",
+                                    "nombre": "Directores de servicios de bienestar social"
+                                },
+                                "1345": {
+                                    "codigo": "1345",
+                                    "nombre": "Directores de servicios de educación"
+                                },
+                                "1346": {
+                                    "codigo": "1346",
+                                    "nombre": "Gerentes de sucursales de bancos, de servicios financieros y de seguros"
+                                },
+                                "1349": {
+                                    "codigo": "1349",
+                                    "nombre": "Directores y gerentes de servicios profesionales no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "14": {
+                    "codigo": "14",
+                    "nombre": "Gerentes de hoteles, restaurantes, comercios y otros servicios",
+                    "subgrupos": {
+                        "141": {
+                            "codigo": "141",
+                            "nombre": "Gerentes de hoteles y restaurantes",
+                            "grupos_primarios": {
+                                "1411": {
+                                    "codigo": "1411",
+                                    "nombre": "Gerentes de hoteles"
+                                },
+                                "1412": {
+                                    "codigo": "1412",
+                                    "nombre": "Gerentes de restaurantes"
+                                }
+                            }
+                        },
+                        "142": {
+                            "codigo": "142",
+                            "nombre": "Gerentes de comercios al por mayor y al por menor",
+                            "grupos_primarios": {
+                                "1420": {
+                                    "codigo": "1420",
+                                    "nombre": "Gerentes de comercios al por mayor y al por menor"
+                                }
+                            }
+                        },
+                        "143": {
+                            "codigo": "143",
+                            "nombre": "Otros gerentes de servicios",
+                            "grupos_primarios": {
+                                "1431": {
+                                    "codigo": "1431",
+                                    "nombre": "Gerentes de centros deportivos, de esparcimiento y culturales"
+                                },
+                                "1439": {
+                                    "codigo": "1439",
+                                    "nombre": "Otros gerentes de servicios no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "2": {
+            "codigo": "2",
+            "nombre": "Profesionales, científicos e intelectuales",
+            "subgrupos_principales": {
+                "21": {
+                    "codigo": "21",
+                    "nombre": "Profesionales de las ciencias y de la ingeniería",
+                    "subgrupos": {
+                        "211": {
+                            "codigo": "211",
+                            "nombre": "Físicos, químicos y afines",
+                            "grupos_primarios": {
+                                "2111": {
+                                    "codigo": "2111",
+                                    "nombre": "Físicos y astrónomos"
+                                },
+                                "2112": {
+                                    "codigo": "2112",
+                                    "nombre": "Meteorólogos"
+                                },
+                                "2113": {
+                                    "codigo": "2113",
+                                    "nombre": "Químicos"
+                                },
+                                "2114": {
+                                    "codigo": "2114",
+                                    "nombre": "Geólogos y geofísicos"
+                                }
+                            }
+                        },
+                        "212": {
+                            "codigo": "212",
+                            "nombre": "Matemáticos, actuarios y estadísticos",
+                            "grupos_primarios": {
+                                "2120": {
+                                    "codigo": "2120",
+                                    "nombre": "Matemáticos, actuarios y estadísticos"
+                                }
+                            }
+                        },
+                        "213": {
+                            "codigo": "213",
+                            "nombre": "Profesionales en ciencias biológicas",
+                            "grupos_primarios": {
+                                "2131": {
+                                    "codigo": "2131",
+                                    "nombre": "Biólogos, botánicos, zoólogos y afines"
+                                },
+                                "2132": {
+                                    "codigo": "2132",
+                                    "nombre": "Agrónomos, silvicultores, zootecnistas y afines"
+                                },
+                                "2133": {
+                                    "codigo": "2133",
+                                    "nombre": "Profesionales de la protección medioambiental"
+                                }
+                            }
+                        },
+                        "214": {
+                            "codigo": "214",
+                            "nombre": "Ingenieros (excluyendo ingenieros en electrotecnología)",
+                            "grupos_primarios": {
+                                "2141": {
+                                    "codigo": "2141",
+                                    "nombre": "Ingenieros industriales y de producción"
+                                },
+                                "2142": {
+                                    "codigo": "2142",
+                                    "nombre": "Ingenieros civiles"
+                                },
+                                "2143": {
+                                    "codigo": "2143",
+                                    "nombre": "Ingenieros medioambientales"
+                                },
+                                "2144": {
+                                    "codigo": "2144",
+                                    "nombre": "Ingenieros mecánicos"
+                                },
+                                "2145": {
+                                    "codigo": "2145",
+                                    "nombre": "Ingenieros químicos"
+                                },
+                                "2146": {
+                                    "codigo": "2146",
+                                    "nombre": "Ingenieros de minas, metalúrgicos y afines"
+                                },
+                                "2149": {
+                                    "codigo": "2149",
+                                    "nombre": "Ingenieros no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "215": {
+                            "codigo": "215",
+                            "nombre": "Ingenieros en electrotecnología",
+                            "grupos_primarios": {
+                                "2151": {
+                                    "codigo": "2151",
+                                    "nombre": "Ingenieros electricistas"
+                                },
+                                "2152": {
+                                    "codigo": "2152",
+                                    "nombre": "Ingenieros electrónicos"
+                                },
+                                "2153": {
+                                    "codigo": "2153",
+                                    "nombre": "Ingenieros de telecomunicaciones"
+                                }
+                            }
+                        },
+                        "216": {
+                            "codigo": "216",
+                            "nombre": "Arquitectos, planificadores, topógrafos y diseñadores",
+                            "grupos_primarios": {
+                                "2161": {
+                                    "codigo": "2161",
+                                    "nombre": "Arquitectos constructores"
+                                },
+                                "2162": {
+                                    "codigo": "2162",
+                                    "nombre": "Arquitectos paisajistas"
+                                },
+                                "2163": {
+                                    "codigo": "2163",
+                                    "nombre": "Diseñadores de productos y de prendas"
+                                },
+                                "2164": {
+                                    "codigo": "2164",
+                                    "nombre": "Planificadores urbanos, regionales y de tránsito"
+                                },
+                                "2165": {
+                                    "codigo": "2165",
+                                    "nombre": "Cartógrafos y topógrafos"
+                                },
+                                "2166": {
+                                    "codigo": "2166",
+                                    "nombre": "Diseñadores gráficos y multimedia"
+                                }
+                            }
+                        }
+                    }
+                },
+                "22": {
+                    "codigo": "22",
+                    "nombre": "Profesionales de la salud",
+                    "subgrupos": {
+                        "221": {
+                            "codigo": "221",
+                            "nombre": "Médicos",
+                            "grupos_primarios": {
+                                "2211": {
+                                    "codigo": "2211",
+                                    "nombre": "Médicos generales"
+                                },
+                                "2212": {
+                                    "codigo": "2212",
+                                    "nombre": "Médicos especialistas"
+                                }
+                            }
+                        },
+                        "222": {
+                            "codigo": "222",
+                            "nombre": "Profesionales de enfermería y de partería",
+                            "grupos_primarios": {
+                                "2221": {
+                                    "codigo": "2221",
+                                    "nombre": "Profesionales de enfermería"
+                                },
+                                "2222": {
+                                    "codigo": "2222",
+                                    "nombre": "Profesionales de partería"
+                                }
+                            }
+                        },
+                        "223": {
+                            "codigo": "223",
+                            "nombre": "Profesionales de medicina tradicional y alternativa",
+                            "grupos_primarios": {
+                                "2230": {
+                                    "codigo": "2230",
+                                    "nombre": "Profesionales de medicina tradicional y alternativa"
+                                }
+                            }
+                        },
+                        "224": {
+                            "codigo": "224",
+                            "nombre": "Paramédicos e instrumentadores quirúrgicos",
+                            "grupos_primarios": {
+                                "2240": {
+                                    "codigo": "2240",
+                                    "nombre": "Paramédicos e instrumentadores quirúrgicos"
+                                }
+                            }
+                        },
+                        "225": {
+                            "codigo": "225",
+                            "nombre": "Veterinarios",
+                            "grupos_primarios": {
+                                "2250": {
+                                    "codigo": "2250",
+                                    "nombre": "Veterinarios"
+                                }
+                            }
+                        },
+                        "226": {
+                            "codigo": "226",
+                            "nombre": "Otros profesionales de la salud",
+                            "grupos_primarios": {
+                                "2261": {
+                                    "codigo": "2261",
+                                    "nombre": "Odontólogos"
+                                },
+                                "2262": {
+                                    "codigo": "2262",
+                                    "nombre": "Farmacéuticos"
+                                },
+                                "2263": {
+                                    "codigo": "2263",
+                                    "nombre": "Profesionales de la salud y la higiene laboral y ambiental"
+                                },
+                                "2264": {
+                                    "codigo": "2264",
+                                    "nombre": "Fisioterapeutas"
+                                },
+                                "2265": {
+                                    "codigo": "2265",
+                                    "nombre": "Dietistas y nutricionistas"
+                                },
+                                "2266": {
+                                    "codigo": "2266",
+                                    "nombre": "Fonoaudiólogos y terapeutas del lenguaje"
+                                },
+                                "2267": {
+                                    "codigo": "2267",
+                                    "nombre": "Optómetras"
+                                },
+                                "2269": {
+                                    "codigo": "2269",
+                                    "nombre": "Otros profesionales de la salud no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "23": {
+                    "codigo": "23",
+                    "nombre": "Profesionales de la educación",
+                    "subgrupos": {
+                        "231": {
+                            "codigo": "231",
+                            "nombre": "Profesores de instituciones de educación superior",
+                            "grupos_primarios": {
+                                "2310": {
+                                    "codigo": "2310",
+                                    "nombre": "Profesores de instituciones de educación superior"
+                                }
+                            }
+                        },
+                        "232": {
+                            "codigo": "232",
+                            "nombre": "Profesores de formación profesional",
+                            "grupos_primarios": {
+                                "2320": {
+                                    "codigo": "2320",
+                                    "nombre": "Profesores de formación profesional"
+                                }
+                            }
+                        },
+                        "233": {
+                            "codigo": "233",
+                            "nombre": "Profesores de educación secundaria",
+                            "grupos_primarios": {
+                                "2330": {
+                                    "codigo": "2330",
+                                    "nombre": "Profesores de educación secundaria"
+                                }
+                            }
+                        },
+                        "234": {
+                            "codigo": "234",
+                            "nombre": "Profesores de educación primaria y de primera infancia",
+                            "grupos_primarios": {
+                                "2341": {
+                                    "codigo": "2341",
+                                    "nombre": "Profesores de educación primaria"
+                                },
+                                "2342": {
+                                    "codigo": "2342",
+                                    "nombre": "Profesores de primera infancia"
+                                }
+                            }
+                        },
+                        "235": {
+                            "codigo": "235",
+                            "nombre": "Otros profesionales de la educación",
+                            "grupos_primarios": {
+                                "2351": {
+                                    "codigo": "2351",
+                                    "nombre": "Especialistas en métodos pedagógicos"
+                                },
+                                "2352": {
+                                    "codigo": "2352",
+                                    "nombre": "Profesores de educación especial e inclusiva"
+                                },
+                                "2353": {
+                                    "codigo": "2353",
+                                    "nombre": "Otros profesores de idiomas"
+                                },
+                                "2354": {
+                                    "codigo": "2354",
+                                    "nombre": "Otros profesores de música"
+                                },
+                                "2355": {
+                                    "codigo": "2355",
+                                    "nombre": "Otros profesores de artes"
+                                },
+                                "2356": {
+                                    "codigo": "2356",
+                                    "nombre": "Instructores de tecnología de la información"
+                                },
+                                "2359": {
+                                    "codigo": "2359",
+                                    "nombre": "Otros profesionales de la educación no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "24": {
+                    "codigo": "24",
+                    "nombre": "Profesionales de negocios y de administración",
+                    "subgrupos": {
+                        "241": {
+                            "codigo": "241",
+                            "nombre": "Profesionales en finanzas",
+                            "grupos_primarios": {
+                                "2411": {
+                                    "codigo": "2411",
+                                    "nombre": "Contadores"
+                                },
+                                "2412": {
+                                    "codigo": "2412",
+                                    "nombre": "Asesores financieros y de inversiones"
+                                },
+                                "2413": {
+                                    "codigo": "2413",
+                                    "nombre": "Analistas financieros"
+                                }
+                            }
+                        },
+                        "242": {
+                            "codigo": "242",
+                            "nombre": "Profesionales de la administración",
+                            "grupos_primarios": {
+                                "2421": {
+                                    "codigo": "2421",
+                                    "nombre": "Analistas de gestión y organización"
+                                },
+                                "2422": {
+                                    "codigo": "2422",
+                                    "nombre": "Profesionales en políticas de administración"
+                                },
+                                "2423": {
+                                    "codigo": "2423",
+                                    "nombre": "Profesionales de gestión de talento humano"
+                                },
+                                "2424": {
+                                    "codigo": "2424",
+                                    "nombre": "Profesionales en formación y desarrollo de personal"
+                                }
+                            }
+                        },
+                        "243": {
+                            "codigo": "243",
+                            "nombre": "Profesionales de las ventas, la comercialización y las relaciones públicas",
+                            "grupos_primarios": {
+                                "2431": {
+                                    "codigo": "2431",
+                                    "nombre": "Profesionales de la publicidad y la comercialización"
+                                },
+                                "2432": {
+                                    "codigo": "2432",
+                                    "nombre": "Profesionales de relaciones públicas"
+                                },
+                                "2433": {
+                                    "codigo": "2433",
+                                    "nombre": "Profesionales de ventas técnicas y médicas (excluyendo las TIC)"
+                                },
+                                "2434": {
+                                    "codigo": "2434",
+                                    "nombre": "Profesionales de ventas de tecnología de la información y las comunicaciones"
+                                }
+                            }
+                        }
+                    }
+                },
+                "25": {
+                    "codigo": "25",
+                    "nombre": "Profesionales de tecnología de la información y las comunicaciones",
+                    "subgrupos": {
+                        "251": {
+                            "codigo": "251",
+                            "nombre": "Desarrolladores y analistas de software y multimedia",
+                            "grupos_primarios": {
+                                "2511": {
+                                    "codigo": "2511",
+                                    "nombre": "Analistas de sistemas"
+                                },
+                                "2512": {
+                                    "codigo": "2512",
+                                    "nombre": "Desarrolladores de software"
+                                },
+                                "2513": {
+                                    "codigo": "2513",
+                                    "nombre": "Desarrolladores web y multimedia"
+                                },
+                                "2514": {
+                                    "codigo": "2514",
+                                    "nombre": "Programadores de aplicaciones"
+                                },
+                                "2519": {
+                                    "codigo": "2519",
+                                    "nombre": "Desarrolladores y analistas de software y multimedia no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "252": {
+                            "codigo": "252",
+                            "nombre": "Profesionales en bases de datos y en redes de computadores",
+                            "grupos_primarios": {
+                                "2521": {
+                                    "codigo": "2521",
+                                    "nombre": "Diseñadores y administradores de bases de datos"
+                                },
+                                "2522": {
+                                    "codigo": "2522",
+                                    "nombre": "Administradores de sistemas"
+                                },
+                                "2523": {
+                                    "codigo": "2523",
+                                    "nombre": "Profesionales en redes de computadores"
+                                },
+                                "2529": {
+                                    "codigo": "2529",
+                                    "nombre": "Profesionales en bases de datos y en redes de computadores no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "26": {
+                    "codigo": "26",
+                    "nombre": "Profesionales en derecho, en ciencias sociales y culturales",
+                    "subgrupos": {
+                        "261": {
+                            "codigo": "261",
+                            "nombre": "Profesionales en derecho",
+                            "grupos_primarios": {
+                                "2611": {
+                                    "codigo": "2611",
+                                    "nombre": "Abogados"
+                                },
+                                "2612": {
+                                    "codigo": "2612",
+                                    "nombre": "Jueces"
+                                },
+                                "2619": {
+                                    "codigo": "2619",
+                                    "nombre": "Profesionales en derecho no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "262": {
+                            "codigo": "262",
+                            "nombre": "Bibliotecarios, archivistas y curadores de arte",
+                            "grupos_primarios": {
+                                "2621": {
+                                    "codigo": "2621",
+                                    "nombre": "Archivistas y curadores de arte"
+                                },
+                                "2622": {
+                                    "codigo": "2622",
+                                    "nombre": "Bibliotecarios, documentalistas y afines"
+                                }
+                            }
+                        },
+                        "263": {
+                            "codigo": "263",
+                            "nombre": "Profesionales en ciencias sociales y religiosas",
+                            "grupos_primarios": {
+                                "2631": {
+                                    "codigo": "2631",
+                                    "nombre": "Economistas"
+                                },
+                                "2632": {
+                                    "codigo": "2632",
+                                    "nombre": "Sociólogos, antropólogos y afines"
+                                },
+                                "2633": {
+                                    "codigo": "2633",
+                                    "nombre": "Filósofos, historiadores y especialistas en ciencias políticas"
+                                },
+                                "2634": {
+                                    "codigo": "2634",
+                                    "nombre": "Psicólogos"
+                                },
+                                "2635": {
+                                    "codigo": "2635",
+                                    "nombre": "Profesionales del trabajo social y consejeros"
+                                },
+                                "2636": {
+                                    "codigo": "2636",
+                                    "nombre": "Profesionales religiosos"
+                                }
+                            }
+                        },
+                        "264": {
+                            "codigo": "264",
+                            "nombre": "Autores, periodistas y lingüistas",
+                            "grupos_primarios": {
+                                "2641": {
+                                    "codigo": "2641",
+                                    "nombre": "Autores y otros escritores"
+                                },
+                                "2642": {
+                                    "codigo": "2642",
+                                    "nombre": "Periodistas"
+                                },
+                                "2643": {
+                                    "codigo": "2643",
+                                    "nombre": "Traductores, intérpretes y otros lingüistas"
+                                }
+                            }
+                        },
+                        "265": {
+                            "codigo": "265",
+                            "nombre": "Artistas creativos e interpretativos",
+                            "grupos_primarios": {
+                                "2651": {
+                                    "codigo": "2651",
+                                    "nombre": "Escultores, pintores artísticos y afines"
+                                },
+                                "2652": {
+                                    "codigo": "2652",
+                                    "nombre": "Compositores, músicos y cantantes"
+                                },
+                                "2653": {
+                                    "codigo": "2653",
+                                    "nombre": "Coreógrafos y bailarines"
+                                },
+                                "2654": {
+                                    "codigo": "2654",
+                                    "nombre": "Directores y productores de cine, de teatro y afines"
+                                },
+                                "2655": {
+                                    "codigo": "2655",
+                                    "nombre": "Actores"
+                                },
+                                "2656": {
+                                    "codigo": "2656",
+                                    "nombre": "Locutores de radio, televisión y otros medios de comunicación"
+                                },
+                                "2659": {
+                                    "codigo": "2659",
+                                    "nombre": "Artistas creativos e interpretativos no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "3": {
+            "codigo": "3",
+            "nombre": "Técnicos y profesionales del nivel medio",
+            "subgrupos_principales": {
+                "31": {
+                    "codigo": "31",
+                    "nombre": "Técnicos y profesionales del nivel medio de las ciencias y la ingeniería",
+                    "subgrupos": {
+                        "311": {
+                            "codigo": "311",
+                            "nombre": "Técnicos en ciencias físicas y en ingeniería",
+                            "grupos_primarios": {
+                                "3111": {
+                                    "codigo": "3111",
+                                    "nombre": "Técnicos en ciencias físicas y químicas"
+                                },
+                                "3112": {
+                                    "codigo": "3112",
+                                    "nombre": "Técnicos en ingeniería civil"
+                                },
+                                "3113": {
+                                    "codigo": "3113",
+                                    "nombre": "Electrotécnicos"
+                                },
+                                "3114": {
+                                    "codigo": "3114",
+                                    "nombre": "Técnicos en electrónica"
+                                },
+                                "3115": {
+                                    "codigo": "3115",
+                                    "nombre": "Técnicos en ingeniería mecánica"
+                                },
+                                "3116": {
+                                    "codigo": "3116",
+                                    "nombre": "Técnicos en química industrial"
+                                },
+                                "3117": {
+                                    "codigo": "3117",
+                                    "nombre": "Técnicos de minas y metalurgia"
+                                },
+                                "3118": {
+                                    "codigo": "3118",
+                                    "nombre": "Delineantes y dibujantes técnicos"
+                                },
+                                "3119": {
+                                    "codigo": "3119",
+                                    "nombre": "Técnicos en ciencias físicas y en ingeniería no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "312": {
+                            "codigo": "312",
+                            "nombre": "Supervisores en la minería, la industria manufacturera y la construcción",
+                            "grupos_primarios": {
+                                "3121": {
+                                    "codigo": "3121",
+                                    "nombre": "Supervisores de minas"
+                                },
+                                "3122": {
+                                    "codigo": "3122",
+                                    "nombre": "Supervisores de industrias manufactureras"
+                                },
+                                "3123": {
+                                    "codigo": "3123",
+                                    "nombre": "Supervisores de la construcción"
+                                }
+                            }
+                        },
+                        "313": {
+                            "codigo": "313",
+                            "nombre": "Técnicos en control de procesos",
+                            "grupos_primarios": {
+                                "3131": {
+                                    "codigo": "3131",
+                                    "nombre": "Operadores de plantas de producción de energía"
+                                },
+                                "3132": {
+                                    "codigo": "3132",
+                                    "nombre": "Operadores de incineradores, instalaciones de tratamiento de agua y afines"
+                                },
+                                "3133": {
+                                    "codigo": "3133",
+                                    "nombre": "Controladores de instalaciones de procesamiento de productos químicos"
+                                },
+                                "3134": {
+                                    "codigo": "3134",
+                                    "nombre": "Operadores de instalaciones de refinación de petróleo y gas natural"
+                                },
+                                "3135": {
+                                    "codigo": "3135",
+                                    "nombre": "Controladores de procesos de producción de metales"
+                                },
+                                "3139": {
+                                    "codigo": "3139",
+                                    "nombre": "Técnicos en control de procesos no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "314": {
+                            "codigo": "314",
+                            "nombre": "Técnicos y profesionales del nivel medio en ciencias biológicas y afines",
+                            "grupos_primarios": {
+                                "3141": {
+                                    "codigo": "3141",
+                                    "nombre": "Técnicos en ciencias biológicas (excluyendo la medicina)"
+                                },
+                                "3142": {
+                                    "codigo": "3142",
+                                    "nombre": "Técnicos agropecuarios"
+                                },
+                                "3143": {
+                                    "codigo": "3143",
+                                    "nombre": "Técnicos forestales"
+                                }
+                            }
+                        },
+                        "315": {
+                            "codigo": "315",
+                            "nombre": "Técnicos y controladores en navegación marítima y aeronáutica",
+                            "grupos_primarios": {
+                                "3151": {
+                                    "codigo": "3151",
+                                    "nombre": "Oficiales maquinistas en navegación"
+                                },
+                                "3152": {
+                                    "codigo": "3152",
+                                    "nombre": "Capitanes, oficiales de cubierta y prácticos"
+                                },
+                                "3153": {
+                                    "codigo": "3153",
+                                    "nombre": "Pilotos de aviación y afines"
+                                },
+                                "3154": {
+                                    "codigo": "3154",
+                                    "nombre": "Controladores de tráfico aéreo y marítimo"
+                                },
+                                "3155": {
+                                    "codigo": "3155",
+                                    "nombre": "Técnicos en seguridad aeronáutica"
+                                }
+                            }
+                        }
+                    }
+                },
+                "32": {
+                    "codigo": "32",
+                    "nombre": "Técnicos y profesionales del nivel medio de la salud",
+                    "subgrupos": {
+                        "321": {
+                            "codigo": "321",
+                            "nombre": "Técnicos médicos y farmacéuticos",
+                            "grupos_primarios": {
+                                "3211": {
+                                    "codigo": "3211",
+                                    "nombre": "Técnicos en aparatos de diagnóstico y tratamiento médico"
+                                },
+                                "3212": {
+                                    "codigo": "3212",
+                                    "nombre": "Técnicos de laboratorios médicos"
+                                },
+                                "3213": {
+                                    "codigo": "3213",
+                                    "nombre": "Técnicos y asistentes farmacéuticos"
+                                },
+                                "3214": {
+                                    "codigo": "3214",
+                                    "nombre": "Técnicos de prótesis médicas y dentales"
+                                }
+                            }
+                        },
+                        "322": {
+                            "codigo": "322",
+                            "nombre": "Técnicos y profesionales del nivel medio en enfermería y partería",
+                            "grupos_primarios": {
+                                "3221": {
+                                    "codigo": "3221",
+                                    "nombre": "Técnicos y profesionales del nivel medio en enfermería"
+                                },
+                                "3222": {
+                                    "codigo": "3222",
+                                    "nombre": "Técnicos y profesionales del nivel medio en partería"
+                                }
+                            }
+                        },
+                        "323": {
+                            "codigo": "323",
+                            "nombre": "Técnicos y profesionales del nivel medio en medicina tradicional y alternativa",
+                            "grupos_primarios": {
+                                "3230": {
+                                    "codigo": "3230",
+                                    "nombre": "Técnicos y profesionales del nivel medio en medicina tradicional y alternativa"
+                                }
+                            }
+                        },
+                        "324": {
+                            "codigo": "324",
+                            "nombre": "Técnicos y asistentes veterinarios",
+                            "grupos_primarios": {
+                                "3240": {
+                                    "codigo": "3240",
+                                    "nombre": "Técnicos y asistentes veterinarios"
+                                }
+                            }
+                        },
+                        "325": {
+                            "codigo": "325",
+                            "nombre": "Otros técnicos y profesionales del nivel medio de la salud",
+                            "grupos_primarios": {
+                                "3251": {
+                                    "codigo": "3251",
+                                    "nombre": "Higienistas y asistentes odontológicos"
+                                },
+                                "3252": {
+                                    "codigo": "3252",
+                                    "nombre": "Técnicos en documentación sanitaria"
+                                },
+                                "3253": {
+                                    "codigo": "3253",
+                                    "nombre": "Trabajadores comunitarios de la salud"
+                                },
+                                "3254": {
+                                    "codigo": "3254",
+                                    "nombre": "Técnicos en optometría y ópticas"
+                                },
+                                "3255": {
+                                    "codigo": "3255",
+                                    "nombre": "Técnicos y asistentes terapeutas"
+                                },
+                                "3256": {
+                                    "codigo": "3256",
+                                    "nombre": "Asistentes médicos"
+                                },
+                                "3257": {
+                                    "codigo": "3257",
+                                    "nombre": "Inspectores de seguridad, salud ocupacional, medioambiental y afines"
+                                },
+                                "3258": {
+                                    "codigo": "3258",
+                                    "nombre": "Técnicos en atención prehospitalaria"
+                                },
+                                "3259": {
+                                    "codigo": "3259",
+                                    "nombre": "Otros técnicos y profesionales del nivel medio de la salud no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "33": {
+                    "codigo": "33",
+                    "nombre": "Técnicos y profesionales del nivel medio en las finanzas y la administración",
+                    "subgrupos": {
+                        "331": {
+                            "codigo": "331",
+                            "nombre": "Técnicos y profesionales del nivel medio en finanzas y matemáticas",
+                            "grupos_primarios": {
+                                "3311": {
+                                    "codigo": "3311",
+                                    "nombre": "Agentes de bolsa, cambio y otros servicios financieros"
+                                },
+                                "3312": {
+                                    "codigo": "3312",
+                                    "nombre": "Analistas de préstamos y créditos"
+                                },
+                                "3313": {
+                                    "codigo": "3313",
+                                    "nombre": "Técnicos de contabilidad y afines"
+                                },
+                                "3314": {
+                                    "codigo": "3314",
+                                    "nombre": "Técnicos y profesionales del nivel medio de servicios estadísticos, matemáticos y afines"
+                                },
+                                "3315": {
+                                    "codigo": "3315",
+                                    "nombre": "Tasadores y evaluadores"
+                                }
+                            }
+                        },
+                        "332": {
+                            "codigo": "332",
+                            "nombre": "Agentes comerciales y corredores",
+                            "grupos_primarios": {
+                                "3321": {
+                                    "codigo": "3321",
+                                    "nombre": "Agentes de seguros"
+                                },
+                                "3322": {
+                                    "codigo": "3322",
+                                    "nombre": "Representantes comerciales"
+                                },
+                                "3323": {
+                                    "codigo": "3323",
+                                    "nombre": "Agentes de compras"
+                                },
+                                "3324": {
+                                    "codigo": "3324",
+                                    "nombre": "Agentes de operaciones comerciales y consignatarios"
+                                }
+                            }
+                        },
+                        "333": {
+                            "codigo": "333",
+                            "nombre": "Agentes de servicios empresariales",
+                            "grupos_primarios": {
+                                "3331": {
+                                    "codigo": "3331",
+                                    "nombre": "Declarantes o gestores de aduana"
+                                },
+                                "3332": {
+                                    "codigo": "3332",
+                                    "nombre": "Organizadores de conferencias y eventos"
+                                },
+                                "3333": {
+                                    "codigo": "3333",
+                                    "nombre": "Agentes de empleo y contratistas de mano de obra"
+                                },
+                                "3334": {
+                                    "codigo": "3334",
+                                    "nombre": "Agentes inmobiliarios"
+                                },
+                                "3339": {
+                                    "codigo": "3339",
+                                    "nombre": "Agentes de servicios comerciales no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "334": {
+                            "codigo": "334",
+                            "nombre": "Secretarios administrativos y especializados",
+                            "grupos_primarios": {
+                                "3341": {
+                                    "codigo": "3341",
+                                    "nombre": "Supervisores de oficina"
+                                },
+                                "3342": {
+                                    "codigo": "3342",
+                                    "nombre": "Secretarios jurídicos"
+                                },
+                                "3343": {
+                                    "codigo": "3343",
+                                    "nombre": "Secretarios administrativos y ejecutivos"
+                                },
+                                "3344": {
+                                    "codigo": "3344",
+                                    "nombre": "Secretarios médicos"
+                                }
+                            }
+                        },
+                        "335": {
+                            "codigo": "335",
+                            "nombre": "Agentes de gobierno y profesionales del nivel medio para la aplicación de regulaciones",
+                            "grupos_primarios": {
+                                "3351": {
+                                    "codigo": "3351",
+                                    "nombre": "Agentes de aduanas e inspectores de fronteras"
+                                },
+                                "3352": {
+                                    "codigo": "3352",
+                                    "nombre": "Agentes de administración tributaria"
+                                },
+                                "3353": {
+                                    "codigo": "3353",
+                                    "nombre": "Agentes de servicios de seguridad social"
+                                },
+                                "3354": {
+                                    "codigo": "3354",
+                                    "nombre": "Agentes gubernamentales de expedición de licencias"
+                                },
+                                "3355": {
+                                    "codigo": "3355",
+                                    "nombre": "Inspectores de policía y detectives"
+                                },
+                                "3359": {
+                                    "codigo": "3359",
+                                    "nombre": "Agentes de gobierno y profesionales del nivel medio para la aplicación de regulaciones no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "34": {
+                    "codigo": "34",
+                    "nombre": "Técnicos y profesionales del nivel medio de servicios jurídicos, sociales, culturales y afines",
+                    "subgrupos": {
+                        "341": {
+                            "codigo": "341",
+                            "nombre": "Técnicos y profesionales del nivel medio de servicios jurídicos, sociales y religiosos",
+                            "grupos_primarios": {
+                                "3411": {
+                                    "codigo": "3411",
+                                    "nombre": "Técnicos y profesionales del nivel medio del derecho, de servicios legales y afines"
+                                },
+                                "3412": {
+                                    "codigo": "3412",
+                                    "nombre": "Trabajadores y asistentes sociales"
+                                },
+                                "3413": {
+                                    "codigo": "3413",
+                                    "nombre": "Auxiliares laicos de las religiones"
+                                }
+                            }
+                        },
+                        "342": {
+                            "codigo": "342",
+                            "nombre": "Entrenadores de deportes y aptitud física",
+                            "grupos_primarios": {
+                                "3421": {
+                                    "codigo": "3421",
+                                    "nombre": "Atletas y deportistas"
+                                },
+                                "3422": {
+                                    "codigo": "3422",
+                                    "nombre": "Entrenadores, instructores y árbitros de actividades deportivas"
+                                },
+                                "3423": {
+                                    "codigo": "3423",
+                                    "nombre": "Instructores de educación física y actividades recreativas"
+                                }
+                            }
+                        },
+                        "343": {
+                            "codigo": "343",
+                            "nombre": "Técnicos y profesionales del nivel medio en actividades culturales, artísticas y culinarias",
+                            "grupos_primarios": {
+                                "3431": {
+                                    "codigo": "3431",
+                                    "nombre": "Fotógrafos"
+                                },
+                                "3432": {
+                                    "codigo": "3432",
+                                    "nombre": "Diseñadores y decoradores de interiores"
+                                },
+                                "3433": {
+                                    "codigo": "3433",
+                                    "nombre": "Técnicos en galerías de arte, museos y bibliotecas"
+                                },
+                                "3434": {
+                                    "codigo": "3434",
+                                    "nombre": "Chefs"
+                                },
+                                "3435": {
+                                    "codigo": "3435",
+                                    "nombre": "Otros técnicos y profesionales del nivel medio en actividades culturales y artísticas"
+                                }
+                            }
+                        }
+                    }
+                },
+                "35": {
+                    "codigo": "35",
+                    "nombre": "Técnicos en tecnología de la información y las comunicaciones",
+                    "subgrupos": {
+                        "351": {
+                            "codigo": "351",
+                            "nombre": "Técnicos en operaciones de tecnología de la información, las comunicaciones y asistencia al usuario",
+                            "grupos_primarios": {
+                                "3511": {
+                                    "codigo": "3511",
+                                    "nombre": "Técnicos en operaciones de tecnología de la información y las comunicaciones"
+                                },
+                                "3512": {
+                                    "codigo": "3512",
+                                    "nombre": "Técnicos en asistencia y soporte al usuario de tecnología de la información y las comunicaciones"
+                                },
+                                "3513": {
+                                    "codigo": "3513",
+                                    "nombre": "Técnicos en redes y sistemas de computación"
+                                },
+                                "3514": {
+                                    "codigo": "3514",
+                                    "nombre": "Técnicos de la web"
+                                }
+                            }
+                        },
+                        "352": {
+                            "codigo": "352",
+                            "nombre": "Técnicos en telecomunicaciones y radiodifusión",
+                            "grupos_primarios": {
+                                "3521": {
+                                    "codigo": "3521",
+                                    "nombre": "Técnicos de radiodifusión y grabación audiovisual"
+                                },
+                                "3522": {
+                                    "codigo": "3522",
+                                    "nombre": "Técnicos de ingeniería de las telecomunicaciones"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "4": {
+            "codigo": "4",
+            "nombre": "Personal de apoyo administrativo",
+            "subgrupos_principales": {
+                "41": {
+                    "codigo": "41",
+                    "nombre": "Oficinistas",
+                    "subgrupos": {
+                        "411": {
+                            "codigo": "411",
+                            "nombre": "Oficinistas generales",
+                            "grupos_primarios": {
+                                "4110": {
+                                    "codigo": "4110",
+                                    "nombre": "Oficinistas generales"
+                                }
+                            }
+                        },
+                        "412": {
+                            "codigo": "412",
+                            "nombre": "Secretarios generales",
+                            "grupos_primarios": {
+                                "4120": {
+                                    "codigo": "4120",
+                                    "nombre": "Secretarios generales"
+                                }
+                            }
+                        },
+                        "413": {
+                            "codigo": "413",
+                            "nombre": "Operadores de máquinas de oficina",
+                            "grupos_primarios": {
+                                "4131": {
+                                    "codigo": "4131",
+                                    "nombre": "Operadores de máquinas de procesamiento de texto y mecanógrafos"
+                                },
+                                "4132": {
+                                    "codigo": "4132",
+                                    "nombre": "Grabadores de datos"
+                                }
+                            }
+                        }
+                    }
+                },
+                "42": {
+                    "codigo": "42",
+                    "nombre": "Empleados de trato directo con el público",
+                    "subgrupos": {
+                        "421": {
+                            "codigo": "421",
+                            "nombre": "Pagadores y cobradores de ventanilla y afines",
+                            "grupos_primarios": {
+                                "4211": {
+                                    "codigo": "4211",
+                                    "nombre": "Cajeros de bancos y afines"
+                                },
+                                "4212": {
+                                    "codigo": "4212",
+                                    "nombre": "Receptores de apuestas y afines"
+                                },
+                                "4213": {
+                                    "codigo": "4213",
+                                    "nombre": "Prestamistas"
+                                },
+                                "4214": {
+                                    "codigo": "4214",
+                                    "nombre": "Cobradores y afines"
+                                }
+                            }
+                        },
+                        "422": {
+                            "codigo": "422",
+                            "nombre": "Empleados de servicios de información al cliente",
+                            "grupos_primarios": {
+                                "4221": {
+                                    "codigo": "4221",
+                                    "nombre": "Empleados y consultores de viajes"
+                                },
+                                "4222": {
+                                    "codigo": "4222",
+                                    "nombre": "Empleados de centros de llamadas"
+                                },
+                                "4223": {
+                                    "codigo": "4223",
+                                    "nombre": "Telefonistas"
+                                },
+                                "4224": {
+                                    "codigo": "4224",
+                                    "nombre": "Recepcionistas de hoteles"
+                                },
+                                "4225": {
+                                    "codigo": "4225",
+                                    "nombre": "Empleados de ventanillas de información"
+                                },
+                                "4226": {
+                                    "codigo": "4226",
+                                    "nombre": "Recepcionistas generales"
+                                },
+                                "4227": {
+                                    "codigo": "4227",
+                                    "nombre": "Entrevistadores de encuestas y de investigaciones de mercados"
+                                },
+                                "4229": {
+                                    "codigo": "4229",
+                                    "nombre": "Otros empleados de servicios de información al cliente no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "43": {
+                    "codigo": "43",
+                    "nombre": "Auxiliares contables y encargados del registro de materiales",
+                    "subgrupos": {
+                        "431": {
+                            "codigo": "431",
+                            "nombre": "Auxiliares contables y financieros",
+                            "grupos_primarios": {
+                                "4311": {
+                                    "codigo": "4311",
+                                    "nombre": "Auxiliares de contabilidad y cálculo de costos"
+                                },
+                                "4312": {
+                                    "codigo": "4312",
+                                    "nombre": "Auxiliares de servicios estadísticos, financieros y de seguros"
+                                },
+                                "4313": {
+                                    "codigo": "4313",
+                                    "nombre": "Auxiliares encargados de las nóminas"
+                                }
+                            }
+                        },
+                        "432": {
+                            "codigo": "432",
+                            "nombre": "Empleados encargados del registro de materiales y de transportes",
+                            "grupos_primarios": {
+                                "4321": {
+                                    "codigo": "4321",
+                                    "nombre": "Empleados de control de abastecimientos e inventario"
+                                },
+                                "4322": {
+                                    "codigo": "4322",
+                                    "nombre": "Empleados de servicios de apoyo a la producción"
+                                },
+                                "4323": {
+                                    "codigo": "4323",
+                                    "nombre": "Empleados de servicios de transporte"
+                                }
+                            }
+                        }
+                    }
+                },
+                "44": {
+                    "codigo": "44",
+                    "nombre": "Otro personal de apoyo administrativo",
+                    "subgrupos": {
+                        "441": {
+                            "codigo": "441",
+                            "nombre": "Otro personal de apoyo administrativo",
+                            "grupos_primarios": {
+                                "4411": {
+                                    "codigo": "4411",
+                                    "nombre": "Empleados de bibliotecas"
+                                },
+                                "4412": {
+                                    "codigo": "4412",
+                                    "nombre": "Empleados de servicios de correos"
+                                },
+                                "4413": {
+                                    "codigo": "4413",
+                                    "nombre": "Codificadores de datos, correctores de pruebas de imprenta y afines"
+                                },
+                                "4414": {
+                                    "codigo": "4414",
+                                    "nombre": "Escribientes públicos y afines"
+                                },
+                                "4415": {
+                                    "codigo": "4415",
+                                    "nombre": "Empleados de archivos"
+                                },
+                                "4416": {
+                                    "codigo": "4416",
+                                    "nombre": "Empleados del servicio de personal"
+                                },
+                                "4419": {
+                                    "codigo": "4419",
+                                    "nombre": "Otro personal de apoyo administrativo no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "5": {
+            "codigo": "5",
+            "nombre": "Trabajadores de los servicios y vendedores de comercios y mercados",
+            "subgrupos_principales": {
+                "51": {
+                    "codigo": "51",
+                    "nombre": "Trabajadores de los servicios personales",
+                    "subgrupos": {
+                        "511": {
+                            "codigo": "511",
+                            "nombre": "Personal al servicio directo de los pasajeros",
+                            "grupos_primarios": {
+                                "5111": {
+                                    "codigo": "5111",
+                                    "nombre": "Personal de servicio a pasajeros"
+                                },
+                                "5112": {
+                                    "codigo": "5112",
+                                    "nombre": "Revisores y cobradores de los transportes públicos"
+                                },
+                                "5113": {
+                                    "codigo": "5113",
+                                    "nombre": "Guías"
+                                }
+                            }
+                        },
+                        "512": {
+                            "codigo": "512",
+                            "nombre": "Cocineros",
+                            "grupos_primarios": {
+                                "5120": {
+                                    "codigo": "5120",
+                                    "nombre": "Cocineros"
+                                }
+                            }
+                        },
+                        "513": {
+                            "codigo": "513",
+                            "nombre": "Meseros y bármanes",
+                            "grupos_primarios": {
+                                "5131": {
+                                    "codigo": "5131",
+                                    "nombre": "Meseros"
+                                },
+                                "5132": {
+                                    "codigo": "5132",
+                                    "nombre": "Bármanes"
+                                }
+                            }
+                        },
+                        "514": {
+                            "codigo": "514",
+                            "nombre": "Peluqueros, especialistas en tratamientos de belleza y afines",
+                            "grupos_primarios": {
+                                "5141": {
+                                    "codigo": "5141",
+                                    "nombre": "Peluqueros"
+                                },
+                                "5142": {
+                                    "codigo": "5142",
+                                    "nombre": "Especialistas en tratamientos de belleza y afines"
+                                }
+                            }
+                        },
+                        "515": {
+                            "codigo": "515",
+                            "nombre": "Supervisores de mantenimiento y limpieza de edificios",
+                            "grupos_primarios": {
+                                "5151": {
+                                    "codigo": "5151",
+                                    "nombre": "Supervisores de mantenimiento y limpieza en oficinas, hoteles y otros establecimientos"
+                                },
+                                "5152": {
+                                    "codigo": "5152",
+                                    "nombre": "Mayordomos domésticos"
+                                },
+                                "5153": {
+                                    "codigo": "5153",
+                                    "nombre": "Conserjes y afines"
+                                }
+                            }
+                        },
+                        "516": {
+                            "codigo": "516",
+                            "nombre": "Otros trabajadores de servicios personales",
+                            "grupos_primarios": {
+                                "5161": {
+                                    "codigo": "5161",
+                                    "nombre": "Astrólogos, adivinos y trabajadores afines"
+                                },
+                                "5162": {
+                                    "codigo": "5162",
+                                    "nombre": "Acompañantes"
+                                },
+                                "5163": {
+                                    "codigo": "5163",
+                                    "nombre": "Personal de servicios funerarios y embalsamadores"
+                                },
+                                "5164": {
+                                    "codigo": "5164",
+                                    "nombre": "Cuidadores de animales"
+                                },
+                                "5165": {
+                                    "codigo": "5165",
+                                    "nombre": "Instructores de conducción"
+                                },
+                                "5169": {
+                                    "codigo": "5169",
+                                    "nombre": "Otros trabajadores de servicios personales no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "52": {
+                    "codigo": "52",
+                    "nombre": "Vendedores",
+                    "subgrupos": {
+                        "521": {
+                            "codigo": "521",
+                            "nombre": "Vendedores callejeros y en puestos de mercado",
+                            "grupos_primarios": {
+                                "5211": {
+                                    "codigo": "5211",
+                                    "nombre": "Vendedores en quioscos y puestos de mercado"
+                                },
+                                "5212": {
+                                    "codigo": "5212",
+                                    "nombre": "Vendedores ambulantes de alimentos preparados para consumo inmediato"
+                                }
+                            }
+                        },
+                        "522": {
+                            "codigo": "522",
+                            "nombre": "Comerciantes y vendedores de tiendas, almacenes y afines",
+                            "grupos_primarios": {
+                                "5221": {
+                                    "codigo": "5221",
+                                    "nombre": "Comerciantes de tiendas"
+                                },
+                                "5222": {
+                                    "codigo": "5222",
+                                    "nombre": "Supervisores de tiendas y almacenes"
+                                },
+                                "5223": {
+                                    "codigo": "5223",
+                                    "nombre": "Vendedores y auxiliares de venta en tiendas, almacenes y afines"
+                                }
+                            }
+                        },
+                        "523": {
+                            "codigo": "523",
+                            "nombre": "Cajeros de comercio, taquilleros y expendedores de boletas",
+                            "grupos_primarios": {
+                                "5230": {
+                                    "codigo": "5230",
+                                    "nombre": "Cajeros de comercio, taquilleros y expendedores de boletas"
+                                }
+                            }
+                        },
+                        "524": {
+                            "codigo": "524",
+                            "nombre": "Otros vendedores",
+                            "grupos_primarios": {
+                                "5241": {
+                                    "codigo": "5241",
+                                    "nombre": "Modelos de moda, arte y publicidad"
+                                },
+                                "5242": {
+                                    "codigo": "5242",
+                                    "nombre": "Demostradores de tiendas, almacenes y afines"
+                                },
+                                "5243": {
+                                    "codigo": "5243",
+                                    "nombre": "Vendedores puerta a puerta"
+                                },
+                                "5244": {
+                                    "codigo": "5244",
+                                    "nombre": "Vendedores a través de medios tecnológicos"
+                                },
+                                "5245": {
+                                    "codigo": "5245",
+                                    "nombre": "Expendedores de combustibles para vehículos"
+                                },
+                                "5246": {
+                                    "codigo": "5246",
+                                    "nombre": "Vendedores de comidas en mostrador"
+                                },
+                                "5249": {
+                                    "codigo": "5249",
+                                    "nombre": "Otros vendedores no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "53": {
+                    "codigo": "53",
+                    "nombre": "Trabajadores de los cuidados personales",
+                    "subgrupos": {
+                        "531": {
+                            "codigo": "531",
+                            "nombre": "Cuidadores de niños y auxiliares de maestros",
+                            "grupos_primarios": {
+                                "5311": {
+                                    "codigo": "5311",
+                                    "nombre": "Cuidadores de niños"
+                                },
+                                "5312": {
+                                    "codigo": "5312",
+                                    "nombre": "Auxiliares de maestros"
+                                }
+                            }
+                        },
+                        "532": {
+                            "codigo": "532",
+                            "nombre": "Trabajadores de los cuidados personales en servicios de salud",
+                            "grupos_primarios": {
+                                "5321": {
+                                    "codigo": "5321",
+                                    "nombre": "Trabajadores de los cuidados personales en instituciones"
+                                },
+                                "5322": {
+                                    "codigo": "5322",
+                                    "nombre": "Trabajadores de los cuidados personales a domicilio"
+                                },
+                                "5329": {
+                                    "codigo": "5329",
+                                    "nombre": "Trabajadores de los cuidados personales en servicios de salud no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "54": {
+                    "codigo": "54",
+                    "nombre": "Personal de los servicios de protección",
+                    "subgrupos": {
+                        "541": {
+                            "codigo": "541",
+                            "nombre": "Personal de los servicios de protección",
+                            "grupos_primarios": {
+                                "5411": {
+                                    "codigo": "5411",
+                                    "nombre": "Bomberos y rescatistas"
+                                },
+                                "5412": {
+                                    "codigo": "5412",
+                                    "nombre": "Policías"
+                                },
+                                "5413": {
+                                    "codigo": "5413",
+                                    "nombre": "Guardianes de prisión"
+                                },
+                                "5414": {
+                                    "codigo": "5414",
+                                    "nombre": "Guardias de seguridad"
+                                },
+                                "5419": {
+                                    "codigo": "5419",
+                                    "nombre": "Personal de los servicios de protección no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "6": {
+            "codigo": "6",
+            "nombre": "Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros",
+            "subgrupos_principales": {
+                "61": {
+                    "codigo": "61",
+                    "nombre": "Agricultores y trabajadores calificados agropecuarios con destino al mercado",
+                    "subgrupos": {
+                        "611": {
+                            "codigo": "611",
+                            "nombre": "Agricultores y trabajadores calificados de jardines y de cultivos para el mercado",
+                            "grupos_primarios": {
+                                "6111": {
+                                    "codigo": "6111",
+                                    "nombre": "Agricultores y trabajadores calificados de cultivos extensivos"
+                                },
+                                "6112": {
+                                    "codigo": "6112",
+                                    "nombre": "Agricultores y trabajadores calificados de plantaciones de árboles y arbustos"
+                                },
+                                "6113": {
+                                    "codigo": "6113",
+                                    "nombre": "Agricultores y trabajadores calificados de huertas, invernaderos, viveros y jardines"
+                                },
+                                "6114": {
+                                    "codigo": "6114",
+                                    "nombre": "Agricultores y trabajadores calificados de cultivos mixtos"
+                                }
+                            }
+                        },
+                        "612": {
+                            "codigo": "612",
+                            "nombre": "Criadores y trabajadores pecuarios calificados orientados al mercado",
+                            "grupos_primarios": {
+                                "6121": {
+                                    "codigo": "6121",
+                                    "nombre": "Criadores de ganado y trabajadores de la cría de animales domésticos (excepto aves de corral)"
+                                },
+                                "6122": {
+                                    "codigo": "6122",
+                                    "nombre": "Avicultores y trabajadores calificados de la avicultura"
+                                },
+                                "6123": {
+                                    "codigo": "6123",
+                                    "nombre": "Criadores y trabajadores calificados de la apicultura y la sericicultura"
+                                },
+                                "6129": {
+                                    "codigo": "6129",
+                                    "nombre": "Criadores y trabajadores pecuarios calificados, avicultores y criadores de insectos no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "613": {
+                            "codigo": "613",
+                            "nombre": "Productores y trabajadores calificados de explotaciones agropecuarias mixtas cuya producción se destina al mercado",
+                            "grupos_primarios": {
+                                "6130": {
+                                    "codigo": "6130",
+                                    "nombre": "Productores y trabajadores calificados de explotaciones agropecuarias mixtas cuya producción se destina al mercado"
+                                }
+                            }
+                        }
+                    }
+                },
+                "62": {
+                    "codigo": "62",
+                    "nombre": "Trabajadores forestales calificados, pescadores y cazadores en actividades orientadas al mercado",
+                    "subgrupos": {
+                        "621": {
+                            "codigo": "621",
+                            "nombre": "Trabajadores forestales calificados y afines",
+                            "grupos_primarios": {
+                                "6210": {
+                                    "codigo": "6210",
+                                    "nombre": "Trabajadores forestales calificados y afines"
+                                }
+                            }
+                        },
+                        "622": {
+                            "codigo": "622",
+                            "nombre": "Pescadores, cazadores y tramperos",
+                            "grupos_primarios": {
+                                "6221": {
+                                    "codigo": "6221",
+                                    "nombre": "Trabajadores de explotaciones de acuicultura"
+                                },
+                                "6222": {
+                                    "codigo": "6222",
+                                    "nombre": "Pescadores de agua dulce y en aguas costeras"
+                                },
+                                "6223": {
+                                    "codigo": "6223",
+                                    "nombre": "Pescadores de alta mar"
+                                },
+                                "6224": {
+                                    "codigo": "6224",
+                                    "nombre": "Cazadores y tramperos"
+                                }
+                            }
+                        }
+                    }
+                },
+                "63": {
+                    "codigo": "63",
+                    "nombre": "Trabajadores agropecuarios, pescadores, cazadores y recolectores de subsistencia",
+                    "subgrupos": {
+                        "631": {
+                            "codigo": "631",
+                            "nombre": "Trabajadores agrícolas de subsistencia",
+                            "grupos_primarios": {
+                                "6310": {
+                                    "codigo": "6310",
+                                    "nombre": "Trabajadores agrícolas de subsistencia"
+                                }
+                            }
+                        },
+                        "632": {
+                            "codigo": "632",
+                            "nombre": "Trabajadores pecuarios de subsistencia",
+                            "grupos_primarios": {
+                                "6320": {
+                                    "codigo": "6320",
+                                    "nombre": "Trabajadores pecuarios de subsistencia"
+                                }
+                            }
+                        },
+                        "633": {
+                            "codigo": "633",
+                            "nombre": "Trabajadores agropecuarios de subsistencia",
+                            "grupos_primarios": {
+                                "6330": {
+                                    "codigo": "6330",
+                                    "nombre": "Trabajadores agropecuarios de subsistencia"
+                                }
+                            }
+                        },
+                        "634": {
+                            "codigo": "634",
+                            "nombre": "Pescadores, cazadores, tramperos y recolectores de subsistencia",
+                            "grupos_primarios": {
+                                "6340": {
+                                    "codigo": "6340",
+                                    "nombre": "Pescadores, cazadores, tramperos y recolectores de subsistencia"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "7": {
+            "codigo": "7",
+            "nombre": "Oficiales, operarios, artesanos y oficios relacionados",
+            "subgrupos_principales": {
+                "71": {
+                    "codigo": "71",
+                    "nombre": "Oficiales y operarios de la construcción (excluyendo electricistas)",
+                    "subgrupos": {
+                        "711": {
+                            "codigo": "711",
+                            "nombre": "Oficiales y operarios de la construcción de obra gruesa y afines",
+                            "grupos_primarios": {
+                                "7111": {
+                                    "codigo": "7111",
+                                    "nombre": "Constructores de casas"
+                                },
+                                "7112": {
+                                    "codigo": "7112",
+                                    "nombre": "Albañiles"
+                                },
+                                "7113": {
+                                    "codigo": "7113",
+                                    "nombre": "Labrantes, tronzadores y grabadores de piedra"
+                                },
+                                "7114": {
+                                    "codigo": "7114",
+                                    "nombre": "Operarios en cemento armado, enfoscadores y afines"
+                                },
+                                "7115": {
+                                    "codigo": "7115",
+                                    "nombre": "Carpinteros de armar y de obra blanca"
+                                },
+                                "7119": {
+                                    "codigo": "7119",
+                                    "nombre": "Oficiales y operarios de la construcción de obra gruesa y afines no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "712": {
+                            "codigo": "712",
+                            "nombre": "Oficiales y operarios de la construcción de trabajos de acabado y afines",
+                            "grupos_primarios": {
+                                "7121": {
+                                    "codigo": "7121",
+                                    "nombre": "Techadores"
+                                },
+                                "7122": {
+                                    "codigo": "7122",
+                                    "nombre": "Enchapadores, parqueteros y colocadores de suelos"
+                                },
+                                "7123": {
+                                    "codigo": "7123",
+                                    "nombre": "Revocadores"
+                                },
+                                "7124": {
+                                    "codigo": "7124",
+                                    "nombre": "Instaladores de material aislante y de insonorización"
+                                },
+                                "7125": {
+                                    "codigo": "7125",
+                                    "nombre": "Cristaleros"
+                                },
+                                "7126": {
+                                    "codigo": "7126",
+                                    "nombre": "Fontaneros e instaladores de tuberías"
+                                },
+                                "7127": {
+                                    "codigo": "7127",
+                                    "nombre": "Mecánicos montadores de aire acondicionado y refrigeración"
+                                }
+                            }
+                        },
+                        "713": {
+                            "codigo": "713",
+                            "nombre": "Pintores, limpiadores de fachadas y afines",
+                            "grupos_primarios": {
+                                "7131": {
+                                    "codigo": "7131",
+                                    "nombre": "Pintores y empapeladores"
+                                },
+                                "7132": {
+                                    "codigo": "7132",
+                                    "nombre": "Barnizadores y afines"
+                                },
+                                "7133": {
+                                    "codigo": "7133",
+                                    "nombre": "Limpiadores de fachadas y deshollinadores"
+                                }
+                            }
+                        }
+                    }
+                },
+                "72": {
+                    "codigo": "72",
+                    "nombre": "Oficiales y operarios de la metalurgia; mecánicos y reparadores de máquinas y afines",
+                    "subgrupos": {
+                        "721": {
+                            "codigo": "721",
+                            "nombre": "Moldeadores, soldadores, chapistas, caldereros, montadores de estructuras metálicas y afines",
+                            "grupos_primarios": {
+                                "7211": {
+                                    "codigo": "7211",
+                                    "nombre": "Moldeadores y macheros"
+                                },
+                                "7212": {
+                                    "codigo": "7212",
+                                    "nombre": "Soldadores y oxicortadores"
+                                },
+                                "7213": {
+                                    "codigo": "7213",
+                                    "nombre": "Chapistas y caldereros"
+                                },
+                                "7214": {
+                                    "codigo": "7214",
+                                    "nombre": "Montadores de estructuras metálicas"
+                                },
+                                "7215": {
+                                    "codigo": "7215",
+                                    "nombre": "Aparejadores y empalmadores de cables"
+                                }
+                            }
+                        },
+                        "722": {
+                            "codigo": "722",
+                            "nombre": "Herreros, herramentistas y afines",
+                            "grupos_primarios": {
+                                "7221": {
+                                    "codigo": "7221",
+                                    "nombre": "Herreros y forjadores"
+                                },
+                                "7222": {
+                                    "codigo": "7222",
+                                    "nombre": "Herramentistas y afines"
+                                },
+                                "7223": {
+                                    "codigo": "7223",
+                                    "nombre": "Ajustadores y operadores de máquinas herramientas"
+                                },
+                                "7224": {
+                                    "codigo": "7224",
+                                    "nombre": "Pulidores de metales y afiladores de herramientas"
+                                }
+                            }
+                        },
+                        "723": {
+                            "codigo": "723",
+                            "nombre": "Mecánicos y reparadores de máquinas",
+                            "grupos_primarios": {
+                                "7231": {
+                                    "codigo": "7231",
+                                    "nombre": "Mecánicos y reparadores de vehículos de motor"
+                                },
+                                "7232": {
+                                    "codigo": "7232",
+                                    "nombre": "Mecánicos y reparadores de sistemas y motores de aeronaves"
+                                },
+                                "7233": {
+                                    "codigo": "7233",
+                                    "nombre": "Mecánicos y reparadores de máquinas agrícolas e industriales"
+                                },
+                                "7234": {
+                                    "codigo": "7234",
+                                    "nombre": "Reparadores de bicicletas y afines"
+                                }
+                            }
+                        }
+                    }
+                },
+                "73": {
+                    "codigo": "73",
+                    "nombre": "Artesanos y operarios de las artes gráficas y afines",
+                    "subgrupos": {
+                        "731": {
+                            "codigo": "731",
+                            "nombre": "Artesanos de precisión, alfarería, cerámica y vidrio",
+                            "grupos_primarios": {
+                                "7311": {
+                                    "codigo": "7311",
+                                    "nombre": "Mecánicos y reparadores de instrumentos de precisión"
+                                },
+                                "7312": {
+                                    "codigo": "7312",
+                                    "nombre": "Fabricantes y afinadores de instrumentos musicales"
+                                },
+                                "7314": {
+                                    "codigo": "7314",
+                                    "nombre": "Alfareros y ceramistas"
+                                },
+                                "7315": {
+                                    "codigo": "7315",
+                                    "nombre": "Sopladores, modeladores, laminadores, cortadores y pulidores de vidrio"
+                                },
+                                "7316": {
+                                    "codigo": "7316",
+                                    "nombre": "Rotulistas, pintores decorativos y grabadores"
+                                }
+                            }
+                        },
+                        "732": {
+                            "codigo": "732",
+                            "nombre": "Oficiales y operarios de las artes gráficas",
+                            "grupos_primarios": {
+                                "7321": {
+                                    "codigo": "7321",
+                                    "nombre": "Preimpresores y afines"
+                                },
+                                "7322": {
+                                    "codigo": "7322",
+                                    "nombre": "Impresores"
+                                },
+                                "7323": {
+                                    "codigo": "7323",
+                                    "nombre": "Encuadernadores y afines"
+                                }
+                            }
+                        },
+                        "733": {
+                            "codigo": "733",
+                            "nombre": "Tejedores",
+                            "grupos_primarios": {
+                                "7331": {
+                                    "codigo": "7331",
+                                    "nombre": "Tejedores con telares"
+                                },
+                                "7332": {
+                                    "codigo": "7332",
+                                    "nombre": "Tejedores con agujas"
+                                },
+                                "7333": {
+                                    "codigo": "7333",
+                                    "nombre": "Otros tejedores"
+                                }
+                            }
+                        },
+                        "734": {
+                            "codigo": "734",
+                            "nombre": "Cesteros, mimbreros y sombrereros artesanales",
+                            "grupos_primarios": {
+                                "7341": {
+                                    "codigo": "7341",
+                                    "nombre": "Cesteros y mimbreros"
+                                },
+                                "7342": {
+                                    "codigo": "7342",
+                                    "nombre": "Sombrereros artesanales"
+                                }
+                            }
+                        },
+                        "735": {
+                            "codigo": "735",
+                            "nombre": "Artesanos que realizan trabajos en madera",
+                            "grupos_primarios": {
+                                "7351": {
+                                    "codigo": "7351",
+                                    "nombre": "Talladores de piezas artesanales de madera"
+                                },
+                                "7352": {
+                                    "codigo": "7352",
+                                    "nombre": "Decoradores de piezas artesanales en madera"
+                                }
+                            }
+                        },
+                        "736": {
+                            "codigo": "736",
+                            "nombre": "Joyeros, orfebres, plateros y bisuteros",
+                            "grupos_primarios": {
+                                "7361": {
+                                    "codigo": "7361",
+                                    "nombre": "Joyeros"
+                                },
+                                "7362": {
+                                    "codigo": "7362",
+                                    "nombre": "Orfebres y plateros"
+                                },
+                                "7363": {
+                                    "codigo": "7363",
+                                    "nombre": "Bisuteros"
+                                }
+                            }
+                        },
+                        "737": {
+                            "codigo": "737",
+                            "nombre": "Artesanos del cuero",
+                            "grupos_primarios": {
+                                "7370": {
+                                    "codigo": "7370",
+                                    "nombre": "Artesanos del cuero"
+                                }
+                            }
+                        },
+                        "739": {
+                            "codigo": "739",
+                            "nombre": "Artesanos no clasificados en otros grupos primarios",
+                            "grupos_primarios": {
+                                "7391": {
+                                    "codigo": "7391",
+                                    "nombre": "Artesanos de papel"
+                                },
+                                "7392": {
+                                    "codigo": "7392",
+                                    "nombre": "Artesanos del hierro y otros metales"
+                                },
+                                "7393": {
+                                    "codigo": "7393",
+                                    "nombre": "Artesanos de las semillas y cortezas vegetales"
+                                },
+                                "7399": {
+                                    "codigo": "7399",
+                                    "nombre": "Artesanos de otros materiales no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "74": {
+                    "codigo": "74",
+                    "nombre": "Oficiales y operarios de electricidad y electrónica",
+                    "subgrupos": {
+                        "741": {
+                            "codigo": "741",
+                            "nombre": "Instaladores y reparadores de equipos eléctricos",
+                            "grupos_primarios": {
+                                "7411": {
+                                    "codigo": "7411",
+                                    "nombre": "Electricistas de obras y afines"
+                                },
+                                "7412": {
+                                    "codigo": "7412",
+                                    "nombre": "Ajustadores electricistas"
+                                },
+                                "7413": {
+                                    "codigo": "7413",
+                                    "nombre": "Instaladores y reparadores de líneas eléctricas"
+                                }
+                            }
+                        },
+                        "742": {
+                            "codigo": "742",
+                            "nombre": "Instaladores y reparadores de equipos electrónicos y de telecomunicaciones",
+                            "grupos_primarios": {
+                                "7421": {
+                                    "codigo": "7421",
+                                    "nombre": "Ajustadores e instaladores en electrónica"
+                                },
+                                "7422": {
+                                    "codigo": "7422",
+                                    "nombre": "Instaladores y reparadores en tecnología de la información y las comunicaciones"
+                                }
+                            }
+                        }
+                    }
+                },
+                "75": {
+                    "codigo": "75",
+                    "nombre": "Oficiales y operarios de procesamiento de alimentos, de la confección, ebanistas y afines",
+                    "subgrupos": {
+                        "751": {
+                            "codigo": "751",
+                            "nombre": "Oficiales y operarios de procesamiento de alimentos y afines",
+                            "grupos_primarios": {
+                                "7511": {
+                                    "codigo": "7511",
+                                    "nombre": "Carniceros, pescaderos y afines"
+                                },
+                                "7512": {
+                                    "codigo": "7512",
+                                    "nombre": "Panaderos, pasteleros y confiteros"
+                                },
+                                "7513": {
+                                    "codigo": "7513",
+                                    "nombre": "Operarios de la elaboración de productos lácteos"
+                                },
+                                "7514": {
+                                    "codigo": "7514",
+                                    "nombre": "Operarios de la conservación de frutas, legumbres, verduras y afines"
+                                },
+                                "7515": {
+                                    "codigo": "7515",
+                                    "nombre": "Catadores y clasificadores de alimentos y bebidas"
+                                },
+                                "7516": {
+                                    "codigo": "7516",
+                                    "nombre": "Preparadores y elaboradores de cigarros y productos del tabaco"
+                                }
+                            }
+                        },
+                        "752": {
+                            "codigo": "752",
+                            "nombre": "Oficiales y operarios del tratamiento de la madera, ebanistas y afines",
+                            "grupos_primarios": {
+                                "7521": {
+                                    "codigo": "7521",
+                                    "nombre": "Operarios del tratamiento de la madera"
+                                },
+                                "7522": {
+                                    "codigo": "7522",
+                                    "nombre": "Ebanistas y carpinteros (excluye carpinteros de armar y de obra blanca)"
+                                },
+                                "7523": {
+                                    "codigo": "7523",
+                                    "nombre": "Ajustadores y operadores de máquinas para trabajar madera"
+                                }
+                            }
+                        },
+                        "753": {
+                            "codigo": "753",
+                            "nombre": "Oficiales y operarios de la confección y afines",
+                            "grupos_primarios": {
+                                "7531": {
+                                    "codigo": "7531",
+                                    "nombre": "Sastres, modistos, peleteros y sombrereros"
+                                },
+                                "7532": {
+                                    "codigo": "7532",
+                                    "nombre": "Patronistas y cortadores de tela, cuero y afines"
+                                },
+                                "7533": {
+                                    "codigo": "7533",
+                                    "nombre": "Costureros, bordadores y afines"
+                                },
+                                "7534": {
+                                    "codigo": "7534",
+                                    "nombre": "Tapiceros, colchoneros y afines"
+                                },
+                                "7535": {
+                                    "codigo": "7535",
+                                    "nombre": "Apelambradores, pellejeros y curtidores"
+                                },
+                                "7536": {
+                                    "codigo": "7536",
+                                    "nombre": "Zapateros y afines"
+                                }
+                            }
+                        },
+                        "754": {
+                            "codigo": "754",
+                            "nombre": "Otros oficiales, operarios y afines",
+                            "grupos_primarios": {
+                                "7541": {
+                                    "codigo": "7541",
+                                    "nombre": "Buzos"
+                                },
+                                "7542": {
+                                    "codigo": "7542",
+                                    "nombre": "Dinamiteros y pegadores"
+                                },
+                                "7543": {
+                                    "codigo": "7543",
+                                    "nombre": "Clasificadores y probadores de productos (excluyendo alimentos y bebidas)"
+                                },
+                                "7544": {
+                                    "codigo": "7544",
+                                    "nombre": "Fumigadores y otros controladores de plagas y malas hierbas"
+                                },
+                                "7549": {
+                                    "codigo": "7549",
+                                    "nombre": "Otros oficiales, operarios y oficios relacionados no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "8": {
+            "codigo": "8",
+            "nombre": "Operadores de instalaciones y máquinas y ensambladores",
+            "subgrupos_principales": {
+                "81": {
+                    "codigo": "81",
+                    "nombre": "Operadores de instalaciones fijas y máquinas",
+                    "subgrupos": {
+                        "811": {
+                            "codigo": "811",
+                            "nombre": "Operadores de instalaciones mineras y de extracción y procesamiento de minerales",
+                            "grupos_primarios": {
+                                "8111": {
+                                    "codigo": "8111",
+                                    "nombre": "Mineros y operadores de instalaciones mineras"
+                                },
+                                "8112": {
+                                    "codigo": "8112",
+                                    "nombre": "Operadores de instalaciones de procesamiento de minerales y rocas"
+                                },
+                                "8113": {
+                                    "codigo": "8113",
+                                    "nombre": "Perforadores y sondistas de pozos y afines"
+                                },
+                                "8114": {
+                                    "codigo": "8114",
+                                    "nombre": "Operadores de máquinas para fabricar cemento y otros productos minerales"
+                                }
+                            }
+                        },
+                        "812": {
+                            "codigo": "812",
+                            "nombre": "Operadores de instalaciones de procesamiento y recubridoras de metales",
+                            "grupos_primarios": {
+                                "8121": {
+                                    "codigo": "8121",
+                                    "nombre": "Operadores de instalaciones de procesamiento de metales"
+                                },
+                                "8122": {
+                                    "codigo": "8122",
+                                    "nombre": "Operadores de máquinas pulidoras, galvanizadoras y recubridoras de metales"
+                                }
+                            }
+                        },
+                        "813": {
+                            "codigo": "813",
+                            "nombre": "Operadores de instalaciones y máquinas de productos químicos y fotográficos",
+                            "grupos_primarios": {
+                                "8131": {
+                                    "codigo": "8131",
+                                    "nombre": "Operadores de plantas y máquinas de productos químicos"
+                                },
+                                "8132": {
+                                    "codigo": "8132",
+                                    "nombre": "Operadores de máquinas para fabricar productos fotográficos"
+                                }
+                            }
+                        },
+                        "814": {
+                            "codigo": "814",
+                            "nombre": "Operadores de máquinas para fabricar productos de caucho, de papel y de material plástico",
+                            "grupos_primarios": {
+                                "8141": {
+                                    "codigo": "8141",
+                                    "nombre": "Operadores de máquinas para fabricar productos de caucho"
+                                },
+                                "8142": {
+                                    "codigo": "8142",
+                                    "nombre": "Operadores de máquinas para fabricar productos de material plástico"
+                                },
+                                "8143": {
+                                    "codigo": "8143",
+                                    "nombre": "Operadores de máquinas para fabricar productos de papel"
+                                }
+                            }
+                        },
+                        "815": {
+                            "codigo": "815",
+                            "nombre": "Operadores de máquinas para fabricar productos textiles y artículos de piel y cuero",
+                            "grupos_primarios": {
+                                "8151": {
+                                    "codigo": "8151",
+                                    "nombre": "Operadores de máquinas de preparación de fibras, hilado y devanado"
+                                },
+                                "8152": {
+                                    "codigo": "8152",
+                                    "nombre": "Operadores de telares y otras máquinas tejedoras"
+                                },
+                                "8153": {
+                                    "codigo": "8153",
+                                    "nombre": "Operadores de máquinas de coser"
+                                },
+                                "8154": {
+                                    "codigo": "8154",
+                                    "nombre": "Operadores de máquinas de blanqueamiento, teñido y limpieza de tejidos"
+                                },
+                                "8155": {
+                                    "codigo": "8155",
+                                    "nombre": "Operadores de máquinas de tratamiento de pieles y cueros"
+                                },
+                                "8156": {
+                                    "codigo": "8156",
+                                    "nombre": "Operadores de máquinas para la fabricación de calzado y afines"
+                                },
+                                "8157": {
+                                    "codigo": "8157",
+                                    "nombre": "Operadores de máquinas de lavandería"
+                                },
+                                "8159": {
+                                    "codigo": "8159",
+                                    "nombre": "Operadores de máquinas para fabricar productos textiles y artículos de piel y cuero no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "816": {
+                            "codigo": "816",
+                            "nombre": "Operadores de máquinas para elaborar alimentos y productos afines",
+                            "grupos_primarios": {
+                                "8160": {
+                                    "codigo": "8160",
+                                    "nombre": "Operadores de máquinas para elaborar alimentos y productos afines"
+                                }
+                            }
+                        },
+                        "817": {
+                            "codigo": "817",
+                            "nombre": "Operadores de instalaciones para la preparación de papel y de procesamiento de la madera",
+                            "grupos_primarios": {
+                                "8171": {
+                                    "codigo": "8171",
+                                    "nombre": "Operadores de instalaciones para la preparación de papel y de pasta para papel"
+                                },
+                                "8172": {
+                                    "codigo": "8172",
+                                    "nombre": "Operadores de instalaciones de procesamiento de la madera"
+                                }
+                            }
+                        },
+                        "818": {
+                            "codigo": "818",
+                            "nombre": "Otros operadores de máquinas y de instalaciones fijas",
+                            "grupos_primarios": {
+                                "8181": {
+                                    "codigo": "8181",
+                                    "nombre": "Operadores de máquinas y de instalaciones para elaborar productos de vidrio y cerámica"
+                                },
+                                "8182": {
+                                    "codigo": "8182",
+                                    "nombre": "Operadores de máquinas de vapor y calderas"
+                                },
+                                "8183": {
+                                    "codigo": "8183",
+                                    "nombre": "Operadores de máquinas de embalaje, embotellamiento y etiquetado"
+                                },
+                                "8189": {
+                                    "codigo": "8189",
+                                    "nombre": "Otros operadores de máquinas y de instalaciones fijas no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "82": {
+                    "codigo": "82",
+                    "nombre": "Ensambladores",
+                    "subgrupos": {
+                        "821": {
+                            "codigo": "821",
+                            "nombre": "Ensambladores",
+                            "grupos_primarios": {
+                                "8211": {
+                                    "codigo": "8211",
+                                    "nombre": "Ensambladores de maquinaria mecánica"
+                                },
+                                "8212": {
+                                    "codigo": "8212",
+                                    "nombre": "Ensambladores de equipos eléctricos y electrónicos"
+                                },
+                                "8219": {
+                                    "codigo": "8219",
+                                    "nombre": "Ensambladores no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "83": {
+                    "codigo": "83",
+                    "nombre": "Conductores de vehículos y operadores de equipos pesados móviles",
+                    "subgrupos": {
+                        "831": {
+                            "codigo": "831",
+                            "nombre": "Maquinistas de locomotoras y afines",
+                            "grupos_primarios": {
+                                "8311": {
+                                    "codigo": "8311",
+                                    "nombre": "Maquinistas de locomotoras"
+                                },
+                                "8312": {
+                                    "codigo": "8312",
+                                    "nombre": "Guardafrenos, guardagujas y agentes de maniobras"
+                                }
+                            }
+                        },
+                        "832": {
+                            "codigo": "832",
+                            "nombre": "Conductores de automóviles, camionetas y motocicletas",
+                            "grupos_primarios": {
+                                "8321": {
+                                    "codigo": "8321",
+                                    "nombre": "Conductores de motocicletas"
+                                },
+                                "8323": {
+                                    "codigo": "8323",
+                                    "nombre": "Conductores de camionetas y vehículos livianos"
+                                },
+                                "8324": {
+                                    "codigo": "8324",
+                                    "nombre": "Conductores de taxis"
+                                }
+                            }
+                        },
+                        "833": {
+                            "codigo": "833",
+                            "nombre": "Conductores de camiones pesados y buses",
+                            "grupos_primarios": {
+                                "8331": {
+                                    "codigo": "8331",
+                                    "nombre": "Conductores de buses, microbuses y tranvías"
+                                },
+                                "8332": {
+                                    "codigo": "8332",
+                                    "nombre": "Conductores de camiones y vehículos pesados"
+                                }
+                            }
+                        },
+                        "834": {
+                            "codigo": "834",
+                            "nombre": "Operadores de maquinaria agrícola móvil y de otras máquinas móviles",
+                            "grupos_primarios": {
+                                "8341": {
+                                    "codigo": "8341",
+                                    "nombre": "Operadores de maquinaria agrícola y forestal móvil"
+                                },
+                                "8342": {
+                                    "codigo": "8342",
+                                    "nombre": "Operadores de máquinas de movimiento de tierras, construcción de vías y afines"
+                                },
+                                "8343": {
+                                    "codigo": "8343",
+                                    "nombre": "Operadores de grúas, aparatos elevadores y afines"
+                                },
+                                "8344": {
+                                    "codigo": "8344",
+                                    "nombre": "Operadores de montacargas"
+                                }
+                            }
+                        },
+                        "835": {
+                            "codigo": "835",
+                            "nombre": "Marineros de cubierta y afines",
+                            "grupos_primarios": {
+                                "8350": {
+                                    "codigo": "8350",
+                                    "nombre": "Marineros de cubierta y afines"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "9": {
+            "codigo": "9",
+            "nombre": "Ocupaciones elementales",
+            "subgrupos_principales": {
+                "91": {
+                    "codigo": "91",
+                    "nombre": "Personal doméstico y de aseo",
+                    "subgrupos": {
+                        "911": {
+                            "codigo": "911",
+                            "nombre": "Personal doméstico, aseadores de hoteles, oficinas y otros establecimientos",
+                            "grupos_primarios": {
+                                "9111": {
+                                    "codigo": "9111",
+                                    "nombre": "Personal doméstico"
+                                },
+                                "9112": {
+                                    "codigo": "9112",
+                                    "nombre": "Aseadores de oficinas, hoteles y otros establecimientos"
+                                }
+                            }
+                        },
+                        "912": {
+                            "codigo": "912",
+                            "nombre": "Limpiadores de vehículos, ventanas, ropa y otra limpieza a mano",
+                            "grupos_primarios": {
+                                "9121": {
+                                    "codigo": "9121",
+                                    "nombre": "Lavanderos y planchadores manuales"
+                                },
+                                "9122": {
+                                    "codigo": "9122",
+                                    "nombre": "Lavadores de vehículos"
+                                },
+                                "9123": {
+                                    "codigo": "9123",
+                                    "nombre": "Limpiadores de ventanas"
+                                },
+                                "9129": {
+                                    "codigo": "9129",
+                                    "nombre": "Otro personal de limpieza no clasificados en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                },
+                "92": {
+                    "codigo": "92",
+                    "nombre": "Obreros y peones agropecuarios, pesqueros y forestales",
+                    "subgrupos": {
+                        "921": {
+                            "codigo": "921",
+                            "nombre": "Obreros y peones agropecuarios, pesqueros y forestales",
+                            "grupos_primarios": {
+                                "9211": {
+                                    "codigo": "9211",
+                                    "nombre": "Obreros y peones de explotaciones agrícolas"
+                                },
+                                "9212": {
+                                    "codigo": "9212",
+                                    "nombre": "Obreros y peones de explotaciones ganaderas"
+                                },
+                                "9213": {
+                                    "codigo": "9213",
+                                    "nombre": "Obreros y peones de explotaciones agropecuarias"
+                                },
+                                "9214": {
+                                    "codigo": "9214",
+                                    "nombre": "Obreros y peones de jardinería y horticultura"
+                                },
+                                "9215": {
+                                    "codigo": "9215",
+                                    "nombre": "Obreros y peones forestales"
+                                },
+                                "9216": {
+                                    "codigo": "9216",
+                                    "nombre": "Obreros y peones de pesca y acuicultura"
+                                }
+                            }
+                        }
+                    }
+                },
+                "93": {
+                    "codigo": "93",
+                    "nombre": "Obreros y peones de la minería, la construcción, la industria manufacturera y el transporte",
+                    "subgrupos": {
+                        "931": {
+                            "codigo": "931",
+                            "nombre": "Obreros y peones de la minería y la construcción",
+                            "grupos_primarios": {
+                                "9311": {
+                                    "codigo": "9311",
+                                    "nombre": "Obreros y peones de minas y canteras"
+                                },
+                                "9312": {
+                                    "codigo": "9312",
+                                    "nombre": "Obreros y peones de obras públicas y mantenimiento"
+                                },
+                                "9313": {
+                                    "codigo": "9313",
+                                    "nombre": "Obreros y peones de la construcción de edificios"
+                                }
+                            }
+                        },
+                        "932": {
+                            "codigo": "932",
+                            "nombre": "Obreros y peones de la industria manufacturera",
+                            "grupos_primarios": {
+                                "9321": {
+                                    "codigo": "9321",
+                                    "nombre": "Empacadores manuales"
+                                },
+                                "9329": {
+                                    "codigo": "9329",
+                                    "nombre": "Obreros y peones de la industria manufacturera no clasificados en otros grupos primarios"
+                                }
+                            }
+                        },
+                        "933": {
+                            "codigo": "933",
+                            "nombre": "Obreros y peones de transporte y almacenamiento",
+                            "grupos_primarios": {
+                                "9331": {
+                                    "codigo": "9331",
+                                    "nombre": "Conductores de vehículos accionados a pedal o a brazo"
+                                },
+                                "9332": {
+                                    "codigo": "9332",
+                                    "nombre": "Conductores de vehículos y maquinaria de tracción animal"
+                                },
+                                "9333": {
+                                    "codigo": "9333",
+                                    "nombre": "Obreros y peones de carga"
+                                },
+                                "9334": {
+                                    "codigo": "9334",
+                                    "nombre": "Surtidores de estanterías"
+                                }
+                            }
+                        }
+                    }
+                },
+                "94": {
+                    "codigo": "94",
+                    "nombre": "Ayudantes de preparación de alimentos",
+                    "subgrupos": {
+                        "941": {
+                            "codigo": "941",
+                            "nombre": "Ayudantes de preparación de alimentos",
+                            "grupos_primarios": {
+                                "9411": {
+                                    "codigo": "9411",
+                                    "nombre": "Cocineros de comidas rápidas"
+                                },
+                                "9412": {
+                                    "codigo": "9412",
+                                    "nombre": "Ayudantes de cocina"
+                                }
+                            }
+                        }
+                    }
+                },
+                "95": {
+                    "codigo": "95",
+                    "nombre": "Vendedores ambulantes de servicios y afines (excluyendo comidas de preparación inmediata)",
+                    "subgrupos": {
+                        "951": {
+                            "codigo": "951",
+                            "nombre": "Trabajadores ambulantes de servicios y afines",
+                            "grupos_primarios": {
+                                "9510": {
+                                    "codigo": "9510",
+                                    "nombre": "Trabajadores ambulantes de servicios y afines"
+                                }
+                            }
+                        },
+                        "952": {
+                            "codigo": "952",
+                            "nombre": "Vendedores ambulantes (excluyendo comidas de preparación inmediata)",
+                            "grupos_primarios": {
+                                "9520": {
+                                    "codigo": "9520",
+                                    "nombre": "Vendedores ambulantes (excluyendo comidas de preparación inmediata)"
+                                }
+                            }
+                        }
+                    }
+                },
+                "96": {
+                    "codigo": "96",
+                    "nombre": "Recolectores de desechos y otras ocupaciones elementales",
+                    "subgrupos": {
+                        "961": {
+                            "codigo": "961",
+                            "nombre": "Recolectores de desechos",
+                            "grupos_primarios": {
+                                "9611": {
+                                    "codigo": "9611",
+                                    "nombre": "Recolectores de basura y material reciclable"
+                                },
+                                "9612": {
+                                    "codigo": "9612",
+                                    "nombre": "Clasificadores de desechos"
+                                },
+                                "9613": {
+                                    "codigo": "9613",
+                                    "nombre": "Barrenderos y afines"
+                                }
+                            }
+                        },
+                        "962": {
+                            "codigo": "962",
+                            "nombre": "Otras ocupaciones elementales",
+                            "grupos_primarios": {
+                                "9621": {
+                                    "codigo": "9621",
+                                    "nombre": "Mensajeros, mandaderos, maleteros y repartidores"
+                                },
+                                "9622": {
+                                    "codigo": "9622",
+                                    "nombre": "Personas que realizan trabajos varios"
+                                },
+                                "9624": {
+                                    "codigo": "9624",
+                                    "nombre": "Acarreadores de agua y recolectores de leña"
+                                },
+                                "9625": {
+                                    "codigo": "9625",
+                                    "nombre": "Recolectores de dinero y surtidores de máquinas de venta automática"
+                                },
+                                "9626": {
+                                    "codigo": "9626",
+                                    "nombre": "Lectores de medidores"
+                                },
+                                "9629": {
+                                    "codigo": "9629",
+                                    "nombre": "Otras ocupaciones elementales no clasificadas en otros grupos primarios"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 ]
