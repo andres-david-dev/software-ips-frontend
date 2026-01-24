@@ -284,41 +284,60 @@ function Stepper({ currentStep }: { currentStep: 1 | 2 | 3 }) {
   ];
 
   return (
-    <div className="relative">
-      <div className="absolute left-0 right-0 top-5 h-[2px] bg-zinc-200" />
-      <div className="grid grid-cols-3 gap-4">
+    <div className="relative py-6">
+      {/* Línea de progreso - Fondo */}
+      <div className="absolute left-0 right-0 top-[calc(1.25rem+20px)] h-1 bg-zinc-200 rounded-full" />
+      
+      {/* Línea de progreso - Activa con gradiente */}
+      <div 
+        className="absolute left-0 top-[calc(1.25rem+20px)] h-1 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] rounded-full transition-all duration-500"
+        style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
+      />
+
+      <div className="grid grid-cols-3 gap-4 relative z-10">
         {steps.map((s) => {
           const isDone = s.n < currentStep;
           const isActive = s.n === currentStep;
           return (
             <div key={s.n} className="relative flex flex-col items-center text-center">
+              {/* Círculo del paso */}
               <div
                 className={cn(
-                  "z-10 flex items-center justify-center h-10 w-10 rounded-full border-2 bg-white",
-                  (isActive || isDone) && "border-[var(--brand-blue)]",
-                  !isActive && !isDone && "border-zinc-300",
+                  "flex items-center justify-center h-12 w-12 rounded-full border-2 font-bold text-white transition-all duration-300",
+                  isActive
+                    ? "bg-gradient-to-br from-[var(--brand-blue)] to-[var(--brand-green)] border-[var(--brand-blue)] shadow-lg shadow-[rgba(27,120,214,0.3)]"
+                    : isDone
+                    ? "bg-[var(--brand-green)] border-[var(--brand-green)] shadow-md"
+                    : "bg-white border-zinc-300 text-zinc-400",
                 )}
               >
-                <span
-                  className={cn(
-                    "text-sm font-semibold",
-                    (isActive || isDone) && "text-[var(--brand-blue)]",
-                    !isActive && !isDone && "text-zinc-400",
-                  )}
-                >
-                  {s.n}
-                </span>
+                {isDone ? (
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <span>{s.n}</span>
+                )}
               </div>
-              <div className="mt-2">
+
+              {/* Etiquetas */}
+              <div className="mt-3">
                 <div
                   className={cn(
-                    "text-xs font-semibold uppercase tracking-wide",
-                    isActive ? "text-zinc-900" : "text-zinc-400",
+                    "text-xs font-bold uppercase tracking-widest transition-colors duration-300",
+                    isActive ? "text-[var(--brand-blue)]" : isDone ? "text-[var(--brand-green)]" : "text-zinc-400",
                   )}
                 >
                   {s.title}
                 </div>
-                <div className={cn("text-xs", isActive ? "text-zinc-700" : "text-zinc-400")}>{s.subtitle}</div>
+                <div 
+                  className={cn(
+                    "text-xs mt-1 transition-colors duration-300",
+                    isActive ? "text-zinc-700 font-medium" : "text-zinc-500",
+                  )}
+                >
+                  {s.subtitle}
+                </div>
               </div>
             </div>
           );
@@ -507,14 +526,23 @@ function Paso2Form({
       </div>
 
       <form
-        className="p-5"
+        className="p-5 space-y-6"
         onSubmit={(e) => {
           e.preventDefault();
           onSubmit();
         }}
       >
-        {/* Identificación (read-only display) */}
-        <div className="mb-6 rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+        {/* Datos personales */}
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 space-y-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-zinc-900 uppercase tracking-wide">Datos personales</h3>
+              <p className="text-sm text-zinc-600">Identificación y datos básicos del usuario</p>
+            </div>
+          </div>
+
+          {/* Identificación (read-only display) */}
+          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
           <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-2">No. Identificación</div>
           <div className="text-sm font-mono text-zinc-900">
             {paso1.tipoIdentificacion || "—"} {paso1.numeroIdentificacion || ""}
@@ -878,9 +906,16 @@ function Paso2Form({
             <InlineError message="Selecciona el estado civil." />
           )}
         </div>
+        </div>
 
         {/* Residencia y contacto */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 space-y-5">
+          <div>
+            <h3 className="text-sm font-semibold text-zinc-900 uppercase tracking-wide">Residencia y contacto</h3>
+            <p className="text-sm text-zinc-600">Dirección, zona y medios de contacto</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <label htmlFor="lugarResidencia" className="text-sm font-semibold text-zinc-900">
               Lugar Residencia <span className="text-rose-600">*</span>
@@ -922,9 +957,9 @@ function Paso2Form({
               className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
             />
           </div>
-        </div>
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <label htmlFor="estrato" className="text-sm font-semibold text-zinc-900">
               Estrato <span className="text-rose-600">*</span>
@@ -988,8 +1023,7 @@ function Paso2Form({
             )}
           </div>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <label htmlFor="localidad" className="text-sm font-semibold text-zinc-900">
               Localidad/Comuna
@@ -1032,25 +1066,60 @@ function Paso2Form({
             )}
           </div>
         </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="email" className="text-sm font-semibold text-zinc-900">
+                e-Mail
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="usuario@correo.com"
+                value={data.email}
+                onChange={(e) => onChange({ ...data, email: e.target.value })}
+                className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+              />
+            </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <div>
-            <label htmlFor="email" className="text-sm font-semibold text-zinc-900">
-              e-Mail
-            </label>
-            <input
-              id="email"
-              type="email"
-              placeholder="usuario@correo.com"
-              value={data.email}
-              onChange={(e) => onChange({ ...data, email: e.target.value })}
-              className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
-            />
+            <div>
+              <label htmlFor="acompanante" className="text-sm font-semibold text-zinc-900">
+                Acompañante/Responsable <span className="text-rose-600">*</span>
+              </label>
+            <div className="mt-2 relative">
+              <select
+                id="acompanante"
+                value={data.acompanante}
+                onChange={(e) => onChange({ ...data, acompanante: e.target.value })}
+                className={cn(
+                  "w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
+                  touched && !data.acompanante ? "border-rose-300" : "border-zinc-200",
+                )}
+              >
+                <option value="">Elija...</option>
+                <option value="si">Sí</option>
+                <option value="no">No registra</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+            </div>
+            {touched && !data.acompanante && (
+              <InlineError message="Selecciona si hay acompañante/responsable." />
+            )}
+            </div>
           </div>
-          <div />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        {/* Seguridad social */}
+        <div className="rounded-2xl border border-zinc-200 bg-white p-5 space-y-4">
+          <div>
+            <h3 className="text-sm font-semibold text-zinc-900 uppercase tracking-wide">Seguridad social</h3>
+            <p className="text-sm text-zinc-600">EPS, ARL y AFP del usuario</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <SearchableSelect
               id="eps"
@@ -1087,35 +1156,7 @@ function Paso2Form({
             />
             {touched && !data.afp && <InlineError message="Selecciona la AFP." />}
           </div>
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="acompanante" className="text-sm font-semibold text-zinc-900">
-            Acompañante/Responsable <span className="text-rose-600">*</span>
-          </label>
-          <div className="mt-2 relative">
-            <select
-              id="acompanante"
-              value={data.acompanante}
-              onChange={(e) => onChange({ ...data, acompanante: e.target.value })}
-              className={cn(
-                "w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
-                touched && !data.acompanante ? "border-rose-300" : "border-zinc-200",
-              )}
-            >
-              <option value="">Elija...</option>
-              <option value="si">Sí</option>
-              <option value="no">No registra</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
           </div>
-          {touched && !data.acompanante && (
-            <InlineError message="Selecciona si hay acompañante/responsable." />
-          )}
         </div>
 
         {/* Convenio / Empresa / Cargo */}
@@ -1136,30 +1177,22 @@ function Paso2Form({
               }}
               error={touched && !data.convenio}
             />
-            {touched && !data.convenio && (
-              <InlineError message="Selecciona el convenio." />
-            )}
+            {touched && !data.convenio && <InlineError message="Selecciona el convenio." />}
           </div>
-
           <div>
-            <div className="flex items-center justify-between">
-              <label htmlFor="empresaUsuaria" className="text-sm font-semibold text-zinc-900">
-                Empresa usuaria <span className="text-rose-600">*</span>
-              </label>
-              <button
-                type="button"
-                className="text-xs text-[var(--brand-blue)] hover:underline"
-              >
-                + Crear empresa usuaria
-              </button>
-            </div>
             <SearchableSelect
               id="empresaUsuaria"
-              label=""
-              placeholder="Buscar empresa usuaria"
+              label="Empresa Usuaria"
+              placeholder="Buscar empresa"
               value={data.empresaUsuaria}
               options={empresaOptions}
-              onChange={(value) => onChange({ ...data, empresaUsuaria: value })}
+              onChange={(value) =>
+                onChange({
+                  ...data,
+                  empresaUsuaria: value,
+                  empresaIgualConvenio: value === data.convenio ? data.empresaIgualConvenio : false,
+                })
+              }
               error={touched && !data.empresaUsuaria}
             />
             {touched && !data.empresaUsuaria && (
@@ -2200,37 +2233,30 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
   }, [paso2]);
 
   return (
-    <div className="space-y-4">
-      {showBanner && (
-        <div className="rounded-xl border border-rose-200 bg-rose-500 text-white shadow-sm">
-          <div className="px-4 py-3 flex items-center justify-between gap-3">
-            <p className="text-sm font-medium">
-              El éxito es la suma de pequeños esfuerzos repetidos día tras día.
-            </p>
-            <button
-              type="button"
-              aria-label="Cerrar"
-              onClick={() => setShowBanner(false)}
-              className="shrink-0 rounded-lg p-1 hover:bg-white/10"
-            >
-              <IconClose className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-      )}
+    <div className="space-y-8">
 
-      <header className="flex items-center gap-3">
-        <div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-2xl font-semibold text-zinc-900">Nuevo Servicio</h1>
-            <span className="text-zinc-300">·</span>
-            <span className="text-sm font-medium text-zinc-600">Modalidad Intramural</span>
-          </div>
+      <header className="space-y-3 mb-4">
+        <div className="flex items-center gap-3 flex-wrap">
+          <h1 className="text-4xl font-bold text-zinc-900">Nuevo Servicio</h1>
+          <span className="text-zinc-200">·</span>
+          <span className="text-lg font-semibold text-[var(--brand-blue)]">Modalidad Intramural</span>
         </div>
       </header>
 
       <section className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-6">
         <Stepper currentStep={currentStep} />
+
+        {currentStep === 1 && (
+          <div className="rounded-xl border border-[rgb(var(--brand-blue-rgb)/0.2)] bg-[rgb(var(--brand-blue-rgb)/0.05)] p-4 mb-6 mt-6 flex items-start gap-3">
+            <svg className="w-5 h-5 text-[var(--brand-blue)] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div className="text-sm text-zinc-700">
+              <span className="text-rose-600 font-bold">*</span>
+              <span className="ml-1">Indica campos obligatorios para continuar</span>
+            </div>
+          </div>
+        )}
 
         {currentStep === 1 && (
           <div className="mt-6 rounded-2xl border border-zinc-200 bg-white">
@@ -2240,7 +2266,7 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
             </div>
 
             <form
-              className="p-5"
+              className="p-6 space-y-6"
               onSubmit={(e) => {
                 e.preventDefault();
                 setTouchedPaso1(true);
@@ -2253,12 +2279,12 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
               }}
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="tipoIdentificacion" className="text-sm font-semibold text-zinc-900">
-                    Tipo Identificación <span className="text-rose-600">*</span>
+                <div className="space-y-2">
+                  <label htmlFor="tipoIdentificacion" className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                    Tipo de Identificación
+                    <span className="text-rose-600">*</span>
                   </label>
-
-                  <div className="mt-3 relative">
+                  <div className="relative">
                     <select
                       id="tipoIdentificacion"
                       name="tipoIdentificacion"
@@ -2275,13 +2301,16 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                       }}
                       onBlur={() => setTouchedPaso1(true)}
                       className={cn(
-                        "w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm text-zinc-900 outline-none appearance-none",
-                        "focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
-                        touchedPaso1 && !paso1.tipoIdentificacion ? "border-rose-300" : "border-zinc-200",
+                        "w-full h-12 rounded-xl border-2 bg-white px-4 pr-10 text-sm text-zinc-900 outline-none appearance-none font-medium transition-all duration-200",
+                        "focus:ring-2 focus:ring-[rgb(var(--brand-blue-rgb)/0.3)] focus:border-[var(--brand-blue)] focus:shadow-md",
+                        "hover:border-[var(--brand-blue)]/30",
+                        touchedPaso1 && !paso1.tipoIdentificacion 
+                          ? "border-rose-400 bg-rose-50" 
+                          : "border-zinc-300",
                       )}
                     >
                       <option value="" disabled>
-                        Selecciona una opción
+                        Selecciona el tipo de documento
                       </option>
                       {opciones.map((opt) => (
                         <option key={opt.value} value={opt.value}>
@@ -2289,35 +2318,30 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                         </option>
                       ))}
                     </select>
-
-                    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path
-                          d="M6 9l6 6 6-6"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
+                    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-500">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
                   </div>
-
-                  <p className="mt-2 text-xs text-zinc-500">Selecciona el tipo de documento del usuario.</p>
+                  <p className="text-xs text-zinc-600 italic">
+                    Selecciona cédula, pasaporte u otro documento válido
+                  </p>
                   {touchedPaso1 && !paso1.tipoIdentificacion && (
-                    <InlineError message="Selecciona un tipo de identificación." />
+                    <InlineError message="Por favor, selecciona el tipo de identificación." />
                   )}
                 </div>
 
-                <div>
-                  <label htmlFor="numeroIdentificacion" className="text-sm font-semibold text-zinc-900">
-                    No. Identificación <span className="text-rose-600">*</span>
+                <div className="space-y-2">
+                  <label htmlFor="numeroIdentificacion" className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                    Número de Identificación
+                    <span className="text-rose-600">*</span>
                   </label>
                   <input
                     id="numeroIdentificacion"
                     name="numeroIdentificacion"
                     inputMode="numeric"
-                    placeholder="Ingresa el número"
+                    placeholder="Ej: 1109542604"
                     value={paso1.numeroIdentificacion}
                     onChange={(e) => {
                       const updated = { ...paso1, numeroIdentificacion: e.target.value };
@@ -2328,44 +2352,50 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                     }}
                     onBlur={() => setTouchedPaso1(true)}
                     className={cn(
-                      "mt-3 w-full h-11 rounded-xl border px-3 outline-none transition-shadow",
-                      "focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
+                      "w-full h-12 rounded-xl border-2 px-4 outline-none transition-all duration-200 font-medium",
+                      "focus:ring-2 focus:ring-[rgb(var(--brand-blue-rgb)/0.3)] focus:border-[var(--brand-blue)] focus:shadow-md",
+                      "hover:border-[var(--brand-blue)]/30",
                       touchedPaso1 && !paso1.numeroIdentificacion.trim()
-                        ? "border-rose-300"
+                        ? "border-rose-400 bg-rose-50"
                         : touchedPaso1 && paso1.numeroIdentificacion.trim().length < 4
-                          ? "border-rose-300"
-                          : "border-zinc-200",
+                          ? "border-amber-400 bg-amber-50"
+                          : "border-zinc-300 bg-white",
                     )}
                   />
                   {touchedPaso1 && !paso1.numeroIdentificacion.trim() && (
-                    <InlineError message="Ingresa el número de identificación." />
+                    <InlineError message="Por favor, ingresa el número de identificación." />
                   )}
                   {touchedPaso1 &&
                     paso1.numeroIdentificacion.trim().length > 0 &&
                     paso1.numeroIdentificacion.trim().length < 4 && (
-                      <InlineError message="Ingresa un número válido." />
+                      <InlineError message="Mínimo 4 caracteres requeridos." />
                     )}
+                  <p className="text-xs text-zinc-600 italic">Sin puntos ni guiones.</p>
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center gap-3">
+              <div className="flex items-center gap-3 pt-6 border-t border-zinc-200">
                 <button
                   type="submit"
+                  disabled={!isValidPaso1}
                   className={cn(
-                    "h-11 px-6 rounded-xl text-white font-semibold shadow-sm transition-opacity",
+                    "h-12 px-8 rounded-xl text-white font-bold shadow-md transition-all duration-200 flex items-center gap-2",
                     "bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)]",
-                    !isValidPaso1 && "opacity-60 cursor-not-allowed",
+                    "hover:shadow-lg hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none",
                   )}
                 >
-                  Continuar
+                  <span>Continuar</span>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => router.push("/nuevo-servicio")}
-                  className="h-11 px-4 rounded-xl text-sm font-semibold text-zinc-700 hover:bg-zinc-100"
+                  className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
                 >
-                  Cancelar Registro
+                  Cancelar
                 </button>
               </div>
             </form>

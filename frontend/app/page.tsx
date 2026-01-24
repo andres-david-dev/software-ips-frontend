@@ -11,6 +11,8 @@ export default function Home() {
   const [logoError, setLogoError] = useState(false);
   const [usuario, setUsuario] = useState("");
   const [contrasena, setContrasena] = useState("");
+  const [cargo, setCargo] = useState("");
+  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const nextPath = useMemo(() => {
@@ -60,10 +62,16 @@ export default function Home() {
           onSubmit={(e) => {
             e.preventDefault();
             if (submitting) return;
+            if (!usuario.trim() || !contrasena.trim() || !cargo) {
+              setError("Completa usuario, contraseña y cargo.");
+              return;
+            }
+
+            setError("");
             setSubmitting(true);
 
             // Auth mock (local): cookie-based session for protected routes.
-            document.cookie = "somedi_session=1; Path=/; SameSite=Lax";
+            document.cookie = `somedi_session=1; Path=/; SameSite=Lax;`;
             router.push(nextPath);
             router.refresh();
           }}
@@ -121,6 +129,30 @@ export default function Home() {
               )}
             </button>
           </div>
+
+          <div className="relative">
+            <label htmlFor="cargo" className="sr-only">Cargo</label>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 4h14v2H5zM5 18h14v2H5zM9 9h10v2H9zM9 13h10v2H9zM5 9h2v2H5zM5 13h2v2H5z" fill="#9ca3af" />
+              </svg>
+            </span>
+            <select
+              id="cargo"
+              name="cargo"
+              value={cargo}
+              onChange={(e) => setCargo(e.target.value)}
+              className="w-full h-12 pl-10 pr-4 rounded-xl border border-zinc-200 bg-white text-zinc-800 focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+            >
+              <option value="">Selecciona tu cargo</option>
+              <option value="medico">Médico</option>
+              <option value="administrador">Administrador</option>
+            </select>
+          </div>
+
+          {error && (
+            <p className="text-sm text-red-600">{error}</p>
+          )}
 
           <button
             type="submit"

@@ -101,48 +101,44 @@ export default function Sidebar() {
   }, [isAgenda]);
 
   return (
-    <aside className="w-[280px] shrink-0 border-r border-zinc-200 bg-white">
-      <div className="h-14 px-4 flex items-center border-b border-zinc-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)]">
-        <span className="text-white font-semibold tracking-wide">SOMEDI S.A.S.</span>
-      </div>
-
-      <nav className="p-3">
+    <aside className="w-[280px] shrink-0 border-r border-zinc-200 bg-gradient-to-b from-[var(--brand-blue)] to-[var(--brand-green)] flex flex-col h-full shadow-lg">
+      <nav className="p-3 flex-1 overflow-y-auto">
         <div className="space-y-1">
           <button
             type="button"
             onClick={() => setMenuOpen((prev) => !prev)}
             className={cn(
-              "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-base font-bold transition-colors",
               isNuevoServicio
-                ? "bg-zinc-100 text-zinc-900"
-                : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900",
+                ? "bg-white/25 text-white"
+                : "text-white/95 hover:bg-white/15 hover:text-white",
             )}
             aria-expanded={menuOpen}
             aria-controls="menu-nuevo-servicio"
           >
-            <IconPlus className="h-4 w-4 text-zinc-700" />
+            <IconPlus className="h-5 w-5 text-white" />
             <span className="flex-1 text-left">Nuevo Servicio</span>
             <IconChevron
               className={cn(
-                "h-4 w-4 text-zinc-500 transition-transform",
+                "h-5 w-5 text-white/90 transition-transform",
                 menuOpen && "rotate-90",
               )}
             />
           </button>
 
           {menuOpen && (
-            <div className="mt-1 ml-2 border-l border-zinc-200 pl-2 space-y-1">
+            <div className="mt-1 ml-2 border-l-2 border-white/40 pl-2 space-y-1 bg-white/15 py-2 rounded-r-lg">
               {modalidades.map((item) => {
-                const active = pathname === item.href;
+                const active = pathname.startsWith(item.href);
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "block rounded-lg px-3 py-2 text-sm transition-colors",
+                      "block rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
                       active
-                        ? "bg-zinc-100 text-zinc-900"
-                        : "text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900",
+                        ? "bg-white text-[var(--brand-blue)] font-bold"
+                        : "text-white/95 hover:bg-white/20 hover:text-white",
                     )}
                   >
                     {item.label}
@@ -236,7 +232,7 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      <div className="mt-auto p-3">
+      <div className="p-3 border-t border-white/20">
         <button
           type="button"
           onClick={() => {
@@ -244,7 +240,7 @@ export default function Sidebar() {
             router.push("/");
             router.refresh();
           }}
-          className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
+          className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/15 hover:text-white transition-colors"
         >
           <IconLogout className="h-4 w-4" />
           <span>Cerrar sesión</span>
