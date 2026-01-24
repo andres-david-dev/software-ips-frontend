@@ -541,7 +541,7 @@ function Paso2Form({
           <div>
             <label htmlFor="primerNombre" className="text-sm font-semibold text-zinc-900">
               Primer Nombre <span className="text-rose-600">*</span>
-              <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 mb-6 mt-6 flex items-start gap-3">
+            </label>
             <input
               id="primerNombre"
               type="text"
