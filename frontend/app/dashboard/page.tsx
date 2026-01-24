@@ -7,9 +7,9 @@ export default function Dashboard() {
   const router = useRouter();
   const [logoError, setLogoError] = useState(false);
   const logoCandidates = [
+    "/images/logo.jpeg",
     "/images/logo.png",
     "/images/logo.jpg",
-    "/images/logo.jpeg",
     "/images/logo.webp",
     "/images/logo.svg",
   ];

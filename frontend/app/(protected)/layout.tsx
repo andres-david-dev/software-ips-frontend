@@ -12,11 +12,8 @@ export default function ProtectedLayout({
   const [logoIndex, setLogoIndex] = useState(0);
 
   const logoCandidates = [
-    "/images/logo.png",
-    "/images/logo.jpg",
     "/images/logo.jpeg",
-    "/images/logo.webp",
-    "/images/logo.svg",
+
   ];
 
   const handleLogoError = () => {
@@ -64,7 +61,7 @@ export default function ProtectedLayout({
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
 
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-6 overflow-auto bg-[#f7fafc]">
           <div className="max-w-6xl mx-auto">{children}</div>
         </main>
       </div>
