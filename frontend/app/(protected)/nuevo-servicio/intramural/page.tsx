@@ -57,8 +57,8 @@ type Paso2Data = {
   tipoEvaluacion: string;
   enfasisEvaluacion: string[];
   examenesParaclinicos: string[];
-  examenesLaboratorio: string;
-  vacunacion: string;
+  examenesLaboratorio: string[];
+  vacunacion: string[];
   observaciones: string;
   prioridadAtencion: string;
 };
@@ -505,26 +505,69 @@ function Paso2Form({
     if (!q) return [] as MunicipioItem[];
     return fuseMunicipios.search(q).map((r) => r.item).slice(0, 8);
   }, [data.ciudadAtencion, fuseMunicipios]);
-  const paraclinicosOptions = useMemo(
-    () => [
-      "Audiometría Tamiz",
-      "Evaluación Médica Ocupacional (20min)",
-      "Visiometría",
-      "Espirometría",
-      "Electrocardiograma",
-    ],
-    [],
-  );
-  const laboratorioOptions = useMemo(
-    () => ["Cuadro hemático", "Glicemia", "Perfil lipídico", "Orina", "No Aplica"],
-    [],
-  );
-  const vacunacionOptions = useMemo(
-    () => ["Tétanos", "Hepatitis B", "Influenza", "COVID-19", "No Aplica"],
-    [],
-  );
+
+  // Validadores de entrada
+  const sanitizeLettersOnly = (value: string) => value.replace(/[^a-záéíóúñA-ZÁÉÍÓÚÑ\s]/g, "");
+  const sanitizeNumbersOnly = (value: string) => value.replace(/\D+/g, "");
+  const blockNonLetters = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowed = ["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End"];
+    if (e.ctrlKey || e.metaKey) return;
+    const isLetter = /[a-záéíóúñA-ZÁÉÍÓÚÑ\s]/.test(e.key);
+    const isAllowed = allowed.includes(e.key);
+    if (!isLetter && !isAllowed) e.preventDefault();
+  };
+  const blockNonNumbers = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowed = ["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End"];
+    if (e.ctrlKey || e.metaKey) return;
+    const isDigit = /[0-9]/.test(e.key);
+    const isAllowed = allowed.includes(e.key);
+    if (!isDigit && !isAllowed) e.preventDefault();
+  };
+
+  // Scroll to first error field
+  useEffect(() => {
+    if (touched && !isValid) {
+      const firstErrorId = [
+        !data.primerNombre && "primerNombre",
+        !data.primerApellido && "primerApellido",
+        !data.sexoBiologico && "sexoBiologico",
+        !data.identidadGenero && "identidadGenero",
+        !data.fechaNacimiento && "fechaNacimiento",
+        !data.tipoSangre && "tipoSangre",
+        !data.estadoCivil && "estadoCivil",
+        !data.lugarResidencia && "lugarResidencia",
+        !data.telefono && "telefono",
+        !data.email && "email",
+        !data.eps && "eps",
+      ].find(Boolean);
+      if (firstErrorId) {
+        const el = document.getElementById(firstErrorId as string);
+        if (el) {
+          setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+        }
+      }
+    }
+  }, [touched, isValid, data]);
+  const [paraclinicosOptions, setParaclinicosOptions] = useState<string[]>([]);
+  const [laboratorioOptions, setLaboratorioOptions] = useState<string[]>([]);
+  const [vacunacionOptions, setVacunacionOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("/data/examenes.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setParaclinicosOptions(data.Paraclinicos || []);
+        setLaboratorioOptions(data.Laboratorio || []);
+        setVacunacionOptions(data.Vacunacion || []);
+      })
+      .catch(() => {
+        console.error("Error cargando exámenes");
+      });
+  }, []);
   const [ocupacionOptions, setOcupacionOptions] = useState<CiuoItem[]>([]);
   const [ocupacionOpen, setOcupacionOpen] = useState(false);
+  const [lugarResidenciaOpen, setLugarResidenciaOpen] = useState(false);
+  const [ciudadAtencionOpen, setCiudadAtencionOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -588,7 +631,8 @@ function Paso2Form({
               type="text"
               placeholder="Ingresa primer nombre"
               value={data.primerNombre}
-              onChange={(e) => onChange({ ...data, primerNombre: e.target.value })}
+              onChange={(e) => onChange({ ...data, primerNombre: sanitizeLettersOnly(e.target.value) })}
+              onKeyDown={blockNonLetters}
               className={cn(
                 "mt-2 w-full h-11 rounded-xl border px-3 text-sm outline-none",
                 "focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
@@ -609,7 +653,8 @@ function Paso2Form({
               type="text"
               placeholder="Opcional"
               value={data.segundoNombre}
-              onChange={(e) => onChange({ ...data, segundoNombre: e.target.value })}
+              onChange={(e) => onChange({ ...data, segundoNombre: sanitizeLettersOnly(e.target.value) })}
+              onKeyDown={blockNonLetters}
               className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
             />
           </div>
@@ -623,7 +668,8 @@ function Paso2Form({
               type="text"
               placeholder="Ingresa primer apellido"
               value={data.primerApellido}
-              onChange={(e) => onChange({ ...data, primerApellido: e.target.value })}
+              onChange={(e) => onChange({ ...data, primerApellido: sanitizeLettersOnly(e.target.value) })}
+              onKeyDown={blockNonLetters}
               className={cn(
                 "mt-2 w-full h-11 rounded-xl border px-3 text-sm outline-none",
                 "focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
@@ -644,7 +690,8 @@ function Paso2Form({
               type="text"
               placeholder="Opcional"
               value={data.segundoApellido}
-              onChange={(e) => onChange({ ...data, segundoApellido: e.target.value })}
+              onChange={(e) => onChange({ ...data, segundoApellido: sanitizeLettersOnly(e.target.value) })}
+              onKeyDown={blockNonLetters}
               className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
             />
           </div>
@@ -952,6 +999,8 @@ function Paso2Form({
                 placeholder="Buscar municipio o ciudad"
                 value={data.lugarResidencia}
                 onChange={(e) => onChange({ ...data, lugarResidencia: e.target.value })}
+                onFocus={() => setLugarResidenciaOpen(true)}
+                onBlur={() => setTimeout(() => setLugarResidenciaOpen(false), 150)}
                 className={cn(
                   "w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
                   touched && !data.lugarResidencia ? "border-rose-300" : "border-zinc-200",
@@ -963,7 +1012,7 @@ function Paso2Form({
                   <path d="M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" stroke="currentColor" strokeWidth="2" />
                 </svg>
               </div>
-              {data.lugarResidencia && (
+              {lugarResidenciaOpen && data.lugarResidencia && (
                 <div className="absolute z-20 mt-2 w-full rounded-xl border border-zinc-200 bg-white shadow-sm max-h-56 overflow-auto">
                   {municipioSuggestions.length > 0 ? (
                     municipioSuggestions.map((m) => (
@@ -971,7 +1020,10 @@ function Paso2Form({
                         type="button"
                         key={`${m.codigo ?? m.nombre}-${m.nombre}`}
                         className="w-full text-left px-3 py-2 text-sm hover:bg-zinc-50"
-                        onClick={() => onChange({ ...data, lugarResidencia: m.departamento ? `${m.nombre}, ${m.departamento}` : m.nombre })}
+                        onClick={() => {
+                          onChange({ ...data, lugarResidencia: m.departamento ? `${m.nombre}, ${m.departamento}` : m.nombre });
+                          setLugarResidenciaOpen(false);
+                        }}
                       >
                         <span className="font-medium text-zinc-900">{m.nombre}</span>
                         {m.departamento ? <span className="ml-1 text-zinc-500">({m.departamento})</span> : null}
@@ -1099,7 +1151,8 @@ function Paso2Form({
               type="tel"
               placeholder="Ej: 3157051782"
               value={data.telefono}
-              onChange={(e) => onChange({ ...data, telefono: e.target.value })}
+              onChange={(e) => onChange({ ...data, telefono: sanitizeNumbersOnly(e.target.value) })}
+              onKeyDown={blockNonNumbers}
               className={cn(
                 "mt-2 w-full h-11 rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
                 touched && !data.telefono ? "border-rose-300" : "border-zinc-200",
@@ -1365,6 +1418,8 @@ function Paso2Form({
                   placeholder="Buscar ciudad o municipio"
                   value={data.ciudadAtencion}
                   onChange={(e) => onChange({ ...data, ciudadAtencion: e.target.value })}
+                  onFocus={() => setCiudadAtencionOpen(true)}
+                  onBlur={() => setTimeout(() => setCiudadAtencionOpen(false), 150)}
                   className={cn(
                     "w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
                     touched && !data.ciudadAtencion ? "border-rose-300" : "border-zinc-200",
@@ -1376,7 +1431,7 @@ function Paso2Form({
                     <path d="M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" stroke="currentColor" strokeWidth="2" />
                   </svg>
                 </div>
-                {data.ciudadAtencion && (
+                {ciudadAtencionOpen && data.ciudadAtencion && (
                   <div className="absolute z-20 mt-2 w-full rounded-xl border border-zinc-200 bg-white shadow-sm max-h-56 overflow-auto">
                     {ciudadAtencionSuggestions.length > 0 ? (
                       ciudadAtencionSuggestions.map((m) => (
@@ -1384,7 +1439,10 @@ function Paso2Form({
                           type="button"
                           key={`${m.codigo ?? m.nombre}-${m.nombre}`}
                           className="w-full text-left px-3 py-2 text-sm hover:bg-zinc-50"
-                          onClick={() => onChange({ ...data, ciudadAtencion: m.departamento ? `${m.nombre}, ${m.departamento}` : m.nombre })}
+                          onClick={() => {
+                            onChange({ ...data, ciudadAtencion: m.departamento ? `${m.nombre}, ${m.departamento}` : m.nombre });
+                            setCiudadAtencionOpen(false);
+                          }}
                         >
                           <span className="font-medium text-zinc-900">{m.nombre}</span>
                           {m.departamento ? <span className="ml-1 text-zinc-500">({m.departamento})</span> : null}
@@ -1400,9 +1458,6 @@ function Paso2Form({
                 <InlineError message="Selecciona la ciudad de atención." />
               )}
             </div>
-            {touched && !data.ciudadAtencion && (
-              <InlineError message="Selecciona la ciudad de atención." />
-            )}
 
             <div>
               <label htmlFor="entornoAtencion" className="text-sm font-semibold text-zinc-900">
@@ -1506,10 +1561,11 @@ function Paso2Form({
         {/* Exámenes Paraclínicos / Laboratorio / Vacunación */}
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
           <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Exámenes Adicionales</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
+          <div className="space-y-4">
+            {/* Exámenes Paraclínicos */}
+            <div>
               <label className="text-sm font-semibold text-zinc-900">Exámenes Paraclínicos</label>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
                 {data.examenesParaclinicos.map((item) => (
                   <span
                     key={item}
@@ -1531,7 +1587,7 @@ function Paso2Form({
                   </span>
                 ))}
               </div>
-              <div className="mt-3 relative">
+              <div className="mt-1 relative">
                 <select
                   value=""
                   onChange={(e) => {
@@ -1562,15 +1618,45 @@ function Paso2Form({
               </div>
             </div>
 
+            {/* Exámenes de Laboratorio */}
             <div>
-              <label htmlFor="examenesLaboratorio" className="text-sm font-semibold text-zinc-900">
-                Exámenes de Laboratorio
-              </label>
-              <div className="mt-2 relative">
+              <label className="text-sm font-semibold text-zinc-900">Exámenes de Laboratorio</label>
+              <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
+                {data.examenesLaboratorio.map((item) => (
+                  <span
+                    key={item}
+                    className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm"
+                  >
+                    {item}
+                    <button
+                      type="button"
+                      className="text-zinc-400 hover:text-zinc-700"
+                      onClick={() =>
+                        onChange({
+                          ...data,
+                          examenesLaboratorio: data.examenesLaboratorio.filter((x) => x !== item),
+                        })
+                      }
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="mt-1 relative">
                 <select
-                  id="examenesLaboratorio"
-                  value={data.examenesLaboratorio}
-                  onChange={(e) => onChange({ ...data, examenesLaboratorio: e.target.value })}
+                  value=""
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!value) return;
+                    if (!data.examenesLaboratorio.includes(value)) {
+                      onChange({
+                        ...data,
+                        examenesLaboratorio: [...data.examenesLaboratorio, value],
+                      });
+                    }
+                    e.target.value = "";
+                  }}
                   className="w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
                 >
                   <option value="">Elija...</option>
@@ -1586,15 +1672,47 @@ function Paso2Form({
                   </svg>
                 </div>
               </div>
+            </div>
 
-              <label htmlFor="vacunacion" className="text-sm font-semibold text-zinc-900 mt-4 block">
-                Vacunación
-              </label>
-              <div className="mt-2 relative">
+            {/* Vacunación */}
+            <div>
+              <label className="text-sm font-semibold text-zinc-900">Vacunación</label>
+              <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
+                {data.vacunacion.map((item) => (
+                  <span
+                    key={item}
+                    className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm"
+                  >
+                    {item}
+                    <button
+                      type="button"
+                      className="text-zinc-400 hover:text-zinc-700"
+                      onClick={() =>
+                        onChange({
+                          ...data,
+                          vacunacion: data.vacunacion.filter((x) => x !== item),
+                        })
+                      }
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="mt-1 relative">
                 <select
-                  id="vacunacion"
-                  value={data.vacunacion}
-                  onChange={(e) => onChange({ ...data, vacunacion: e.target.value })}
+                  value=""
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!value) return;
+                    if (!data.vacunacion.includes(value)) {
+                      onChange({
+                        ...data,
+                        vacunacion: [...data.vacunacion, value],
+                      });
+                    }
+                    e.target.value = "";
+                  }}
                   className="w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
                 >
                   <option value="">Elija...</option>
@@ -1748,9 +1866,7 @@ function Paso3Summary({
   const [noSabeFirmar, setNoSabeFirmar] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const drawingRef = useRef(false);
-  const examenes = paso2.examenesParaclinicos.length > 0
-    ? paso2.examenesParaclinicos
-    : ["Evaluación Médica Ocupacional (20min)"];
+  const examenes = paso2.examenesParaclinicos;
 
   const startDraw = (event: React.PointerEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current) return;
@@ -1855,6 +1971,34 @@ function Paso3Summary({
                 )}
               </div>
             </div>
+            <div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wide">Laboratorio</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {paso2.examenesLaboratorio.length > 0 ? (
+                  paso2.examenesLaboratorio.map((item) => (
+                    <span key={item} className="px-2 py-1 rounded-full text-xs bg-zinc-100 text-zinc-700">
+                      {item}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-sm text-zinc-500">—</span>
+                )}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wide">Vacunación</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {paso2.vacunacion.length > 0 ? (
+                  paso2.vacunacion.map((item) => (
+                    <span key={item} className="px-2 py-1 rounded-full text-xs bg-zinc-100 text-zinc-700">
+                      {item}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-sm text-zinc-500">—</span>
+                )}
+              </div>
+            </div>
           </div>
         </SummaryCard>
 
@@ -1911,7 +2055,9 @@ function Paso3Summary({
             </div>
             <div className="p-4">
               {fotoDataUrl ? (
-                <img src={fotoDataUrl} alt="Foto registrada" className="h-28 w-full object-cover rounded-lg bg-zinc-50" />
+                <div className="flex justify-center">
+                  <img src={fotoDataUrl} alt="Foto registrada" className="h-48 w-auto max-w-full object-contain rounded-lg bg-zinc-50" />
+                </div>
               ) : (
                 <div className="h-28 w-full rounded-lg border border-dashed border-zinc-200 bg-zinc-50 flex items-center justify-center text-xs text-zinc-500">
                   Sin foto registrada
@@ -2300,27 +2446,6 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
   const [showBanner, setShowBanner] = useState(true);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(defaultStep);
   
-  // Helper functions para sessionStorage
-  const savePaso2ToSession = (data: Paso2Data) => {
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("paso2_draft", JSON.stringify(data));
-    }
-  };
-
-  const loadPaso2FromSession = (): Paso2Data | null => {
-    if (typeof window !== "undefined") {
-      const saved = sessionStorage.getItem("paso2_draft");
-      return saved ? JSON.parse(saved) : null;
-    }
-    return null;
-  };
-
-  const clearPaso2Session = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem("paso2_draft");
-    }
-  };
-  
   // Paso 1 state
   const [paso1, setPaso1] = useState<Paso1Data>({
     tipoIdentificacion: "",
@@ -2363,22 +2488,12 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
     tipoEvaluacion: "",
     enfasisEvaluacion: [],
     examenesParaclinicos: [],
-    examenesLaboratorio: "",
-    vacunacion: "",
+    examenesLaboratorio: [],
+    vacunacion: [],
     observaciones: "",
     prioridadAtencion: "",
   });
   const [touchedPaso2, setTouchedPaso2] = useState(false);
-
-  // Cargar datos de Paso 2 si existen en sessionStorage
-  useEffect(() => {
-    if (currentStep === 2) {
-      const savedPaso2 = loadPaso2FromSession();
-      if (savedPaso2) {
-        setPaso2(savedPaso2);
-      }
-    }
-  }, [currentStep]);
 
   const opciones = useMemo(
     () =>
@@ -2594,19 +2709,16 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
             touched={touchedPaso2}
             isValid={isValidPaso2}
             onBack={() => {
-              savePaso2ToSession(paso2);
               setCurrentStep(1);
               router.push("/nuevo-servicio/intramural");
             }}
             onCancel={() => {
-              clearPaso2Session();
               router.push("/nuevo-servicio");
             }}
             onChange={(data) => setPaso2(data)}
             onSubmit={() => {
               setTouchedPaso2(true);
               if (!isValidPaso2) return;
-              savePaso2ToSession(paso2);
               setCurrentStep(3);
               router.push("/nuevo-servicio/intramural/paso-3");
             }}

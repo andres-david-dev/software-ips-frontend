@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Fuse from "fuse.js";
 
@@ -57,8 +57,8 @@ type Paso2Data = {
   tipoEvaluacion: string;
   enfasisEvaluacion: string[];
   examenesParaclinicos: string[];
-  examenesLaboratorio: string;
-  vacunacion: string;
+  examenesLaboratorio: string[];
+  vacunacion: string[];
   observaciones: string;
   prioridadAtencion: string;
 };
@@ -71,6 +71,13 @@ type CiuoGrupo = { codigo: string; nombre: string; subgrupos_principales?: Recor
 type CiuoItem = {
   codigo: string;
   nombre: string;
+  search: string;
+};
+
+type MunicipioItem = {
+  nombre: string;
+  departamento?: string;
+  codigo?: string;
   search: string;
 };
 
@@ -134,11 +141,11 @@ function highlightMatch(text: string, query: string) {
   const regex = new RegExp(`(${safe})`, "ig");
   const parts = text.split(regex);
   return parts.map((part, index) => {
-          const isMatch = part.toLowerCase().includes(query.toLowerCase());
+    const isMatch = part.toLowerCase() === query.toLowerCase();
     return isMatch ? (
       <mark
         key={`${part}-${index}`}
-        className="bg-green-100 text-zinc-900 rounded-sm"
+        className="bg-[rgb(var(--brand-green-rgb)/0.25)] text-zinc-900 rounded-sm"
       >
         {part}
       </mark>
@@ -351,6 +358,7 @@ function Paso2Form({
   data,
   paso1,
   touched,
+  isValid,
   onBack,
   onCancel,
   onChange,
@@ -359,6 +367,7 @@ function Paso2Form({
   data: Paso2Data;
   paso1: Paso1Data;
   touched: boolean;
+  isValid: boolean;
   onBack: () => void;
   onCancel: () => void;
   onChange: (data: Paso2Data) => void;
@@ -417,6 +426,10 @@ function Paso2Form({
   const convenioOptions = useMemo(() => ["DISTRI SOL PACÍFICO SAS", "SALUD OCUPACIONAL INTEGRAL SAS"], []);
   const empresaOptions = useMemo(() => ["DISTRI SOL PACÍFICO SAS", "INTEGRAL MEDICINA SAS"], []);
   const cargoOptions = useMemo(() => ["Jardinero", "Operario", "Conductor", "Supervisor"], []);
+  const [showCrearCargoModal, setShowCrearCargoModal] = useState(false);
+  const [newCargo, setNewCargo] = useState("");
+  const [customCargoOptions, setCustomCargoOptions] = useState<string[]>([]);
+  const cargoOptionsCombined = useMemo(() => [...cargoOptions, ...customCargoOptions], [cargoOptions, customCargoOptions]);
   const sedeOptions = useMemo(
     () => ["SALUD OCUPACIONAL Y MEDICINA INTEGRAL S.A.S. - Sede Principal"],
     [],
@@ -459,26 +472,102 @@ function Paso2Form({
     ],
     [],
   );
-  const paraclinicosOptions = useMemo(
-    () => [
-      "Audiometría Tamiz",
-      "Evaluación Médica Ocupacional (20min)",
-      "Visiometría",
-      "Espirometría",
-      "Electrocardiograma",
-    ],
-    [],
-  );
-  const laboratorioOptions = useMemo(
-    () => ["Cuadro hemático", "Glicemia", "Perfil lipídico", "Orina", "No Aplica"],
-    [],
-  );
-  const vacunacionOptions = useMemo(
-    () => ["Tétanos", "Hepatitis B", "Influenza", "COVID-19", "No Aplica"],
-    [],
-  );
+
+  // Datos y búsqueda para municipios de Colombia
+  const [municipios, setMunicipios] = useState<MunicipioItem[]>([]);
+  const fuseMunicipios = useMemo(() => new Fuse(municipios, { keys: ["search"], threshold: 0.3 }), [municipios]);
+  useEffect(() => {
+    let active = true;
+    fetch("/data/municipios-colombia.json")
+      .then((r) => r.json())
+      .then((list: Array<{ nombre: string; departamento?: string; codigo?: string }>) => {
+        if (!active) return;
+        const prep = list.map((m) => ({
+          ...m,
+          search: normalizar(`${m.nombre} ${m.departamento ?? ""}`),
+        }));
+        setMunicipios(prep);
+      })
+      .catch(() => {
+        // silencioso: si no existe el archivo aún, no rompe la UI
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+  const municipioSuggestions = useMemo(() => {
+    const q = normalizar(data.lugarResidencia || "");
+    if (!q) return [] as MunicipioItem[];
+    return fuseMunicipios.search(q).map((r) => r.item).slice(0, 8);
+  }, [data.lugarResidencia, fuseMunicipios]);
+  const ciudadAtencionSuggestions = useMemo(() => {
+    const q = normalizar(data.ciudadAtencion || "");
+    if (!q) return [] as MunicipioItem[];
+    return fuseMunicipios.search(q).map((r) => r.item).slice(0, 8);
+  }, [data.ciudadAtencion, fuseMunicipios]);
+
+  // Validadores de entrada
+  const sanitizeLettersOnly = (value: string) => value.replace(/[^a-záéíóúñA-ZÁÉÍÓÚÑ\s]/g, "");
+  const sanitizeNumbersOnly = (value: string) => value.replace(/\D+/g, "");
+  const blockNonLetters = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowed = ["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End"];
+    if (e.ctrlKey || e.metaKey) return;
+    const isLetter = /[a-záéíóúñA-ZÁÉÍÓÚÑ\s]/.test(e.key);
+    const isAllowed = allowed.includes(e.key);
+    if (!isLetter && !isAllowed) e.preventDefault();
+  };
+  const blockNonNumbers = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowed = ["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End"];
+    if (e.ctrlKey || e.metaKey) return;
+    const isDigit = /[0-9]/.test(e.key);
+    const isAllowed = allowed.includes(e.key);
+    if (!isDigit && !isAllowed) e.preventDefault();
+  };
+
+  // Scroll to first error field
+  useEffect(() => {
+    if (touched && !isValid) {
+      const firstErrorId = [
+        !data.primerNombre && "primerNombre",
+        !data.primerApellido && "primerApellido",
+        !data.sexoBiologico && "sexoBiologico",
+        !data.identidadGenero && "identidadGenero",
+        !data.fechaNacimiento && "fechaNacimiento",
+        !data.tipoSangre && "tipoSangre",
+        !data.estadoCivil && "estadoCivil",
+        !data.lugarResidencia && "lugarResidencia",
+        !data.telefono && "telefono",
+        !data.email && "email",
+        !data.eps && "eps",
+      ].find(Boolean);
+      if (firstErrorId) {
+        const el = document.getElementById(firstErrorId as string);
+        if (el) {
+          setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+        }
+      }
+    }
+  }, [touched, isValid, data]);
+  const [paraclinicosOptions, setParaclinicosOptions] = useState<string[]>([]);
+  const [laboratorioOptions, setLaboratorioOptions] = useState<string[]>([]);
+  const [vacunacionOptions, setVacunacionOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("/data/examenes.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setParaclinicosOptions(data.Paraclinicos || []);
+        setLaboratorioOptions(data.Laboratorio || []);
+        setVacunacionOptions(data.Vacunacion || []);
+      })
+      .catch(() => {
+        console.error("Error cargando exámenes");
+      });
+  }, []);
   const [ocupacionOptions, setOcupacionOptions] = useState<CiuoItem[]>([]);
   const [ocupacionOpen, setOcupacionOpen] = useState(false);
+  const [lugarResidenciaOpen, setLugarResidenciaOpen] = useState(false);
+  const [ciudadAtencionOpen, setCiudadAtencionOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -512,21 +601,16 @@ function Paso2Form({
   }, [fuse, ocupacionQuery]);
 
   return (
-    <div className="mt-6 rounded-2xl border border-zinc-200 bg-white">
-      <form
-        className="p-5 space-y-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit();
-        }}
-      >
+    <form
+      className="space-y-6"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
         {/* Datos personales */}
-        <div className="rounded-2xl border border-zinc-200 bg-[#f7fafc] p-5 space-y-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-bold text-[var(--brand-blue)] uppercase tracking-wide">Datos personales</h3>
-            </div>
-          </div>
+        <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Datos Personales</h3>
 
           {/* Identificación (read-only display) */}
           <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
@@ -547,7 +631,8 @@ function Paso2Form({
               type="text"
               placeholder="Ingresa primer nombre"
               value={data.primerNombre}
-              onChange={(e) => onChange({ ...data, primerNombre: e.target.value })}
+              onChange={(e) => onChange({ ...data, primerNombre: sanitizeLettersOnly(e.target.value) })}
+              onKeyDown={blockNonLetters}
               className={cn(
                 "mt-2 w-full h-11 rounded-xl border px-3 text-sm outline-none",
                 "focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
@@ -568,7 +653,8 @@ function Paso2Form({
               type="text"
               placeholder="Opcional"
               value={data.segundoNombre}
-              onChange={(e) => onChange({ ...data, segundoNombre: e.target.value })}
+              onChange={(e) => onChange({ ...data, segundoNombre: sanitizeLettersOnly(e.target.value) })}
+              onKeyDown={blockNonLetters}
               className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
             />
           </div>
@@ -582,7 +668,8 @@ function Paso2Form({
               type="text"
               placeholder="Ingresa primer apellido"
               value={data.primerApellido}
-              onChange={(e) => onChange({ ...data, primerApellido: e.target.value })}
+              onChange={(e) => onChange({ ...data, primerApellido: sanitizeLettersOnly(e.target.value) })}
+              onKeyDown={blockNonLetters}
               className={cn(
                 "mt-2 w-full h-11 rounded-xl border px-3 text-sm outline-none",
                 "focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
@@ -603,7 +690,8 @@ function Paso2Form({
               type="text"
               placeholder="Opcional"
               value={data.segundoApellido}
-              onChange={(e) => onChange({ ...data, segundoApellido: e.target.value })}
+              onChange={(e) => onChange({ ...data, segundoApellido: sanitizeLettersOnly(e.target.value) })}
+              onKeyDown={blockNonLetters}
               className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
             />
           </div>
@@ -896,22 +984,57 @@ function Paso2Form({
         </div>
 
         {/* Residencia y contacto */}
-        <div className="rounded-2xl border border-zinc-200 bg-[#f7fafc] p-5 space-y-5">
-          <div>
-            <h3 className="text-lg font-bold text-[var(--brand-blue)] uppercase tracking-wide">Residencia y contacto</h3>
-          </div>
+        <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Residencia y Contacto</h3>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
-            <SearchableSelect
-              id="lugarResidencia"
-              label="Lugar Residencia"
-              placeholder="Buscar municipio o ciudad"
-              value={data.lugarResidencia}
-              options={["Cali", "Yumbo", "Palmira", "Candelaria", "Jamundí", "Vijes", "Buenaventura", "Cartago", "Tuluá", "Buga", "Bogotá", "Medellín", "Barranquilla", "Cartagena", "Santa Marta", "Cúcuta", "Ibagué", "Armenia", "Pereira", "Manizales", "Villavicencio", "Valledupar", "Montería", "Sincelejo", "Riohacha", "Quibdó", "Mocoa", "Leticia"]}
-              onChange={(value) => onChange({ ...data, lugarResidencia: value })}
-              error={touched && !data.lugarResidencia}
-            />
+            <label htmlFor="lugarResidencia" className="text-sm font-semibold text-zinc-900">
+              Lugar Residencia <span className="text-rose-600">*</span>
+            </label>
+            <div className="mt-2 relative">
+              <input
+                id="lugarResidencia"
+                type="text"
+                placeholder="Buscar municipio o ciudad"
+                value={data.lugarResidencia}
+                onChange={(e) => onChange({ ...data, lugarResidencia: e.target.value })}
+                onFocus={() => setLugarResidenciaOpen(true)}
+                onBlur={() => setTimeout(() => setLugarResidenciaOpen(false), 150)}
+                className={cn(
+                  "w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
+                  touched && !data.lugarResidencia ? "border-rose-300" : "border-zinc-200",
+                )}
+              />
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M15 15l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" stroke="currentColor" strokeWidth="2" />
+                </svg>
+              </div>
+              {lugarResidenciaOpen && data.lugarResidencia && (
+                <div className="absolute z-20 mt-2 w-full rounded-xl border border-zinc-200 bg-white shadow-sm max-h-56 overflow-auto">
+                  {municipioSuggestions.length > 0 ? (
+                    municipioSuggestions.map((m) => (
+                      <button
+                        type="button"
+                        key={`${m.codigo ?? m.nombre}-${m.nombre}`}
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-zinc-50"
+                        onClick={() => {
+                          onChange({ ...data, lugarResidencia: m.departamento ? `${m.nombre}, ${m.departamento}` : m.nombre });
+                          setLugarResidenciaOpen(false);
+                        }}
+                      >
+                        <span className="font-medium text-zinc-900">{m.nombre}</span>
+                        {m.departamento ? <span className="ml-1 text-zinc-500">({m.departamento})</span> : null}
+                      </button>
+                    ))
+                  ) : (
+                    <div className="px-3 py-2 text-xs text-zinc-500">Sin coincidencias</div>
+                  )}
+                </div>
+              )}
+            </div>
             {touched && !data.lugarResidencia && (
               <InlineError message="Selecciona el lugar de residencia." />
             )}
@@ -1028,7 +1151,8 @@ function Paso2Form({
               type="tel"
               placeholder="Ej: 3157051782"
               value={data.telefono}
-              onChange={(e) => onChange({ ...data, telefono: e.target.value })}
+              onChange={(e) => onChange({ ...data, telefono: sanitizeNumbersOnly(e.target.value) })}
+              onKeyDown={blockNonNumbers}
               className={cn(
                 "mt-2 w-full h-11 rounded-xl border px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
                 touched && !data.telefono ? "border-rose-300" : "border-zinc-200",
@@ -1086,10 +1210,8 @@ function Paso2Form({
         </div>
 
         {/* Seguridad social */}
-        <div className="rounded-2xl border border-zinc-200 bg-[#f7fafc] p-5 space-y-4">
-          <div>
-            <h3 className="text-lg font-bold text-[var(--brand-blue)] uppercase tracking-wide">Seguridad social</h3>
-          </div>
+        <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Seguridad Social</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -1193,7 +1315,7 @@ function Paso2Form({
             <label htmlFor="cargo" className="text-sm font-semibold text-zinc-900">
               Cargo a Desempeñar <span className="text-rose-600">*</span>
             </label>
-            <button type="button" className="text-xs text-[var(--brand-blue)] hover:underline">
+            <button type="button" className="text-xs text-[var(--brand-blue)] hover:underline" onClick={() => setShowCrearCargoModal(true)}>
               + Crear cargo
             </button>
           </div>
@@ -1202,7 +1324,7 @@ function Paso2Form({
             label=""
             placeholder="Buscar cargo"
             value={data.cargo}
-            options={cargoOptions}
+            options={cargoOptionsCombined}
             onChange={(value) => onChange({ ...data, cargo: value })}
             error={touched && !data.cargo}
           />
@@ -1211,9 +1333,52 @@ function Paso2Form({
           )}
         </div>
 
+        {showCrearCargoModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 p-4">
+            <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl border border-zinc-200">
+              <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white rounded-t-2xl">
+                <div className="font-semibold">Crear cargo</div>
+                <button type="button" onClick={() => setShowCrearCargoModal(false)} className="h-8 w-8 rounded-full hover:bg-white/20" aria-label="Cerrar">×</button>
+              </div>
+              <div className="p-5">
+                <label htmlFor="nuevoCargo" className="text-sm font-semibold text-zinc-900">Nombre del cargo</label>
+                <input
+                  id="nuevoCargo"
+                  type="text"
+                  placeholder="Ej: Auxiliar Administrativo"
+                  value={newCargo}
+                  onChange={(e) => setNewCargo(e.target.value)}
+                  className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+                />
+                <p className="mt-2 text-xs text-zinc-600">Evita duplicados; usaremos el texto tal cual.</p>
+              </div>
+              <div className="px-5 py-4 border-t border-zinc-200 flex justify-end gap-3">
+                <button type="button" onClick={() => { setShowCrearCargoModal(false); setNewCargo(""); }} className="h-10 px-4 rounded-xl text-sm font-semibold text-zinc-700 border border-zinc-200 hover:bg-zinc-50">Cancelar</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nombre = newCargo.trim();
+                    if (!nombre) return;
+                    const exists = cargoOptionsCombined.some((c) => c.toLowerCase() === nombre.toLowerCase());
+                    if (!exists) {
+                      setCustomCargoOptions((prev) => [...prev, nombre]);
+                    }
+                    onChange({ ...data, cargo: nombre });
+                    setShowCrearCargoModal(false);
+                    setNewCargo("");
+                  }}
+                  className="h-10 px-5 rounded-xl text-sm font-semibold text-white bg-[var(--brand-blue)] hover:opacity-95"
+                >
+                  Guardar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Exámenes a Realizar */}
-        <div className="rounded-2xl border border-zinc-200 bg-[#f7fafc] p-5 mb-6">
-          <h3 className="text-lg font-bold text-[var(--brand-blue)] uppercase tracking-wide">Exámenes a Realizar</h3>
+        <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Exámenes a Realizar</h3>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
             <div>
@@ -1242,18 +1407,57 @@ function Paso2Form({
               </div>
             </div>
 
-            <SearchableSelect
-              id="ciudadAtencion"
-              label="Ciudad Atención"
-              placeholder="Buscar ciudad"
-              value={data.ciudadAtencion}
-              options={["Cali", "Yumbo", "Palmira", "Candelaria"]}
-              onChange={(value) => onChange({ ...data, ciudadAtencion: value })}
-              error={touched && !data.ciudadAtencion}
-            />
-            {touched && !data.ciudadAtencion && (
-              <InlineError message="Selecciona la ciudad de atención." />
-            )}
+            <div>
+              <label htmlFor="ciudadAtencion" className="text-sm font-semibold text-zinc-900">
+                Ciudad Atención <span className="text-rose-600">*</span>
+              </label>
+              <div className="mt-2 relative">
+                <input
+                  id="ciudadAtencion"
+                  type="text"
+                  placeholder="Buscar ciudad o municipio"
+                  value={data.ciudadAtencion}
+                  onChange={(e) => onChange({ ...data, ciudadAtencion: e.target.value })}
+                  onFocus={() => setCiudadAtencionOpen(true)}
+                  onBlur={() => setTimeout(() => setCiudadAtencionOpen(false), 150)}
+                  className={cn(
+                    "w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent",
+                    touched && !data.ciudadAtencion ? "border-rose-300" : "border-zinc-200",
+                  )}
+                />
+                <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 15l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                </div>
+                {ciudadAtencionOpen && data.ciudadAtencion && (
+                  <div className="absolute z-20 mt-2 w-full rounded-xl border border-zinc-200 bg-white shadow-sm max-h-56 overflow-auto">
+                    {ciudadAtencionSuggestions.length > 0 ? (
+                      ciudadAtencionSuggestions.map((m) => (
+                        <button
+                          type="button"
+                          key={`${m.codigo ?? m.nombre}-${m.nombre}`}
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-zinc-50"
+                          onClick={() => {
+                            onChange({ ...data, ciudadAtencion: m.departamento ? `${m.nombre}, ${m.departamento}` : m.nombre });
+                            setCiudadAtencionOpen(false);
+                          }}
+                        >
+                          <span className="font-medium text-zinc-900">{m.nombre}</span>
+                          {m.departamento ? <span className="ml-1 text-zinc-500">({m.departamento})</span> : null}
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-3 py-2 text-xs text-zinc-500">Sin coincidencias</div>
+                    )}
+                  </div>
+                )}
+              </div>
+              {touched && !data.ciudadAtencion && (
+                <InlineError message="Selecciona la ciudad de atención." />
+              )}
+            </div>
 
             <div>
               <label htmlFor="entornoAtencion" className="text-sm font-semibold text-zinc-900">
@@ -1331,7 +1535,7 @@ function Paso2Form({
                     className={cn(
                       "flex items-center gap-2 rounded-xl border px-3 py-2 text-sm cursor-pointer",
                       checked
-                        ? "border-[var(--brand-blue)] bg-blue-50"
+                        ? "border-[var(--brand-blue)] bg-[rgb(var(--brand-blue-rgb)/0.06)]"
                         : "border-zinc-200 hover:bg-zinc-50",
                     )}
                   >
@@ -1355,11 +1559,13 @@ function Paso2Form({
         </div>
 
         {/* Exámenes Paraclínicos / Laboratorio / Vacunación */}
-        <div className="rounded-2xl border border-zinc-200 bg-[#f7fafc] p-5 mb-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
+        <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Exámenes Adicionales</h3>
+          <div className="space-y-4">
+            {/* Exámenes Paraclínicos */}
+            <div>
               <label className="text-sm font-semibold text-zinc-900">Exámenes Paraclínicos</label>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
                 {data.examenesParaclinicos.map((item) => (
                   <span
                     key={item}
@@ -1381,7 +1587,7 @@ function Paso2Form({
                   </span>
                 ))}
               </div>
-              <div className="mt-3 relative">
+              <div className="mt-1 relative">
                 <select
                   value=""
                   onChange={(e) => {
@@ -1412,15 +1618,45 @@ function Paso2Form({
               </div>
             </div>
 
+            {/* Exámenes de Laboratorio */}
             <div>
-              <label htmlFor="examenesLaboratorio" className="text-sm font-semibold text-zinc-900">
-                Exámenes de Laboratorio
-              </label>
-              <div className="mt-2 relative">
+              <label className="text-sm font-semibold text-zinc-900">Exámenes de Laboratorio</label>
+              <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
+                {data.examenesLaboratorio.map((item) => (
+                  <span
+                    key={item}
+                    className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm"
+                  >
+                    {item}
+                    <button
+                      type="button"
+                      className="text-zinc-400 hover:text-zinc-700"
+                      onClick={() =>
+                        onChange({
+                          ...data,
+                          examenesLaboratorio: data.examenesLaboratorio.filter((x) => x !== item),
+                        })
+                      }
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="mt-1 relative">
                 <select
-                  id="examenesLaboratorio"
-                  value={data.examenesLaboratorio}
-                  onChange={(e) => onChange({ ...data, examenesLaboratorio: e.target.value })}
+                  value=""
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!value) return;
+                    if (!data.examenesLaboratorio.includes(value)) {
+                      onChange({
+                        ...data,
+                        examenesLaboratorio: [...data.examenesLaboratorio, value],
+                      });
+                    }
+                    e.target.value = "";
+                  }}
                   className="w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
                 >
                   <option value="">Elija...</option>
@@ -1436,15 +1672,47 @@ function Paso2Form({
                   </svg>
                 </div>
               </div>
+            </div>
 
-              <label htmlFor="vacunacion" className="text-sm font-semibold text-zinc-900 mt-4 block">
-                Vacunación
-              </label>
-              <div className="mt-2 relative">
+            {/* Vacunación */}
+            <div>
+              <label className="text-sm font-semibold text-zinc-900">Vacunación</label>
+              <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
+                {data.vacunacion.map((item) => (
+                  <span
+                    key={item}
+                    className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-sm"
+                  >
+                    {item}
+                    <button
+                      type="button"
+                      className="text-zinc-400 hover:text-zinc-700"
+                      onClick={() =>
+                        onChange({
+                          ...data,
+                          vacunacion: data.vacunacion.filter((x) => x !== item),
+                        })
+                      }
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="mt-1 relative">
                 <select
-                  id="vacunacion"
-                  value={data.vacunacion}
-                  onChange={(e) => onChange({ ...data, vacunacion: e.target.value })}
+                  value=""
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!value) return;
+                    if (!data.vacunacion.includes(value)) {
+                      onChange({
+                        ...data,
+                        vacunacion: [...data.vacunacion, value],
+                      });
+                    }
+                    e.target.value = "";
+                  }}
                   className="w-full h-11 rounded-xl border bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
                 >
                   <option value="">Elija...</option>
@@ -1465,8 +1733,8 @@ function Paso2Form({
         </div>
 
         {/* Observaciones */}
-        <div className="rounded-2xl border border-zinc-200 bg-[#f7fafc] p-5 mb-6">
-          <h3 className="text-lg font-bold text-[var(--brand-blue)] uppercase tracking-wide">Observaciones</h3>
+        <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Observaciones</h3>
           <div className="mt-4">
             <label className="text-sm font-semibold text-zinc-900">
               Prioridad para la atención <span className="text-rose-600">*</span>
@@ -1482,7 +1750,7 @@ function Paso2Form({
                     data.prioridadAtencion === opt
                       ? opt === "Prioritaria"
                         ? "border-transparent text-white bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)]"
-                        : "border-[var(--brand-blue)] bg-blue-50"
+                        : "border-[var(--brand-blue)] bg-[rgb(var(--brand-blue-rgb)/0.06)]"
                       : "border-zinc-200 hover:bg-zinc-50",
                   )}
                 >
@@ -1509,97 +1777,15 @@ function Paso2Form({
           </div>
         </div>
 
-        {/* Firma */}
-        <div className="rounded-2xl border border-zinc-200 bg-[#f7fafc] p-5 mb-6">
-          <h3 className="text-lg font-bold text-[var(--brand-blue)] uppercase tracking-wide mb-4">Firma</h3>
-          <div className="bg-white border-2 border-dashed border-zinc-300 rounded-xl p-4 min-h-[200px] flex items-center justify-center">
-            <canvas
-              id="signatureCanvas"
-              className="border border-zinc-200 rounded-lg cursor-crosshair"
-              width={600}
-              height={200}
-              onMouseDown={(e) => {
-                const canvas = e.currentTarget;
-                const ctx = canvas.getContext('2d');
-                if (!ctx) return;
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                canvas.onmousemove = (moveEvent) => {
-                  const newX = moveEvent.clientX - rect.left;
-                  const newY = moveEvent.clientY - rect.top;
-                  ctx.lineTo(newX, newY);
-                  ctx.strokeStyle = '#000';
-                  ctx.lineWidth = 2;
-                  ctx.stroke();
-                };
-              }}
-              onMouseUp={(e) => {
-                const canvas = e.currentTarget;
-                canvas.onmousemove = null;
-              }}
-              onMouseLeave={(e) => {
-                const canvas = e.currentTarget;
-                canvas.onmousemove = null;
-              }}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              const canvas = document.getElementById('signatureCanvas') as HTMLCanvasElement;
-              if (canvas) {
-                const ctx = canvas.getContext('2d');
-                if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-              }
-            }}
-            className="mt-3 h-9 px-4 rounded-lg text-sm font-semibold text-zinc-700 border border-zinc-300 hover:bg-zinc-50"
-          >
-            Limpiar Firma
-          </button>
-        </div>
-
-        {/* Captura de Fotos */}
-        <div className="rounded-2xl border border-zinc-200 bg-[#f7fafc] p-5 mb-6">
-          <h3 className="text-lg font-bold text-[var(--brand-blue)] uppercase tracking-wide mb-4">Captura de Fotos</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-semibold text-zinc-900 mb-2 block">Cámara</label>
-              <div className="bg-white border-2 border-dashed border-zinc-300 rounded-xl p-4 min-h-[200px] flex items-center justify-center">
-                <div className="text-center text-zinc-500">
-                  <div className="w-12 h-12 mx-auto mb-2 text-zinc-400 flex items-center justify-center text-4xl">
-                    📷
-                  </div>
-                  <p className="text-sm">Haz clic para capturar foto</p>
-                </div>
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                className="mt-3 w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[var(--brand-blue)] file:text-white hover:file:opacity-90"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900 mb-2 block">Vista Previa</label>
-              <div className="bg-white border-2 border-dashed border-zinc-300 rounded-xl p-4 min-h-[200px] flex items-center justify-center">
-                <div className="text-center text-zinc-400">
-                  <div className="w-12 h-12 mx-auto mb-2 flex items-center justify-center text-4xl">
-                    🖼️
-                  </div>
-                  <p className="text-sm">Sin imagen</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Actions */
-        <div className="flex items-center gap-3 pt-4 border-t border-zinc-200">
+        {/* Actions */}
+        <div className="flex items-center gap-3 pt-6 border-t border-zinc-200">
           <button
             type="submit"
-            className="h-11 px-6 rounded-xl text-white font-semibold shadow-sm bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] hover:opacity-95"
+            className={cn(
+              "h-12 px-8 rounded-xl text-white font-bold shadow-md transition-all duration-200 flex items-center gap-2",
+              "bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)]",
+              "hover:shadow-lg hover:scale-105",
+            )}
           >
             Continuar
           </button>
@@ -1607,7 +1793,7 @@ function Paso2Form({
           <button
             type="button"
             onClick={onBack}
-            className="h-11 px-4 rounded-xl text-sm font-semibold text-zinc-700 hover:bg-zinc-100"
+            className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
           >
             Regresar
           </button>
@@ -1615,21 +1801,20 @@ function Paso2Form({
           <button
             type="button"
             onClick={onCancel}
-            className="h-11 px-4 rounded-xl text-sm font-semibold text-zinc-500 hover:bg-zinc-100"
+            className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-600 border-2 border-zinc-200 hover:bg-zinc-50 transition-all duration-200"
           >
             Cancelar Registro
           </button>
         </div>
       </form>
-    </div>
-  );
-}
+    );
+  }
 
-function SummaryCard({ title, children }: { title: string; children: React.ReactNode }) {
+  function SummaryCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm">
-      <div className="px-5 py-4 border-b border-zinc-200 bg-gradient-to-r from-zinc-50 to-white">
-        <h3 className="text-sm font-semibold text-zinc-900 uppercase tracking-wide">{title}</h3>
+      <div className="px-6 py-4 border-b border-zinc-200 bg-gradient-to-r from-zinc-50 to-white rounded-t-2xl">
+        <h3 className="text-lg font-semibold text-[var(--brand-blue)]">{title}</h3>
       </div>
       <div className="p-5">{children}</div>
     </div>
@@ -1658,30 +1843,73 @@ function Paso3Summary({
   const [showAsignar, setShowAsignar] = useState(false);
   const [selectedExamen, setSelectedExamen] = useState<string>("");
   const [selectedFecha, setSelectedFecha] = useState("Miércoles, 21 de Enero de 2026");
-  const examenes = paso2.examenesParaclinicos.length > 0
-    ? paso2.examenesParaclinicos
-    : ["Evaluación Médica Ocupacional (20min)"];
+  const [showFirmaModal, setShowFirmaModal] = useState(false);
+  const [showFotoModal, setShowFotoModal] = useState(false);
+  const [firmaDataUrl, setFirmaDataUrl] = useState<string>("");
+  const [fotoDataUrl, setFotoDataUrl] = useState<string>("");
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    if (showFotoModal && !fotoDataUrl && videoRef.current) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: "user" } })
+        .then((stream) => {
+          if (videoRef.current) videoRef.current.srcObject = stream;
+        })
+        .catch((err) => console.error("Error accediendo a cámara:", err));
+    }
+    return () => {
+      const stream = videoRef.current?.srcObject as MediaStream | null;
+      stream?.getTracks().forEach((t) => t.stop());
+      if (videoRef.current) videoRef.current.srcObject = null;
+    };
+  }, [showFotoModal, fotoDataUrl]);
+  const [noSabeFirmar, setNoSabeFirmar] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const drawingRef = useRef(false);
+  const examenes = paso2.examenesParaclinicos;
+
+  const startDraw = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!canvasRef.current) return;
+    drawingRef.current = true;
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(event.clientX - rect.left, event.clientY - rect.top);
+  };
+
+  const draw = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!drawingRef.current || !canvasRef.current) return;
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    ctx.lineTo(event.clientX - rect.left, event.clientY - rect.top);
+    ctx.strokeStyle = "#1f2937";
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+  };
+
+  const endDraw = () => {
+    drawingRef.current = false;
+  };
+
+  const clearFirma = () => {
+    if (!canvasRef.current) return;
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  };
+
+  const saveFirma = () => {
+    if (!canvasRef.current) return;
+    setFirmaDataUrl(canvasRef.current.toDataURL("image/png"));
+    setShowFirmaModal(false);
+  };
 
   return (
     <div className="mt-6 space-y-4">
-      <div className="rounded-2xl border border-zinc-200 bg-gradient-to-r from-blue-50 to-green-50 p-5">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-xs text-zinc-600 uppercase tracking-wide">Paso 3</div>
-            <h2 className="text-xl font-semibold text-zinc-900">Asignación de citas</h2>
-            <p className="text-sm text-zinc-600 mt-1">
-              Verifica la información consolidada antes de continuar.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onBack}
-            className="h-10 px-4 rounded-xl text-sm font-semibold text-zinc-700 bg-white border border-zinc-200 hover:bg-zinc-50"
-          >
-            Volver a Paso 2
-          </button>
-        </div>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <SummaryCard title="Usuario">
@@ -1743,6 +1971,34 @@ function Paso3Summary({
                 )}
               </div>
             </div>
+            <div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wide">Laboratorio</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {paso2.examenesLaboratorio.length > 0 ? (
+                  paso2.examenesLaboratorio.map((item) => (
+                    <span key={item} className="px-2 py-1 rounded-full text-xs bg-zinc-100 text-zinc-700">
+                      {item}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-sm text-zinc-500">—</span>
+                )}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wide">Vacunación</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {paso2.vacunacion.length > 0 ? (
+                  paso2.vacunacion.map((item) => (
+                    <span key={item} className="px-2 py-1 rounded-full text-xs bg-zinc-100 text-zinc-700">
+                      {item}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-sm text-zinc-500">—</span>
+                )}
+              </div>
+            </div>
           </div>
         </SummaryCard>
 
@@ -1757,6 +2013,69 @@ function Paso3Summary({
           </div>
         </SummaryCard>
       </div>
+
+      <SummaryCard title="Registro de Firma y Foto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="rounded-xl border border-zinc-200 bg-white">
+            <div className="px-4 py-3 border-b border-zinc-200 text-xs font-semibold text-zinc-600 uppercase tracking-wide">
+              Firma Usuario
+            </div>
+            <div className="p-4">
+              {firmaDataUrl ? (
+                <img src={firmaDataUrl} alt="Firma registrada" className="h-28 w-full object-contain rounded-lg bg-zinc-50" />
+              ) : (
+                <div className="h-28 w-full rounded-lg border border-dashed border-zinc-200 bg-zinc-50 flex items-center justify-center text-xs text-zinc-500">
+                  Sin firma registrada
+                </div>
+              )}
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowFirmaModal(true)}
+                  className="h-9 px-4 rounded-lg text-sm font-semibold text-white bg-[var(--brand-blue)] hover:opacity-95"
+                >
+                  Registrar Firma
+                </button>
+                <label className="flex items-center gap-2 text-xs text-zinc-600">
+                  <input
+                    type="checkbox"
+                    checked={noSabeFirmar}
+                    onChange={(e) => setNoSabeFirmar(e.target.checked)}
+                    className="h-4 w-4 accent-[var(--brand-blue)]"
+                  />
+                  Manifiesta NO saber firmar
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-zinc-200 bg-white">
+            <div className="px-4 py-3 border-b border-zinc-200 text-xs font-semibold text-zinc-600 uppercase tracking-wide">
+              Foto Usuario
+            </div>
+            <div className="p-4">
+              {fotoDataUrl ? (
+                <div className="flex justify-center">
+                  <img src={fotoDataUrl} alt="Foto registrada" className="h-48 w-auto max-w-full object-contain rounded-lg bg-zinc-50" />
+                </div>
+              ) : (
+                <div className="h-28 w-full rounded-lg border border-dashed border-zinc-200 bg-zinc-50 flex items-center justify-center text-xs text-zinc-500">
+                  Sin foto registrada
+                </div>
+              )}
+              <div className="mt-3 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowFotoModal(true)}
+                  className="h-9 px-4 rounded-lg text-sm font-semibold text-white bg-emerald-600 hover:opacity-95"
+                >
+                  Registrar Foto
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </SummaryCard>
 
       <div className="rounded-2xl border border-zinc-200 bg-white p-5">
         <div className="text-xs text-zinc-500 uppercase tracking-wide">Observaciones</div>
@@ -1830,6 +2149,199 @@ function Paso3Summary({
         </div>
       </div>
 
+      {/* Botones de acción */}
+      <div className="flex items-center gap-3 pt-6 border-t border-zinc-200 rounded-2xl bg-white p-6">
+        <button
+          type="button"
+          onClick={onBack}
+          className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
+        >
+          Volver
+        </button>
+
+        <button
+          type="button"
+          className="h-12 px-8 rounded-xl text-white font-bold shadow-md transition-all duration-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] hover:shadow-lg hover:scale-105"
+        >
+          Agendar Cita
+        </button>
+
+        <button
+          type="button"
+          className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-600 border-2 border-zinc-200 hover:bg-zinc-50 transition-all duration-200"
+        >
+          Cancelar
+        </button>
+      </div>
+
+      {showFirmaModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 p-4">
+          <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-zinc-200">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white rounded-t-2xl">
+              <div className="font-semibold">Registrar Firma</div>
+              <button
+                type="button"
+                onClick={() => setShowFirmaModal(false)}
+                className="h-8 w-8 rounded-full hover:bg-white/20"
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-5">
+              <div className="text-sm text-zinc-700 mb-3">
+                {`${paso2.primerNombre} ${paso2.segundoNombre} ${paso2.primerApellido} ${paso2.segundoApellido}`
+                  .replace(/\s+/g, " ")
+                  .trim()}
+              </div>
+              <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50 p-3">
+                <canvas
+                  ref={canvasRef}
+                  width={720}
+                  height={220}
+                  onPointerDown={startDraw}
+                  onPointerMove={draw}
+                  onPointerUp={endDraw}
+                  onPointerLeave={endDraw}
+                  className="w-full h-48 rounded-lg bg-white"
+                />
+              </div>
+            </div>
+            <div className="px-5 py-4 border-t border-zinc-200 flex justify-between gap-3">
+              <button
+                type="button"
+                onClick={clearFirma}
+                className="h-10 px-4 rounded-xl text-sm font-semibold text-zinc-700 border border-zinc-200 hover:bg-zinc-50"
+              >
+                Borrar firma
+              </button>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowFirmaModal(false)}
+                  className="h-10 px-4 rounded-xl text-sm font-semibold text-zinc-700 border border-zinc-200 hover:bg-zinc-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={saveFirma}
+                  className="h-10 px-5 rounded-xl text-sm font-semibold text-white bg-[var(--brand-blue)]"
+                >
+                  Registrar Firma
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showFotoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl border border-zinc-200">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white rounded-t-2xl">
+              <div className="font-semibold">Capturar Foto</div>
+              <button
+                type="button"
+                onClick={() => setShowFotoModal(false)}
+                className="h-8 w-8 rounded-full hover:bg-white/20"
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+            </div>
+            <div className="p-5">
+              <div className="text-sm text-zinc-700 mb-3">
+                {`${paso2.primerNombre} ${paso2.segundoNombre} ${paso2.primerApellido} ${paso2.segundoApellido}`
+                  .replace(/\s+/g, " ")
+                  .trim()}
+              </div>
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 flex flex-col items-center gap-3">
+                {fotoDataUrl ? (
+                  <img src={fotoDataUrl} alt="Foto capturada" className="h-96 w-64 rounded-lg object-cover" />
+                ) : (
+                  <video ref={videoRef} autoPlay playsInline className="h-96 w-64 rounded-lg object-cover bg-black" />
+                )}
+              </div>
+            </div>
+            <div className="px-5 py-4 border-t border-zinc-200 flex flex-col gap-3">
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const stream = videoRef.current?.srcObject as MediaStream | null;
+                    stream?.getTracks().forEach((t) => t.stop());
+                    if (videoRef.current) videoRef.current.srcObject = null;
+                    setFotoDataUrl("");
+                    setShowFotoModal(false);
+                  }}
+                  className="flex-1 h-10 rounded-xl text-sm font-semibold text-zinc-700 border border-zinc-200 hover:bg-zinc-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (videoRef.current) {
+                      const canvas = document.createElement("canvas");
+                      const vw = videoRef.current.videoWidth;
+                      const vh = videoRef.current.videoHeight;
+                      canvas.width = vw;
+                      canvas.height = vh;
+                      const ctx = canvas.getContext("2d");
+                      if (ctx) {
+                        ctx.drawImage(videoRef.current, 0, 0, vw, vh);
+                        const dataUrl = canvas.toDataURL("image/jpeg");
+                        setFotoDataUrl(dataUrl);
+                        const stream = videoRef.current.srcObject as MediaStream | null;
+                        stream?.getTracks().forEach((t) => t.stop());
+                        videoRef.current.srcObject = null;
+                      }
+                    }
+                  }}
+                  className="flex-1 h-10 rounded-xl text-sm font-semibold text-white bg-[var(--brand-blue)] hover:opacity-95"
+                >
+                  Capturar
+                </button>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFotoDataUrl("");
+                    if (showFotoModal && videoRef.current) {
+                      navigator.mediaDevices
+                        .getUserMedia({ video: { facingMode: "user" } })
+                        .then((stream) => {
+                          if (videoRef.current) videoRef.current.srcObject = stream;
+                        })
+                        .catch((err) => console.error("Error accediendo a cámara:", err));
+                    }
+                  }}
+                  disabled={!fotoDataUrl}
+                  className="flex-1 h-10 rounded-xl text-sm font-semibold text-zinc-700 border border-zinc-200 hover:bg-zinc-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Limpiar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const stream = videoRef.current?.srcObject as MediaStream | null;
+                    stream?.getTracks().forEach((t) => t.stop());
+                    if (videoRef.current) videoRef.current.srcObject = null;
+                    setShowFotoModal(false);
+                  }}
+                  disabled={!fotoDataUrl}
+                  className="flex-1 h-10 rounded-xl text-sm font-semibold text-white bg-[var(--brand-green)] hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Guardar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showAsignar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-900/40 p-4">
           <div className="w-full max-w-4xl rounded-2xl bg-white shadow-2xl border border-zinc-200">
@@ -1894,7 +2406,7 @@ function Paso3Summary({
                       </div>
                       <div className="px-4 pb-4 grid gap-2">
                         {["10:30", "11:00", "11:30"].map((hora) => (
-                          <label key={hora} className="flex items-center justify-between rounded-xl border border-zinc-200 px-3 py-2 text-sm hover:border-[var(--brand-blue)] hover:bg-blue-50">
+                          <label key={hora} className="flex items-center justify-between rounded-xl border border-zinc-200 px-3 py-2 text-sm hover:border-[var(--brand-blue)] hover:bg-[rgb(var(--brand-blue-rgb)/0.06)]">
                             <span className="font-medium text-zinc-800">{hora}</span>
                             <input type="radio" name="slot" className="h-4 w-4 accent-[var(--brand-blue)]" />
                           </label>
@@ -1929,7 +2441,7 @@ function Paso3Summary({
   );
 }
 
-export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }) {
+export function ExtramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }) {
   const router = useRouter();
   const [showBanner, setShowBanner] = useState(true);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(defaultStep);
@@ -1976,8 +2488,8 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
     tipoEvaluacion: "",
     enfasisEvaluacion: [],
     examenesParaclinicos: [],
-    examenesLaboratorio: "",
-    vacunacion: "",
+    examenesLaboratorio: [],
+    vacunacion: [],
     observaciones: "",
     prioridadAtencion: "",
   });
@@ -2023,39 +2535,24 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
     Boolean(paso2.tipoEvaluacion) &&
     Boolean(paso2.prioridadAtencion);
 
+
+
   return (
     <div className="space-y-8">
 
       <header className="space-y-3 mb-4">
         <div className="flex items-center gap-3 flex-wrap">
-          <h1 className="text-4xl font-bold text-zinc-900">Nuevo Servicio</h1>
+          <h1 className="text-3xl font-bold text-zinc-900">Nuevo Servicio</h1>
           <span className="text-zinc-200">·</span>
-          <span className="text-lg font-semibold text-[var(--brand-blue)]">Modalidad Extramural</span>
+          <span className="text-2xl font-semibold text-[var(--brand-blue)]">Modalidad Extramural</span>
         </div>
       </header>
 
-      <section className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-6">
+      <section className="bg-[#f7fafc] rounded-2xl border border-zinc-200 shadow-sm p-6">
         <Stepper currentStep={currentStep} />
 
         {currentStep === 1 && (
-          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 mb-6 mt-6 flex items-start gap-3">
-            <svg className="w-5 h-5 text-[var(--brand-blue)] flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div className="text-sm text-zinc-700">
-              <span className="text-rose-600 font-bold">*</span>
-              <span className="ml-1">Indica campos obligatorios para continuar</span>
-            </div>
-          </div>
-        )}
-
-        {currentStep === 1 && (
           <div className="mt-6 rounded-2xl border border-zinc-200 bg-white">
-            <div className="px-5 py-4 border-b border-zinc-200 bg-gradient-to-r from-zinc-50 to-white">
-              <h2 className="text-sm font-semibold text-zinc-900 uppercase tracking-wide">Paso 1</h2>
-              <p className="mt-1 text-sm text-zinc-600">Identificación de usuario</p>
-            </div>
-
             <form
               className="p-6 space-y-6"
               onSubmit={(e) => {
@@ -2078,16 +2575,14 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                       name="tipoIdentificacion"
                       value={paso1.tipoIdentificacion}
                       onChange={(e) => {
-                        const updated = {
+                        setPaso1({
                           ...paso1,
                           tipoIdentificacion: e.target.value as TipoIdentificacion,
-                        };
-                        setPaso1(updated);
+                        });
                       }}
-                      onBlur={() => setTouchedPaso1(true)}
                       className={cn(
                         "w-full h-12 rounded-xl border-2 bg-white px-4 pr-10 text-sm text-zinc-900 outline-none appearance-none font-medium transition-all duration-200",
-                        "focus:ring-2 focus:ring-blue-200 focus:border-[var(--brand-blue)] focus:shadow-md",
+                        "focus:ring-2 focus:ring-[rgb(var(--brand-blue-rgb)/0.3)] focus:border-[var(--brand-blue)] focus:shadow-md",
                         "hover:border-[var(--brand-blue)]/30",
                         touchedPaso1 && !paso1.tipoIdentificacion 
                           ? "border-rose-400 bg-rose-50" 
@@ -2126,20 +2621,46 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                     id="numeroIdentificacion"
                     name="numeroIdentificacion"
                     inputMode="numeric"
+                    pattern="[0-9]*"
                     placeholder="Ej: 1109542604"
                     value={paso1.numeroIdentificacion}
                     onChange={(e) => {
-                      const updated = { ...paso1, numeroIdentificacion: e.target.value };
-                      setPaso1(updated);
+                      const onlyDigits = e.target.value.replace(/\D+/g, "");
+                      setPaso1({ ...paso1, numeroIdentificacion: onlyDigits });
                     }}
-                    onBlur={() => setTouchedPaso1(true)}
+                    onKeyDown={(e) => {
+                      const allowed = [
+                        "Backspace",
+                        "Delete",
+                        "Tab",
+                        "ArrowLeft",
+                        "ArrowRight",
+                        "Home",
+                        "End",
+                      ];
+                      if (e.ctrlKey || e.metaKey) return; // permitir copiar/pegar, seleccionar todo
+                      const isDigit = /[0-9]/.test(e.key);
+                      const isAllowed = allowed.includes(e.key);
+                      if (!isDigit && !isAllowed) {
+                        e.preventDefault();
+                      }
+                    }}
+                    onPaste={(e) => {
+                      const text = (e.clipboardData.getData("text") || "").replace(/\D+/g, "");
+                      e.preventDefault();
+                      const target = e.target as HTMLInputElement;
+                      const start = target.selectionStart ?? target.value.length;
+                      const end = target.selectionEnd ?? target.value.length;
+                      const next = target.value.slice(0, start) + text + target.value.slice(end);
+                      setPaso1({ ...paso1, numeroIdentificacion: next });
+                    }}
                     className={cn(
                       "w-full h-12 rounded-xl border-2 px-4 outline-none transition-all duration-200 font-medium",
-                      "focus:ring-2 focus:ring-blue-200 focus:border-[var(--brand-blue)] focus:shadow-md",
+                      "focus:ring-2 focus:ring-[rgb(var(--brand-blue-rgb)/0.3)] focus:border-[var(--brand-blue)] focus:shadow-md",
                       "hover:border-[var(--brand-blue)]/30",
                       touchedPaso1 && !paso1.numeroIdentificacion.trim()
                         ? "border-rose-400 bg-rose-50"
-                        : touchedPaso1 && paso1.numeroIdentificacion.trim().length < 4
+                        : touchedPaso1 && paso1.numeroIdentificacion.trim().length > 0 && paso1.numeroIdentificacion.trim().length < 4
                           ? "border-amber-400 bg-amber-50"
                           : "border-zinc-300 bg-white",
                     )}
@@ -2166,10 +2687,7 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                     "hover:shadow-lg hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none",
                   )}
                 >
-                  <span>Continuar</span>
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
+                  Continuar
                 </button>
 
                 <button
@@ -2189,12 +2707,15 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
             data={paso2}
             paso1={paso1}
             touched={touchedPaso2}
+            isValid={isValidPaso2}
             onBack={() => {
               setCurrentStep(1);
               router.push("/nuevo-servicio/extramural");
             }}
-            onCancel={() => router.push("/nuevo-servicio")}
-            onChange={(updated) => setPaso2(updated)}
+            onCancel={() => {
+              router.push("/nuevo-servicio");
+            }}
+            onChange={(data) => setPaso2(data)}
             onSubmit={() => {
               setTouchedPaso2(true);
               if (!isValidPaso2) return;
@@ -2219,6 +2740,6 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
   );
 }
 
-export default function NuevoServicioIntramural() {
-  return <IntramuralWizard defaultStep={1} />;
+export default function NuevoServicioExtramural() {
+  return <ExtramuralWizard defaultStep={1} />;
 }
