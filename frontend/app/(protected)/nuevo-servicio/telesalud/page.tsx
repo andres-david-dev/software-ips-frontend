@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -285,17 +285,17 @@ function IconClose(props: React.SVGProps<SVGSVGElement>) {
 
 function Stepper({ currentStep }: { currentStep: 1 | 2 | 3 }) {
   const steps = [
-    { n: 1 as const, title: "Paso 1", subtitle: "IdentificaciÃ³n de usuario" },
-    { n: 2 as const, title: "Paso 2", subtitle: "InformaciÃ³n de la orden de servicio" },
-    { n: 3 as const, title: "Paso 3", subtitle: "AsignaciÃ³n de citas" },
+    { n: 1 as const, title: "Paso 1", subtitle: "Identificación de usuario" },
+    { n: 2 as const, title: "Paso 2", subtitle: "Información de la orden de servicio" },
+    { n: 3 as const, title: "Paso 3", subtitle: "Asignación de citas" },
   ];
 
   return (
     <div className="relative py-6">
-      {/* LÃ­nea de progreso - Fondo */}
+      {/* Línea de progreso - Fondo */}
       <div className="absolute left-0 right-0 top-[calc(1.25rem+20px)] h-1 bg-zinc-200 rounded-full" />
       
-      {/* LÃ­nea de progreso - Activa con gradiente */}
+      {/* Línea de progreso - Activa con gradiente */}
       <div 
         className="absolute left-0 top-[calc(1.25rem+20px)] h-1 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] rounded-full transition-all duration-500"
         style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
@@ -307,7 +307,7 @@ function Stepper({ currentStep }: { currentStep: 1 | 2 | 3 }) {
           const isActive = s.n === currentStep;
           return (
             <div key={s.n} className="relative flex flex-col items-center text-center">
-              {/* CÃ­rculo del paso */}
+              {/* Círculo del paso */}
               <div
                 className={cn(
                   "flex items-center justify-center h-12 w-12 rounded-full border-2 font-bold text-white transition-all duration-300",
@@ -386,7 +386,7 @@ function Paso2Form({
     () => [
       { value: "F" as const, label: "Femenino" },
       { value: "M" as const, label: "Masculino" },
-      { value: "T" as const, label: "TransgÃ©nero" },
+      { value: "T" as const, label: "Transgénero" },
       { value: "N" as const, label: "Neutro" },
       { value: "ND" as const, label: "No declara" },
     ],
@@ -414,17 +414,17 @@ function Paso2Form({
       { value: "DIV" as const, label: "Divorciado" },
       { value: "SEP" as const, label: "Separado" },
       { value: "SOL" as const, label: "Soltero" },
-      { value: "UL" as const, label: "UniÃ³n Libre" },
+      { value: "UL" as const, label: "Unión Libre" },
       { value: "VIU" as const, label: "Viudo" },
     ],
     [],
   );
 
   const epsOptions = useMemo(() => ["SURA", "Sanitas", "Nueva EPS", "Coomeva"], []);
-  const arlOptions = useMemo(() => ["SURA", "Colmena", "BolÃ­var", "Positiva"], []);
-  const afpOptions = useMemo(() => ["Porvenir", "ProtecciÃ³n", "Colfondos", "Old Mutual"], []);
-  const convenioOptions = useMemo(() => ["DISTRI SOL PACÃFICO SAS", "SALUD OCUPACIONAL INTEGRAL SAS"], []);
-  const empresaOptions = useMemo(() => ["DISTRI SOL PACÃFICO SAS", "INTEGRAL MEDICINA SAS"], []);
+  const arlOptions = useMemo(() => ["SURA", "Colmena", "Bolívar", "Positiva"], []);
+  const afpOptions = useMemo(() => ["Porvenir", "Protección", "Colfondos", "Old Mutual"], []);
+  const convenioOptions = useMemo(() => ["DISTRI SOL PACÍFICO SAS", "SALUD OCUPACIONAL INTEGRAL SAS"], []);
+  const empresaOptions = useMemo(() => ["DISTRI SOL PACÍFICO SAS", "INTEGRAL MEDICINA SAS"], []);
   const cargoOptions = useMemo(() => ["Jardinero", "Operario", "Conductor", "Supervisor"], []);
   const [showCrearCargoModal, setShowCrearCargoModal] = useState(false);
   const [newCargo, setNewCargo] = useState("");
@@ -438,8 +438,8 @@ function Paso2Form({
   const tipoEvaluacionOptions = useMemo(
     () => [
       "Pre-Ingreso",
-      "PeriÃ³dico",
-      "Cambio de OcupaciÃ³n",
+      "Periódico",
+      "Cambio de Ocupación",
       "Egreso",
       "Post-Incapacidad",
       "Retorno Laboral",
@@ -452,20 +452,20 @@ function Paso2Form({
     () => [
       "Trabajo en Alturas",
       "Espacios Confinados",
-      "ManipulaciÃ³n de Alimentos",
-      "ManipulaciÃ³n Sustancias QuÃ­micas",
-      "ManipulaciÃ³n Productos FarmacÃ©uticos",
-      "Aptitud fÃ­sica, mental y de coordinaciÃ³n motriz para conductores",
+      "Manipulación de Alimentos",
+      "Manipulación Sustancias Químicas",
+      "Manipulación Productos Farmacéuticos",
+      "Aptitud física, mental y de coordinación motriz para conductores",
       "Osteomuscular",
       "Osteomuscular (Fisioterapeuta)",
       "Actividad Deportiva",
-      "DermatolÃ³gico",
+      "Dermatológico",
       "Brigadista",
       "Cardiovascular",
-      "NeurolÃ³gico",
-      "ExposiciÃ³n a Radiaciones Ionizantes",
+      "Neurológico",
+      "Exposición a Radiaciones Ionizantes",
       "Sistema Fonatorio",
-      "Trabajo Riesgo ElÃ©ctrico",
+      "Trabajo Riesgo Eléctrico",
       "Respiratorio",
       "Riesgo para COVID-19",
       "No Aplica",
@@ -473,7 +473,7 @@ function Paso2Form({
     [],
   );
 
-  // Datos y bÃºsqueda para municipios de Colombia
+  // Datos y búsqueda para municipios de Colombia
   const [municipios, setMunicipios] = useState<MunicipioItem[]>([]);
   const fuseMunicipios = useMemo(() => new Fuse(municipios, { keys: ["search"], threshold: 0.3 }), [municipios]);
   useEffect(() => {
@@ -489,7 +489,7 @@ function Paso2Form({
         setMunicipios(prep);
       })
       .catch(() => {
-        // silencioso: si no existe el archivo aÃºn, no rompe la UI
+        // silencioso: si no existe el archivo aún, no rompe la UI
       });
     return () => {
       active = false;
@@ -507,12 +507,12 @@ function Paso2Form({
   }, [data.ciudadAtencion, fuseMunicipios]);
 
   // Validadores de entrada
-  const sanitizeLettersOnly = (value: string) => value.replace(/[^a-zÃ¡Ã©Ã­Ã³ÃºÃ±A-ZÃÃ‰ÃÃ“ÃšÃ‘\s]/g, "");
+  const sanitizeLettersOnly = (value: string) => value.replace(/[^a-záéíóúñA-ZÁÉÍÓÚÑ\s]/g, "");
   const sanitizeNumbersOnly = (value: string) => value.replace(/\D+/g, "");
   const blockNonLetters = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const allowed = ["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End"];
     if (e.ctrlKey || e.metaKey) return;
-    const isLetter = /[a-zÃ¡Ã©Ã­Ã³ÃºÃ±A-ZÃÃ‰ÃÃ“ÃšÃ‘\s]/.test(e.key);
+    const isLetter = /[a-záéíóúñA-ZÁÉÍÓÚÑ\s]/.test(e.key);
     const isAllowed = allowed.includes(e.key);
     if (!isLetter && !isAllowed) e.preventDefault();
   };
@@ -561,7 +561,7 @@ function Paso2Form({
         setVacunacionOptions(data.Vacunacion || []);
       })
       .catch(() => {
-        console.error("Error cargando exÃ¡menes");
+        console.error("Error cargando exámenes");
       });
   }, []);
   const [ocupacionOptions, setOcupacionOptions] = useState<CiuoItem[]>([]);
@@ -612,11 +612,11 @@ function Paso2Form({
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
           <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Datos Personales</h3>
 
-          {/* IdentificaciÃ³n (read-only display) */}
+          {/* Identificación (read-only display) */}
           <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
-          <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-2">No. IdentificaciÃ³n</div>
+          <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-2">No. Identificación</div>
           <div className="text-sm font-mono text-zinc-900">
-            {paso1.tipoIdentificacion || "â€”"} {paso1.numeroIdentificacion || ""}
+            {paso1.tipoIdentificacion || "—"} {paso1.numeroIdentificacion || ""}
           </div>
         </div>
 
@@ -697,11 +697,11 @@ function Paso2Form({
           </div>
         </div>
 
-        {/* Sexo biolÃ³gico y gÃ©nero */}
+        {/* Sexo biológico y género */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
             <label htmlFor="sexoBiologico" className="text-sm font-semibold text-zinc-900">
-              Sexo BiolÃ³gico <span className="text-rose-600">*</span>
+              Sexo Biológico <span className="text-rose-600">*</span>
             </label>
             <div className="mt-2 relative">
               <select
@@ -728,13 +728,13 @@ function Paso2Form({
               </div>
             </div>
             {touched && !data.sexoBiologico && (
-              <InlineError message="Selecciona el sexo biolÃ³gico." />
+              <InlineError message="Selecciona el sexo biológico." />
             )}
           </div>
 
           <div>
             <label htmlFor="identidadGenero" className="text-sm font-semibold text-zinc-900">
-              Identidad de GÃ©nero <span className="text-rose-600">*</span>
+              Identidad de Género <span className="text-rose-600">*</span>
             </label>
             <div className="mt-2 relative">
               <select
@@ -761,12 +761,12 @@ function Paso2Form({
               </div>
             </div>
             {touched && !data.identidadGenero && (
-              <InlineError message="Selecciona la identidad de gÃ©nero." />
+              <InlineError message="Selecciona la identidad de género." />
             )}
           </div>
         </div>
 
-        {/* Fecha, tipo sangre, grupo Ã©tnico */}
+        {/* Fecha, tipo sangre, grupo étnico */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div>
             <label htmlFor="fechaNacimiento" className="text-sm font-semibold text-zinc-900">
@@ -823,7 +823,7 @@ function Paso2Form({
 
           <div className="lg:col-span-2">
             <label htmlFor="grupoEtnico" className="text-sm font-semibold text-zinc-900">
-              Grupo Ã‰tnico
+              Grupo Étnico
             </label>
             <div className="mt-2 relative">
               <select
@@ -833,12 +833,12 @@ function Paso2Form({
                 className="w-full h-11 rounded-xl border border-zinc-200 bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
               >
                 <option value="">Elija...</option>
-                <option value="indigena">IndÃ­gena</option>
+                <option value="indigena">Indígena</option>
                 <option value="rom">Rom (Gitano)</option>
                 <option value="raizal">Raizal</option>
                 <option value="palenquero">Palenquero</option>
                 <option value="negro">Negro</option>
-                <option value="otros">Otros grupos Ã©tnicos</option>
+                <option value="otros">Otros grupos étnicos</option>
                 <option value="ninguno">Ninguno</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
@@ -850,7 +850,7 @@ function Paso2Form({
           </div>
         </div>
 
-        {/* Nivel estudios, ocupaciÃ³n */}
+        {/* Nivel estudios, ocupación */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
             <label htmlFor="nivelEstudios" className="text-sm font-semibold text-zinc-900">
@@ -868,11 +868,11 @@ function Paso2Form({
                 <option value="preescolar">Preescolar</option>
                 <option value="primaria">Primaria</option>
                 <option value="secundaria">Secundaria</option>
-                <option value="tecnico">TÃ©cnico</option>
-                <option value="tecnologo">TecnÃ³logo</option>
+                <option value="tecnico">Técnico</option>
+                <option value="tecnologo">Tecnólogo</option>
                 <option value="profesional">Profesional</option>
-                <option value="especializacion">EspecializaciÃ³n</option>
-                <option value="maestria">MaestrÃ­a</option>
+                <option value="especializacion">Especialización</option>
+                <option value="maestria">Maestría</option>
                 <option value="doctorado">Doctorado</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
@@ -885,13 +885,13 @@ function Paso2Form({
 
           <div>
             <label htmlFor="ocupacion" className="text-sm font-semibold text-zinc-900">
-              OcupaciÃ³n <span className="text-rose-600">*</span>
+              Ocupación <span className="text-rose-600">*</span>
             </label>
             <div className="mt-2 relative">
               <input
                 id="ocupacion"
                 type="text"
-                placeholder="Buscar por cÃ³digo o nombre"
+                placeholder="Buscar por código o nombre"
                 value={data.ocupacion}
                 onChange={(e) => onChange({ ...data, ocupacion: e.target.value })}
                 onFocus={() => setOcupacionOpen(true)}
@@ -940,10 +940,10 @@ function Paso2Form({
               )}
             </div>
             {touched && !data.ocupacion && (
-              <InlineError message="Selecciona una ocupaciÃ³n." />
+              <InlineError message="Selecciona una ocupación." />
             )}
             <p className="mt-2 text-xs text-zinc-500">
-              ClasificaciÃ³n Internacional Uniforme de Ocupaciones (CIUO - 08 A.C.)
+              Clasificación Internacional Uniforme de Ocupaciones (CIUO - 08 A.C.)
             </p>
           </div>
         </div>
@@ -1042,7 +1042,7 @@ function Paso2Form({
 
           <div>
             <label htmlFor="direccion" className="text-sm font-semibold text-zinc-900">
-              DirecciÃ³n
+              Dirección
             </label>
             <input
               id="direccion"
@@ -1144,7 +1144,7 @@ function Paso2Form({
 
           <div>
             <label htmlFor="telefono" className="text-sm font-semibold text-zinc-900">
-              TelÃ©fono <span className="text-rose-600">*</span>
+              Teléfono <span className="text-rose-600">*</span>
             </label>
             <input
               id="telefono"
@@ -1159,7 +1159,7 @@ function Paso2Form({
               )}
             />
             {touched && !data.telefono && (
-              <InlineError message="Ingresa el nÃºmero de telÃ©fono." />
+              <InlineError message="Ingresa el número de teléfono." />
             )}
           </div>
         </div>
@@ -1180,7 +1180,7 @@ function Paso2Form({
 
             <div>
               <label htmlFor="acompanante" className="text-sm font-semibold text-zinc-900">
-                AcompaÃ±ante/Responsable <span className="text-rose-600">*</span>
+                Acompañante/Responsable <span className="text-rose-600">*</span>
               </label>
             <div className="mt-2 relative">
               <select
@@ -1193,7 +1193,7 @@ function Paso2Form({
                 )}
               >
                 <option value="">Elija...</option>
-                <option value="si">SÃ­</option>
+                <option value="si">Sí</option>
                 <option value="no">No registra</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
@@ -1203,7 +1203,7 @@ function Paso2Form({
               </div>
             </div>
             {touched && !data.acompanante && (
-              <InlineError message="Selecciona si hay acompaÃ±ante/responsable." />
+              <InlineError message="Selecciona si hay acompañante/responsable." />
             )}
             </div>
           </div>
@@ -1313,7 +1313,7 @@ function Paso2Form({
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <label htmlFor="cargo" className="text-sm font-semibold text-zinc-900">
-              Cargo a DesempeÃ±ar <span className="text-rose-600">*</span>
+              Cargo a Desempeñar <span className="text-rose-600">*</span>
             </label>
             <button type="button" className="text-xs text-[var(--brand-blue)] hover:underline" onClick={() => setShowCrearCargoModal(true)}>
               + Crear cargo
@@ -1329,7 +1329,7 @@ function Paso2Form({
             error={touched && !data.cargo}
           />
           {touched && !data.cargo && (
-            <InlineError message="Selecciona el cargo a desempeÃ±ar." />
+            <InlineError message="Selecciona el cargo a desempeñar." />
           )}
         </div>
 
@@ -1338,7 +1338,7 @@ function Paso2Form({
             <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl border border-zinc-200">
               <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white rounded-t-2xl">
                 <div className="font-semibold">Crear cargo</div>
-                <button type="button" onClick={() => setShowCrearCargoModal(false)} className="h-8 w-8 rounded-full hover:bg-white/20" aria-label="Cerrar">Ã—</button>
+                <button type="button" onClick={() => setShowCrearCargoModal(false)} className="h-8 w-8 rounded-full hover:bg-white/20" aria-label="Cerrar">×</button>
               </div>
               <div className="p-5">
                 <label htmlFor="nuevoCargo" className="text-sm font-semibold text-zinc-900">Nombre del cargo</label>
@@ -1376,9 +1376,9 @@ function Paso2Form({
           </div>
         )}
 
-        {/* ExÃ¡menes a Realizar */}
+        {/* Exámenes a Realizar */}
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">ExÃ¡menes a Realizar</h3>
+          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Exámenes a Realizar</h3>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
             <div>
@@ -1409,7 +1409,7 @@ function Paso2Form({
 
             <div>
               <label htmlFor="ciudadAtencion" className="text-sm font-semibold text-zinc-900">
-                Ciudad AtenciÃ³n <span className="text-rose-600">*</span>
+                Ciudad Atención <span className="text-rose-600">*</span>
               </label>
               <div className="mt-2 relative">
                 <input
@@ -1455,13 +1455,13 @@ function Paso2Form({
                 )}
               </div>
               {touched && !data.ciudadAtencion && (
-                <InlineError message="Selecciona la ciudad de atenciÃ³n." />
+                <InlineError message="Selecciona la ciudad de atención." />
               )}
             </div>
 
             <div>
               <label htmlFor="entornoAtencion" className="text-sm font-semibold text-zinc-900">
-                Entorno de la atenciÃ³n <span className="text-rose-600">*</span>
+                Entorno de la atención <span className="text-rose-600">*</span>
               </label>
               <div className="mt-2 relative">
                 <select
@@ -1487,14 +1487,14 @@ function Paso2Form({
                 </div>
               </div>
               {touched && !data.entornoAtencion && (
-                <InlineError message="Selecciona el entorno de la atenciÃ³n." />
+                <InlineError message="Selecciona el entorno de la atención." />
               )}
             </div>
           </div>
 
           <div className="mt-4">
             <label className="text-sm font-semibold text-zinc-900">
-              Tipo de EvaluaciÃ³n <span className="text-rose-600">*</span>
+              Tipo de Evaluación <span className="text-rose-600">*</span>
             </label>
             <div className="mt-2 relative">
               <select
@@ -1520,12 +1520,12 @@ function Paso2Form({
               </div>
             </div>
             {touched && !data.tipoEvaluacion && (
-              <InlineError message="Selecciona el tipo de evaluaciÃ³n." />
+              <InlineError message="Selecciona el tipo de evaluación." />
             )}
           </div>
 
           <div className="mt-4">
-            <label className="text-sm font-semibold text-zinc-900">Ã‰nfasis EvaluaciÃ³n</label>
+            <label className="text-sm font-semibold text-zinc-900">Énfasis Evaluación</label>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {enfasisOptions.map((opt) => {
                 const checked = data.enfasisEvaluacion.includes(opt);
@@ -1558,13 +1558,13 @@ function Paso2Form({
           </div>
         </div>
 
-        {/* ExÃ¡menes ParaclÃ­nicos / Laboratorio / VacunaciÃ³n */}
+        {/* Exámenes Paraclínicos / Laboratorio / Vacunación */}
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">ExÃ¡menes Adicionales</h3>
+          <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Exámenes Adicionales</h3>
           <div className="space-y-4">
-            {/* ExÃ¡menes ParaclÃ­nicos */}
+            {/* Exámenes Paraclínicos */}
             <div>
-              <label className="text-sm font-semibold text-zinc-900">ExÃ¡menes ParaclÃ­nicos</label>
+              <label className="text-sm font-semibold text-zinc-900">Exámenes Paraclínicos</label>
               <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
                 {data.examenesParaclinicos.map((item) => (
                   <span
@@ -1582,7 +1582,7 @@ function Paso2Form({
                         })
                       }
                     >
-                      Ã—
+                      ×
                     </button>
                   </span>
                 ))}
@@ -1618,9 +1618,9 @@ function Paso2Form({
               </div>
             </div>
 
-            {/* ExÃ¡menes de Laboratorio */}
+            {/* Exámenes de Laboratorio */}
             <div>
-              <label className="text-sm font-semibold text-zinc-900">ExÃ¡menes de Laboratorio</label>
+              <label className="text-sm font-semibold text-zinc-900">Exámenes de Laboratorio</label>
               <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
                 {data.examenesLaboratorio.map((item) => (
                   <span
@@ -1638,7 +1638,7 @@ function Paso2Form({
                         })
                       }
                     >
-                      Ã—
+                      ×
                     </button>
                   </span>
                 ))}
@@ -1674,9 +1674,9 @@ function Paso2Form({
               </div>
             </div>
 
-            {/* VacunaciÃ³n */}
+            {/* Vacunación */}
             <div>
-              <label className="text-sm font-semibold text-zinc-900">VacunaciÃ³n</label>
+              <label className="text-sm font-semibold text-zinc-900">Vacunación</label>
               <div className="mt-1 flex flex-wrap gap-2 min-h-[44px]">
                 {data.vacunacion.map((item) => (
                   <span
@@ -1694,7 +1694,7 @@ function Paso2Form({
                         })
                       }
                     >
-                      Ã—
+                      ×
                     </button>
                   </span>
                 ))}
@@ -1737,7 +1737,7 @@ function Paso2Form({
           <h3 className="text-lg font-semibold text-[var(--brand-blue)] mb-6">Observaciones</h3>
           <div className="mt-4">
             <label className="text-sm font-semibold text-zinc-900">
-              Prioridad para la atenciÃ³n <span className="text-rose-600">*</span>
+              Prioridad para la atención <span className="text-rose-600">*</span>
             </label>
             <div className="mt-2 flex gap-2">
               {["Prioritaria", "Normal"].map((opt) => (
@@ -1759,7 +1759,7 @@ function Paso2Form({
               ))}
             </div>
             {touched && !data.prioridadAtencion && (
-              <InlineError message="Selecciona la prioridad de atenciÃ³n." />
+              <InlineError message="Selecciona la prioridad de atención." />
             )}
           </div>
           <div className="mt-4">
@@ -1825,7 +1825,7 @@ function SummaryItem({ label, value }: { label: string; value?: string }) {
   return (
     <div>
       <div className="text-xs text-zinc-500 uppercase tracking-wide">{label}</div>
-      <div className="text-sm text-zinc-900 mt-1">{value || "â€”"}</div>
+      <div className="text-sm text-zinc-900 mt-1">{value || "—"}</div>
     </div>
   );
 }
@@ -1842,7 +1842,7 @@ function Paso3Summary({
   const [autoEnviar, setAutoEnviar] = useState<"si" | "no" | "">("");
   const [showAsignar, setShowAsignar] = useState(false);
   const [selectedExamen, setSelectedExamen] = useState<string>("");
-  const [selectedFecha, setSelectedFecha] = useState("MiÃ©rcoles, 21 de Enero de 2026");
+  const [selectedFecha, setSelectedFecha] = useState("Miércoles, 21 de Enero de 2026");
   const [showFirmaModal, setShowFirmaModal] = useState(false);
   const [showFotoModal, setShowFotoModal] = useState(false);
   const [firmaDataUrl, setFirmaDataUrl] = useState<string>("");
@@ -1855,7 +1855,7 @@ function Paso3Summary({
         .then((stream) => {
           if (videoRef.current) videoRef.current.srcObject = stream;
         })
-        .catch((err) => console.error("Error accediendo a cÃ¡mara:", err));
+        .catch((err) => console.error("Error accediendo a cámara:", err));
     }
     return () => {
       const stream = videoRef.current?.srcObject as MediaStream | null;
@@ -1914,9 +1914,9 @@ function Paso3Summary({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <SummaryCard title="Usuario">
           <div className="grid grid-cols-1 gap-4">
-            <SummaryItem label="IdentificaciÃ³n" value={`${paso1.tipoIdentificacion} ${paso1.numeroIdentificacion}`} />
+            <SummaryItem label="Identificación" value={`${paso1.tipoIdentificacion} ${paso1.numeroIdentificacion}`} />
             <SummaryItem label="Nombre" value={`${paso2.primerNombre} ${paso2.segundoNombre} ${paso2.primerApellido} ${paso2.segundoApellido}`.replace(/\s+/g, " ").trim()} />
-            <SummaryItem label="Sexo / GÃ©nero" value={`${paso2.sexoBiologico} / ${paso2.identidadGenero}`} />
+            <SummaryItem label="Sexo / Género" value={`${paso2.sexoBiologico} / ${paso2.identidadGenero}`} />
             <SummaryItem label="Fecha Nacimiento" value={paso2.fechaNacimiento} />
           </div>
         </SummaryCard>
@@ -1926,11 +1926,11 @@ function Paso3Summary({
             <SummaryItem label="Convenio" value={paso2.convenio} />
             <SummaryItem label="Empresa Usuaria" value={paso2.empresaUsuaria} />
             <SummaryItem label="Cargo" value={paso2.cargo} />
-            <SummaryItem label="Tipo EvaluaciÃ³n" value={paso2.tipoEvaluacion} />
+            <SummaryItem label="Tipo Evaluación" value={paso2.tipoEvaluacion} />
           </div>
         </SummaryCard>
 
-        <SummaryCard title="AtenciÃ³n">
+        <SummaryCard title="Atención">
           <div className="grid grid-cols-1 gap-4">
             <SummaryItem label="Sede" value={paso2.sede} />
             <SummaryItem label="Ciudad" value={paso2.ciudadAtencion} />
@@ -1941,10 +1941,10 @@ function Paso3Summary({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <SummaryCard title="Ã‰nfasis & ParaclÃ­nicos">
+        <SummaryCard title="Énfasis & Paraclínicos">
           <div className="space-y-3">
             <div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wide">Ã‰nfasis EvaluaciÃ³n</div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wide">Énfasis Evaluación</div>
               <div className="mt-2 flex flex-wrap gap-2">
                 {paso2.enfasisEvaluacion.length > 0 ? (
                   paso2.enfasisEvaluacion.map((item) => (
@@ -1953,12 +1953,12 @@ function Paso3Summary({
                     </span>
                   ))
                 ) : (
-                  <span className="text-sm text-zinc-500">â€”</span>
+                  <span className="text-sm text-zinc-500">—</span>
                 )}
               </div>
             </div>
             <div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wide">ParaclÃ­nicos</div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wide">Paraclínicos</div>
               <div className="mt-2 flex flex-wrap gap-2">
                 {paso2.examenesParaclinicos.length > 0 ? (
                   paso2.examenesParaclinicos.map((item) => (
@@ -1967,7 +1967,7 @@ function Paso3Summary({
                     </span>
                   ))
                 ) : (
-                  <span className="text-sm text-zinc-500">â€”</span>
+                  <span className="text-sm text-zinc-500">—</span>
                 )}
               </div>
             </div>
@@ -1981,12 +1981,12 @@ function Paso3Summary({
                     </span>
                   ))
                 ) : (
-                  <span className="text-sm text-zinc-500">â€”</span>
+                  <span className="text-sm text-zinc-500">—</span>
                 )}
               </div>
             </div>
             <div>
-              <div className="text-xs text-zinc-500 uppercase tracking-wide">VacunaciÃ³n</div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wide">Vacunación</div>
               <div className="mt-2 flex flex-wrap gap-2">
                 {paso2.vacunacion.length > 0 ? (
                   paso2.vacunacion.map((item) => (
@@ -1995,7 +1995,7 @@ function Paso3Summary({
                     </span>
                   ))
                 ) : (
-                  <span className="text-sm text-zinc-500">â€”</span>
+                  <span className="text-sm text-zinc-500">—</span>
                 )}
               </div>
             </div>
@@ -2005,11 +2005,11 @@ function Paso3Summary({
         <SummaryCard title="Contacto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <SummaryItem label="Residencia" value={paso2.lugarResidencia} />
-            <SummaryItem label="DirecciÃ³n" value={paso2.direccion} />
-            <SummaryItem label="TelÃ©fono" value={paso2.telefono} />
+            <SummaryItem label="Dirección" value={paso2.direccion} />
+            <SummaryItem label="Teléfono" value={paso2.telefono} />
             <SummaryItem label="Email" value={paso2.email} />
             <SummaryItem label="EPS / ARL / AFP" value={`${paso2.eps} / ${paso2.arl} / ${paso2.afp}`} />
-            <SummaryItem label="AcompaÃ±ante" value={paso2.acompanante} />
+            <SummaryItem label="Acompañante" value={paso2.acompanante} />
           </div>
         </SummaryCard>
       </div>
@@ -2080,19 +2080,19 @@ function Paso3Summary({
       <div className="rounded-2xl border border-zinc-200 bg-white p-5">
         <div className="text-xs text-zinc-500 uppercase tracking-wide">Observaciones</div>
         <div className="text-sm text-zinc-900 mt-2 whitespace-pre-wrap">
-          {paso2.observaciones || "â€”"}
+          {paso2.observaciones || "—"}
         </div>
       </div>
 
       <div className="rounded-2xl border border-zinc-200 bg-white p-5">
-        <div className="text-sm font-semibold text-zinc-900">ExÃ¡menes a Realizar</div>
+        <div className="text-sm font-semibold text-zinc-900">Exámenes a Realizar</div>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="bg-zinc-100 text-zinc-700">
                 <th className="text-left px-3 py-2 w-12">No.</th>
-                <th className="text-left px-3 py-2">ExÃ¡menes a Realizar</th>
-                <th className="text-left px-3 py-2 w-40">Fecha AtenciÃ³n</th>
+                <th className="text-left px-3 py-2">Exámenes a Realizar</th>
+                <th className="text-left px-3 py-2 w-40">Fecha Atención</th>
               </tr>
             </thead>
             <tbody>
@@ -2120,7 +2120,7 @@ function Paso3Summary({
 
         <div className="mt-4">
           <label className="text-sm font-semibold text-zinc-900">
-            Enviar automÃ¡ticamente el Concepto MÃ©dico Ocupacional cuando se registre la firma de recibido del trabajador? <span className="text-rose-600">*</span>
+            Enviar automáticamente el Concepto Médico Ocupacional cuando se registre la firma de recibido del trabajador? <span className="text-rose-600">*</span>
           </label>
           <div className="mt-2 flex items-center gap-4">
             <label className="flex items-center gap-2 text-sm text-zinc-700">
@@ -2132,7 +2132,7 @@ function Paso3Summary({
                 onChange={() => setAutoEnviar("si")}
                 className="h-4 w-4 accent-[var(--brand-blue)]"
               />
-              SÃ­
+              Sí
             </label>
             <label className="flex items-center gap-2 text-sm text-zinc-700">
               <input
@@ -2149,7 +2149,7 @@ function Paso3Summary({
         </div>
       </div>
 
-      {/* Botones de acciÃ³n */}
+      {/* Botones de acción */}
       <div className="flex items-center gap-3 pt-6 border-t border-zinc-200 rounded-2xl bg-white p-6">
         <button
           type="button"
@@ -2185,7 +2185,7 @@ function Paso3Summary({
                 className="h-8 w-8 rounded-full hover:bg-white/20"
                 aria-label="Cerrar"
               >
-                Ã—
+                ×
               </button>
             </div>
             <div className="p-5">
@@ -2247,7 +2247,7 @@ function Paso3Summary({
                 className="h-8 w-8 rounded-full hover:bg-white/20"
                 aria-label="Cerrar"
               >
-                Ã—
+                ×
               </button>
             </div>
             <div className="p-5">
@@ -2315,7 +2315,7 @@ function Paso3Summary({
                         .then((stream) => {
                           if (videoRef.current) videoRef.current.srcObject = stream;
                         })
-                        .catch((err) => console.error("Error accediendo a cÃ¡mara:", err));
+                        .catch((err) => console.error("Error accediendo a cámara:", err));
                     }
                   }}
                   disabled={!fotoDataUrl}
@@ -2353,7 +2353,7 @@ function Paso3Summary({
                 className="h-8 w-8 rounded-full hover:bg-white/20"
                 aria-label="Cerrar"
               >
-                Ã—
+                ×
               </button>
             </div>
 
@@ -2362,7 +2362,7 @@ function Paso3Summary({
                 <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
                   <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Trabajador</div>
                   <div className="mt-2 text-sm font-semibold text-zinc-900">
-                    {`${paso2.primerNombre} ${paso2.segundoNombre} ${paso2.primerApellido} ${paso2.segundoApellido}`.replace(/\s+/g, " ").trim() || "â€”"}
+                    {`${paso2.primerNombre} ${paso2.segundoNombre} ${paso2.primerApellido} ${paso2.segundoApellido}`.replace(/\s+/g, " ").trim() || "—"}
                   </div>
                   <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-zinc-100 px-3 py-1 text-xs text-zinc-600">
                     {selectedExamen}
@@ -2374,7 +2374,7 @@ function Paso3Summary({
                 <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
                   <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Examen</div>
                   <div className="mt-2 text-sm text-zinc-900">{selectedExamen}</div>
-                  <div className="mt-3 text-xs text-zinc-500">Tipo de evaluaciÃ³n asignada</div>
+                  <div className="mt-3 text-xs text-zinc-500">Tipo de evaluación asignada</div>
                 </div>
 
                 <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
@@ -2385,7 +2385,7 @@ function Paso3Summary({
                     onChange={(e) => setSelectedFecha(e.target.value)}
                     className="mt-3 w-full h-11 rounded-xl border border-zinc-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
                   >
-                    <option>MiÃ©rcoles, 21 de Enero de 2026</option>
+                    <option>Miércoles, 21 de Enero de 2026</option>
                     <option>Jueves, 22 de Enero de 2026</option>
                     <option>Viernes, 23 de Enero de 2026</option>
                   </select>
@@ -2394,12 +2394,12 @@ function Paso3Summary({
 
               <div className="mt-5 rounded-2xl border border-zinc-200 bg-white overflow-hidden">
                 <div className="flex items-center justify-between px-4 py-3 bg-zinc-50 border-b border-zinc-200">
-                  <div className="text-sm font-semibold text-zinc-700">Disponibilidad Â· {selectedFecha}</div>
+                  <div className="text-sm font-semibold text-zinc-700">Disponibilidad · {selectedFecha}</div>
                   <div className="text-xs text-zinc-500">Selecciona un horario</div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-                  {["Dr. Alejandro Amaya", "Dr. Juan Carlos BenterÃ­a", "Dra. Tania Pamela Arteaga"].map((medico) => (
+                  {["Dr. Alejandro Amaya", "Dr. Juan Carlos Bentería", "Dra. Tania Pamela Arteaga"].map((medico) => (
                     <div key={medico} className="border-t border-zinc-200 md:border-t-0 md:border-l first:md:border-l-0">
                       <div className="px-4 py-3 text-sm font-semibold text-zinc-800 bg-white">
                         {medico}
@@ -2498,11 +2498,11 @@ export function TelesaludWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }
   const opciones = useMemo(
     () =>
       [
-        { value: "CC" as const, label: "CÃ©dula de CiudadanÃ­a" },
-        { value: "CE" as const, label: "CÃ©dula de ExtranjerÃ­a" },
+        { value: "CC" as const, label: "Cédula de Ciudadanía" },
+        { value: "CE" as const, label: "Cédula de Extranjería" },
         { value: "PA" as const, label: "Pasaporte" },
         { value: "PEP" as const, label: "Permiso Especial de Permanencia" },
-        { value: "PPT" as const, label: "Permiso por ProtecciÃ³n Temporal" },
+        { value: "PPT" as const, label: "Permiso por Protección Temporal" },
         { value: "RC" as const, label: "Registro Civil" },
         { value: "TI" as const, label: "Tarjeta de Identidad" },
       ] as const,
@@ -2543,7 +2543,7 @@ export function TelesaludWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }
       <header className="space-y-3 mb-4">
         <div className="flex items-center gap-3 flex-wrap">
           <h1 className="text-3xl font-bold text-zinc-900">Nuevo Servicio</h1>
-          <span className="text-zinc-200">Â·</span>
+          <span className="text-zinc-200">·</span>
           <span className="text-2xl font-semibold text-[var(--brand-blue)]">Modalidad Telesalud</span>
         </div>
       </header>
@@ -2566,7 +2566,7 @@ export function TelesaludWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="tipoIdentificacion" className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                    Tipo de IdentificaciÃ³n
+                    Tipo de Identificación
                     <span className="text-rose-600">*</span>
                   </label>
                   <div className="relative">
@@ -2605,16 +2605,16 @@ export function TelesaludWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }
                     </div>
                   </div>
                   <p className="text-xs text-zinc-600 italic">
-                    Selecciona cÃ©dula, pasaporte u otro documento vÃ¡lido
+                    Selecciona cédula, pasaporte u otro documento válido
                   </p>
                   {touchedPaso1 && !paso1.tipoIdentificacion && (
-                    <InlineError message="Por favor, selecciona el tipo de identificaciÃ³n." />
+                    <InlineError message="Por favor, selecciona el tipo de identificación." />
                   )}
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="numeroIdentificacion" className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                    NÃºmero de IdentificaciÃ³n
+                    Número de Identificación
                     <span className="text-rose-600">*</span>
                   </label>
                   <input
@@ -2666,12 +2666,12 @@ export function TelesaludWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }
                     )}
                   />
                   {touchedPaso1 && !paso1.numeroIdentificacion.trim() && (
-                    <InlineError message="Por favor, ingresa el nÃºmero de identificaciÃ³n." />
+                    <InlineError message="Por favor, ingresa el número de identificación." />
                   )}
                   {touchedPaso1 &&
                     paso1.numeroIdentificacion.trim().length > 0 &&
                     paso1.numeroIdentificacion.trim().length < 4 && (
-                      <InlineError message="MÃ­nimo 4 caracteres requeridos." />
+                      <InlineError message="Mínimo 4 caracteres requeridos." />
                     )}
                   <p className="text-xs text-zinc-600 italic">Sin puntos ni guiones.</p>
                 </div>
