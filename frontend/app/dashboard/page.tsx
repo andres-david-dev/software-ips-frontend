@@ -16,6 +16,8 @@ export default function Dashboard() {
   const [logoIndex, setLogoIndex] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [active, setActive] = useState("Solicitudes de Servicio");
+  const [empresasOpen, setEmpresasOpen] = useState(true);
+  const empresasActions = ["Agregar", "Modificar", "Eliminar", "Consultar", "Certificaciones"];
 
   const handleLogoError = () => {
     if (logoIndex < logoCandidates.length - 1) {
@@ -250,6 +252,72 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-500 mt-2">Navega con el menú lateral desplegable.</p>
               </div>
             </div>
+          </div>
+
+          <div className="mt-8 rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
+            <div className="flex items-center justify-between bg-[var(--brand-blue)] text-white px-5 py-3">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-md bg-white/15 flex items-center justify-center">
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="3" y="7" width="18" height="13" rx="2" />
+                    <path d="M7 7V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2" />
+                    <path d="M10 12h4M9 16h6" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-white/80">Maestro</p>
+                  <p className="text-lg font-semibold">Empresas</p>
+                </div>
+              </div>
+              <button
+                className="text-white/85 hover:text-white transition-colors"
+                onClick={() => setEmpresasOpen((v) => !v)}
+                aria-label="Alternar sección de empresas"
+              >
+                {empresasOpen ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 14l6-6 6 6" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 10l6 6 6-6" />
+                  </svg>
+                )}
+              </button>
+            </div>
+            {empresasOpen && (
+              <div className="bg-gray-100 px-5 py-4 text-gray-800">
+                <ul className="space-y-2">
+                  {empresasActions.map((action) => (
+                    <li
+                      key={action}
+                      className="flex items-center justify-between rounded-lg bg-white px-4 py-3 shadow-sm border border-gray-200/70 hover:border-[var(--brand-blue)]/40 hover:shadow transition-all"
+                    >
+                      <span className="text-sm font-semibold">{action}</span>
+                      <svg
+                        className="h-4 w-4 text-gray-400"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M9 18l6-6-6-6" />
+                      </svg>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </main>
       </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { especialistas } from "@/lib/agendaData";
 
 function cn(...classes: Array<string | false | null | undefined>) {
@@ -11,14 +11,10 @@ function pad(n: number) {
   return n.toString().padStart(2, "0");
 }
 
-function obtenerHoyColombiaISO() {
-  const formatter = new Intl.DateTimeFormat("en-CA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    timeZone: "America/Bogota",
-  });
-  return formatter.format(new Date());
+// Obtiene la fecha de "hoy" sin desfasarla a UTC para evitar que aparezca el día anterior
+function obtenerHoyLocalISO() {
+  const now = new Date();
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 }
 
 function generarHorariosHoras(inicioHora = 8, finHora = 20) {
@@ -33,7 +29,9 @@ function generarHorariosHoras(inicioHora = 8, finHora = 20) {
 
 function formatearFecha(fechaISO: string) {
   try {
-    const d = new Date(fechaISO);
+    // Parse YYYY-MM-DD en zona local para evitar ajuste de zona horaria
+    const [year, month, day] = fechaISO.split("-").map(Number);
+    const d = new Date(year, month - 1, day);
     const dia = d.toLocaleDateString("es-CO", { weekday: "long" });
     const cuerpo = d.toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" });
     return { dia, cuerpo };
@@ -44,10 +42,19 @@ function formatearFecha(fechaISO: string) {
 
 export default function VerAgendaPage() {
   const [especialistaId, setEspecialistaId] = useState<string>("");
-  const [fechaISO, setFechaISO] = useState<string>("");
+  const [fechaISO, setFechaISO] = useState<string>(obtenerHoyLocalISO());
   const [mostrarAgenda, setMostrarAgenda] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [error, setError] = useState<string>("");
+
+  // Limpia el formulario al montar para evitar que persistan datos tras recargar
+  useEffect(() => {
+    setEspecialistaId("");
+    setFechaISO(obtenerHoyLocalISO());
+    setMostrarAgenda(false);
+    setLastUpdated(null);
+    setError("");
+  }, []);
 
   const horarios = useMemo(() => generarHorariosHoras(8, 20), []);
   const { dia, cuerpo } = useMemo(() => (fechaISO ? formatearFecha(fechaISO) : { dia: "", cuerpo: "" }), [fechaISO]);
@@ -142,25 +149,13 @@ export default function VerAgendaPage() {
               </div>
             )}
 
-            <div className="mt-5 flex items-center gap-3">
+            <div className="mt-5 flex items-center justify-end">
               <button
                 type="button"
                 className="h-12 px-8 rounded-xl text-white font-bold shadow-md transition-all duration-200 flex items-center gap-2 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] hover:shadow-lg hover:scale-105"
                 onClick={actualizarAgenda}
               >
                 Ver Agenda
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setEspecialistaId("");
-                  setFechaISO("");
-                  setMostrarAgenda(false);
-                  setLastUpdated(null);
-                }}
-                className="text-xs text-[var(--brand-blue)] hover:underline bg-none border-none p-0 cursor-pointer"
-              >
-                Otra búsqueda
               </button>
             </div>
           </div>

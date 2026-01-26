@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -1778,7 +1778,23 @@ function Paso2Form({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-3 pt-6 border-t border-zinc-200">
+        <div className="flex items-center justify-end gap-3 pt-6 border-t border-zinc-200">
+          <button
+            type="button"
+            onClick={onBack}
+              className="h-12 px-8 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
+          >
+            Regresar
+          </button>
+
+            <button
+              type="button"
+              onClick={onCancel}
+              className="h-12 px-8 rounded-xl text-sm font-semibold text-zinc-600 border-2 border-zinc-200 hover:bg-zinc-50 transition-all duration-200"
+            >
+              Cancelar Registro
+            </button>
+
           <button
             type="submit"
             className={cn(
@@ -1788,22 +1804,6 @@ function Paso2Form({
             )}
           >
             Continuar
-          </button>
-
-          <button
-            type="button"
-            onClick={onBack}
-            className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
-          >
-            Regresar
-          </button>
-
-          <button
-            type="button"
-            onClick={onCancel}
-            className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-600 border-2 border-zinc-200 hover:bg-zinc-50 transition-all duration-200"
-          >
-            Cancelar Registro
           </button>
         </div>
       </form>
@@ -2028,7 +2028,7 @@ function Paso3Summary({
                   Sin firma registrada
                 </div>
               )}
-              <div className="mt-3 flex flex-wrap items-center gap-3">
+              <div className="mt-3 flex flex-wrap items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowFirmaModal(true)}
@@ -2063,7 +2063,7 @@ function Paso3Summary({
                   Sin foto registrada
                 </div>
               )}
-              <div className="mt-3 flex items-center gap-3">
+              <div className="mt-3 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowFotoModal(true)}
@@ -2150,13 +2150,20 @@ function Paso3Summary({
       </div>
 
       {/* Botones de acción */}
-      <div className="flex items-center gap-3 pt-6 border-t border-zinc-200 rounded-2xl bg-white p-6">
+      <div className="flex items-center justify-end gap-3 pt-6 border-t border-zinc-200 rounded-2xl bg-white p-6">
         <button
           type="button"
           onClick={onBack}
-          className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
+          className="h-12 px-8 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
         >
           Volver
+        </button>
+
+        <button
+          type="button"
+          className="h-12 px-8 rounded-xl text-sm font-semibold text-zinc-600 border-2 border-zinc-200 hover:bg-zinc-50 transition-all duration-200"
+        >
+          Cancelar
         </button>
 
         <button
@@ -2164,13 +2171,6 @@ function Paso3Summary({
           className="h-12 px-8 rounded-xl text-white font-bold shadow-md transition-all duration-200 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] hover:shadow-lg hover:scale-105"
         >
           Agendar Cita
-        </button>
-
-        <button
-          type="button"
-          className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-600 border-2 border-zinc-200 hover:bg-zinc-50 transition-all duration-200"
-        >
-          Cancelar
         </button>
       </div>
 
@@ -2677,7 +2677,15 @@ export function TelesaludWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 pt-6 border-t border-zinc-200">
+              <div className="flex items-center justify-end gap-3 pt-6 border-t border-zinc-200">
+                <button
+                  type="button"
+                  onClick={() => router.push("/nuevo-servicio")}
+                  className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
+                >
+                  Cancelar
+                </button>
+
                 <button
                   type="submit"
                   disabled={!isValidPaso1}
@@ -2688,14 +2696,6 @@ export function TelesaludWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 }
                   )}
                 >
                   Continuar
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => router.push("/nuevo-servicio")}
-                  className="h-12 px-6 rounded-xl text-sm font-semibold text-zinc-700 border-2 border-zinc-300 hover:border-zinc-400 hover:bg-zinc-50 transition-all duration-200"
-                >
-                  Cancelar
                 </button>
               </div>
             </form>

@@ -44,17 +44,7 @@ export default function ProtectedLayout({
             )}
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[var(--brand-blue)] to-[var(--brand-green)] text-white font-semibold flex items-center justify-center text-sm">
-                U
-              </div>
-              <div className="leading-tight">
-                <p className="text-sm font-semibold text-zinc-900">Usuario</p>
-                <p className="text-xs text-zinc-500">Activo</p>
-              </div>
-            </div>
-          </div>
+          {/* ...eliminado bloque de usuario... */}
         </div>
       </header>
 

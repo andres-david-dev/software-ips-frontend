@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { especialistas } from "@/lib/agendaData";
 
 function cn(...classes: Array<string | false | null | undefined>) {
@@ -17,17 +17,48 @@ export default function ReasignarAgendaPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [citaSeleccionada, setCitaSeleccionada] = useState<any>(null);
   const [especialistaReasignar, setEspecialistaReasignar] = useState<string>("");
+  const [nuevaFecha, setNuevaFecha] = useState<string>("");
+  const [motivoCambio, setMotivoCambio] = useState<string>("");
+  const [comentario, setComentario] = useState<string>("");
+  const [mostrarModalExito, setMostrarModalExito] = useState(false);
+  const motivosCambio = [
+    "Aplazar la cita a petición del usuario",
+    "Ausencia del especialista",
+    "Cancelación de cita por parte de la empresa",
+    "Cancelación de cita por parte del trabajador",
+    "Falta de equipos",
+    "Llegada tarde del trabajador",
+    "Reasignación para atención empresarial",
+  ];
+
+  // Resetea el formulario al montar la página para evitar persistencia tras recargar
+  useEffect(() => {
+    setEspecialistaId("");
+    setFechaInicio("");
+    setApellidoTrabajador("");
+    setMostrarResultados(false);
+    setResultados([]);
+    setError("");
+    setModalOpen(false);
+    setCitaSeleccionada(null);
+    setEspecialistaReasignar("");
+    setNuevaFecha("");
+    setMotivoCambio("");
+    setComentario("");
+  }, []);
 
   const handleRealizarBusqueda = () => {
     setError("");
     
+    // Validación: fecha siempre obligatoria
     if (!fechaInicio) {
-      setError("La fecha es obligatoria");
+      setError("La fecha es obligatoria para realizar la búsqueda");
       return;
     }
     
-    if (!especialistaId && !apellidoTrabajador) {
-      setError("Por favor selecciona especialista o ingresa el apellido del trabajador");
+    // Validación: al menos uno de los dos campos (especialista o apellido)
+    if (!especialistaId && !apellidoTrabajador.trim()) {
+      setError("Debes seleccionar un especialista o ingresar el apellido del trabajador");
       return;
     }
     
@@ -58,18 +89,40 @@ export default function ReasignarAgendaPage() {
   const abrirModalReasignar = (cita: any) => {
     setCitaSeleccionada(cita);
     setEspecialistaReasignar("");
+    setNuevaFecha("");
+    setMotivoCambio("");
+    setComentario("");
     setModalOpen(true);
   };
 
   const handleConfirmarReasignar = () => {
+    if (!nuevaFecha) {
+      alert("Por favor selecciona la nueva fecha");
+      return;
+    }
+
+    if (!motivoCambio) {
+      alert("Por favor selecciona el motivo del cambio");
+      return;
+    }
+
     if (!especialistaReasignar) {
       alert("Por favor selecciona un especialista");
       return;
     }
     // Aquí se conectará a la BD para realizar la reasignación
-    alert(`Cita reasignada al especialista seleccionado`);
+    setMostrarModalExito(true);
     setModalOpen(false);
+  };
+
+  const handleConfirmarExito = () => {
     setCitaSeleccionada(null);
+    setNuevaFecha("");
+    setMotivoCambio("");
+    setComentario("");
+    setEspecialistaReasignar("");
+    setMostrarModalExito(false);
+    handleLimpiarBusqueda();
   };
 
   return (
@@ -149,7 +202,7 @@ export default function ReasignarAgendaPage() {
             </div>
 
             {/* Botones */}
-            <div className="mt-5 flex items-center gap-3">
+            <div className="mt-5 flex items-center justify-end">
               <button
                 type="button"
                 onClick={handleRealizarBusqueda}
@@ -157,20 +210,8 @@ export default function ReasignarAgendaPage() {
               >
                 Realizar búsqueda
               </button>
-              <button
-                type="button"
-                onClick={handleOtraBusqueda}
-                className="text-xs text-[var(--brand-blue)] hover:underline bg-none border-none p-0 cursor-pointer"
-              >
-                Otra búsqueda
-              </button>
             </div>
 
-            {error && (
-              <div className="mt-4 rounded-xl border border-rose-300 bg-rose-50 p-3">
-                <p className="text-sm text-rose-700">{error}</p>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -244,17 +285,18 @@ export default function ReasignarAgendaPage() {
 
       {/* Modal para reasignar cita */}
       {modalOpen && citaSeleccionada && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-2xl shadow-lg max-w-md w-full mx-4 overflow-hidden">
-            {/* Header con gradiente */}
-            <div className="bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] px-6 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">Reasignar Cita</h2>
+        <div className="fixed inset-0 z-50 bg-black/55 flex items-start justify-center overflow-auto py-8 px-4">
+          <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-zinc-200 overflow-hidden animate-slideUp">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] px-6 py-3 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">Reasignar Cita</h2>
               <button
                 onClick={() => {
                   setModalOpen(false);
                   setCitaSeleccionada(null);
                 }}
                 className="text-white hover:text-white/80 transition-colors"
+                aria-label="Cerrar modal"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M18 6L6 18M6 6l12 12" />
@@ -263,66 +305,148 @@ export default function ReasignarAgendaPage() {
             </div>
 
             {/* Body */}
-            <div className="px-6 py-4 space-y-4">
-              <div>
-                <p className="text-sm font-semibold text-zinc-900 mb-2">Cita actual:</p>
-                <p className="text-sm text-zinc-700">{citaSeleccionada.asunto}</p>
-                <p className="text-sm text-zinc-700 mt-2">
-                  <strong>Especialista:</strong> {citaSeleccionada.especialista}
-                </p>
-                <p className="text-sm text-zinc-700">
-                  <strong>Fecha:</strong> {citaSeleccionada.fechaCita}
-                </p>
+            <div className="px-6 py-5 space-y-5">
+              {/* Resumen de la cita */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
+                  <p className="text-sm font-semibold text-zinc-800">Trabajador</p>
+                  <p className="mt-2 text-base font-semibold text-zinc-900">
+                    {citaSeleccionada.trabajador || citaSeleccionada.asunto || "Trabajador no disponible"}
+                  </p>
+                </div>
+                <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
+                  <p className="text-sm font-semibold text-zinc-800">Examen</p>
+                  <p className="mt-2 text-base font-semibold text-zinc-900">
+                    {citaSeleccionada.asunto || "Examen no disponible"}
+                  </p>
+                </div>
               </div>
 
-              <div className="border-t border-zinc-200 pt-4">
-                <label htmlFor="especialistaModal" className="text-sm font-semibold text-zinc-900">
-                  Selecciona nuevo especialista <span className="text-rose-600">*</span>
-                </label>
-                <div className="mt-2 relative">
-                  <select
-                    id="especialistaModal"
-                    className="w-full h-11 rounded-xl border border-zinc-200 bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
-                    value={especialistaReasignar}
-                    onChange={(e) => setEspecialistaReasignar(e.target.value)}
-                  >
-                    <option value="" disabled>
-                      Elija...
-                    </option>
-                    {especialistas.length === 0 ? null :
-                      especialistas.map((item) => (
-                        <option key={item.id} value={item.id}>
-                          {item.nombre}
-                        </option>
+              {/* Formulario de reasignación */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="nuevaFecha" className="text-sm font-semibold text-zinc-900">Nueva fecha *</label>
+                  <input
+                    id="nuevaFecha"
+                    type="date"
+                    className="mt-2 w-full h-11 rounded-lg border border-zinc-300 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+                    value={nuevaFecha}
+                    onChange={(e) => setNuevaFecha(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="motivoCambio" className="text-sm font-semibold text-zinc-900">Motivo cambio *</label>
+                  <div className="mt-2 relative">
+                    <select
+                      id="motivoCambio"
+                      className="w-full h-11 rounded-lg border border-zinc-300 bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+                      value={motivoCambio}
+                      onChange={(e) => setMotivoCambio(e.target.value)}
+                    >
+                      <option value="" disabled>Elija...</option>
+                      {motivosCambio.map((motivo) => (
+                        <option key={motivo} value={motivo}>{motivo}</option>
                       ))}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="comentario" className="text-sm font-semibold text-zinc-900">Comentario</label>
+                <textarea
+                  id="comentario"
+                  maxLength={255}
+                  className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent min-h-[90px]"
+                  value={comentario}
+                  onChange={(e) => setComentario(e.target.value)}
+                  placeholder="Añade detalles relevantes para la reasignación"
+                />
+                <div className="mt-1 text-xs text-zinc-500">{comentario.length}/255</div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-zinc-200 pt-4">
+                <div>
+                  <p className="text-sm font-semibold text-zinc-900">Especialista actual</p>
+                  <p className="mt-1 text-sm text-zinc-800">{citaSeleccionada.especialista}</p>
+                </div>
+                <div>
+                  <label htmlFor="especialistaModal" className="text-sm font-semibold text-zinc-900">Nuevo especialista *</label>
+                  <div className="mt-2 relative">
+                    <select
+                      id="especialistaModal"
+                      className="w-full h-11 rounded-lg border border-zinc-300 bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+                      value={especialistaReasignar}
+                      onChange={(e) => setEspecialistaReasignar(e.target.value)}
+                    >
+                      <option value="" disabled>Elija...</option>
+                      {especialistas.length === 0 ? null :
+                        especialistas.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.nombre}
+                          </option>
+                        ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t border-zinc-200 flex gap-3 justify-end">
+            <div className="px-6 py-4 border-t border-zinc-200 bg-white flex gap-3 justify-end">
               <button
                 type="button"
                 onClick={() => {
                   setModalOpen(false);
                   setCitaSeleccionada(null);
                 }}
-                className="h-10 px-6 rounded-xl border border-zinc-300 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition-colors"
+                className="h-10 px-6 rounded-lg border border-zinc-300 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition-colors"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleConfirmarReasignar}
-                className="h-10 px-6 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] hover:shadow-lg transition-all"
+                className="h-10 px-6 rounded-lg text-white text-sm font-semibold bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] hover:shadow-md transition-all"
               >
                 Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de éxito */}
+      {mostrarModalExito && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-12 h-12 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-zinc-900 mb-3">¡Cambios Guardados!</h3>
+              <p className="text-base text-zinc-600 mb-8">
+                La cita ha sido reasignada exitosamente.
+              </p>
+              <button
+                onClick={handleConfirmarExito}
+                className="w-full rounded-xl bg-gradient-to-br from-[var(--brand-blue)] to-[var(--brand-green)] px-6 py-3 text-base font-semibold text-white hover:opacity-90 shadow-md transition-all"
+                type="button"
+              >
+                Aceptar
               </button>
             </div>
           </div>

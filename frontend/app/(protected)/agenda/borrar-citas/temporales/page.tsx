@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { especialistas } from "@/lib/agendaData";
 
 export default function BorrarCitasTemporalesPage() {
@@ -13,6 +13,12 @@ export default function BorrarCitasTemporalesPage() {
   const [citaSeleccionada, setCitaSeleccionada] = useState<any>(null);
   const [confirmText, setConfirmText] = useState("");
   const [exitoOpen, setExitoOpen] = useState(false);
+
+  // Restablece el formulario al montar para evitar persistencia de datos tras recargar
+  useEffect(() => {
+    handleReset();
+    setExitoOpen(false);
+  }, []);
 
   const handleBuscar = () => {
     // Aquí se conectará a la BD para traer resultados
@@ -133,20 +139,13 @@ export default function BorrarCitasTemporalesPage() {
               </div>
             </div>
 
-            <div className="mt-5 flex items-center gap-3">
+            <div className="mt-5 flex items-center justify-end">
               <button
                 type="button"
                 onClick={handleBuscar}
                 className="h-12 px-8 rounded-xl text-white font-bold shadow-md transition-all duration-200 flex items-center gap-2 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] hover:shadow-lg hover:scale-105"
               >
                 Realizar búsqueda
-              </button>
-              <button
-                type="button"
-                onClick={handleReset}
-                className="text-xs text-[var(--brand-blue)] hover:underline bg-none border-none p-0 cursor-pointer"
-              >
-                Otra búsqueda
               </button>
             </div>
           </div>
@@ -287,19 +286,25 @@ export default function BorrarCitasTemporalesPage() {
 
       {/* Modal de éxito */}
       {exitoOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-2xl shadow-lg max-w-sm w-full mx-4 overflow-hidden">
-            <div className="bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] px-6 py-4">
-              <h2 className="text-lg font-bold text-white">Cita eliminada</h2>
-            </div>
-            <div className="px-6 py-4 space-y-2">
-              <p className="text-sm text-zinc-800">La cita se eliminó correctamente.</p>
-            </div>
-            <div className="px-6 py-4 border-t border-zinc-200 flex justify-end">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-12 h-12 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold text-zinc-900 mb-3">¡Cambios Guardados!</h3>
+              <p className="text-base text-zinc-600 mb-8">
+                La cita ha sido eliminada exitosamente.
+              </p>
               <button
                 type="button"
-                onClick={() => setExitoOpen(false)}
-                className="h-10 px-6 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] hover:shadow-lg transition-all"
+                onClick={() => {
+                  setExitoOpen(false);
+                  handleReset();
+                }}
+                className="w-full rounded-xl bg-gradient-to-br from-[var(--brand-blue)] to-[var(--brand-green)] px-6 py-3 text-base font-semibold text-white hover:opacity-90 shadow-md transition-all"
               >
                 Aceptar
               </button>
