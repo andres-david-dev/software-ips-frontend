@@ -224,7 +224,7 @@ export default function ModificarDatosGeneralesPage() {
           )}
 
           {/* Campo de búsqueda de orden */}
-          <div className="mb-6 rounded-2xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-2xl border border-zinc-200 bg-white p-6">
             <label htmlFor="buscarOrden" className="text-sm font-semibold text-zinc-900">
               No. Orden <span className="text-rose-600">*</span>
             </label>

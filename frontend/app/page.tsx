@@ -163,6 +163,12 @@ export default function Home() {
           </button>
         </form>
 
+        <div className="mt-4 text-center">
+          <Link href="/registrarse" className="text-[var(--brand-blue)] font-semibold hover:underline text-base">
+            ¿No tienes cuenta? <span className="underline">Registrarse</span>
+          </Link>
+        </div>
+
         <p className="mt-6 text-sm text-center text-zinc-600">
           Al hacer clic en ingresar está aceptando nuestros
           {" "}
