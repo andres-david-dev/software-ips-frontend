@@ -104,20 +104,17 @@ export default function Sidebar() {
   const router = useRouter();
 
 
-  const isNuevoServicio = pathname.startsWith("/nuevo-servicio");
-  const [menuOpen, setMenuOpen] = useState(isNuevoServicio);
+  // Todos los menús cerrados por defecto
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [empresasOpen, setEmpresasOpen] = useState(false);
+  const [agendaOpen, setAgendaOpen] = useState(false);
+  const [agendaBorrarOpen, setAgendaBorrarOpen] = useState(false);
+  const [ordenesOpen, setOrdenesOpen] = useState(false);
+  const [ordenesModificarOpen, setOrdenesModificarOpen] = useState(false);
 
-  // Empresas
-  const isEmpresas = pathname.startsWith("/empresas");
-  const [empresasOpen, setEmpresasOpen] = useState(isEmpresas);
-
+  // Determinar si la ruta actual es agenda y ordenes
   const isAgenda = pathname.startsWith("/agenda");
-  const [agendaOpen, setAgendaOpen] = useState(isAgenda);
-  const [agendaBorrarOpen, setAgendaBorrarOpen] = useState(pathname.startsWith("/agenda/borrar-citas"));
-
   const isOrdenes = pathname.startsWith("/ordenes-servicio");
-  const [ordenesOpen, setOrdenesOpen] = useState(isOrdenes);
-  const [ordenesModificarOpen, setOrdenesModificarOpen] = useState(pathname.startsWith("/ordenes-servicio/modificar"));
 
   return (
     <aside className="w-[280px] shrink-0 border-r border-zinc-200 bg-gradient-to-b from-[var(--brand-blue)] to-[var(--brand-green)] flex flex-col h-full shadow-lg">
@@ -125,10 +122,15 @@ export default function Sidebar() {
         <div className="space-y-1">
           <button
             type="button"
-            onClick={() => setMenuOpen((prev) => !prev)}
+            onClick={() => {
+              setMenuOpen((prev) => !prev);
+              setEmpresasOpen(false);
+              setAgendaOpen(false);
+              setOrdenesOpen(false);
+            }}
             className={cn(
               "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-base font-bold transition-colors",
-              isNuevoServicio
+              menuOpen
                 ? "bg-white/25 text-white"
                 : "text-white/95 hover:bg-white/15 hover:text-white",
             )}
@@ -170,10 +172,15 @@ export default function Sidebar() {
           {/* Empresas */}
           <button
             type="button"
-            onClick={() => setEmpresasOpen((prev) => !prev)}
+            onClick={() => {
+              setEmpresasOpen((prev) => !prev);
+              setMenuOpen(false);
+              setAgendaOpen(false);
+              setOrdenesOpen(false);
+            }}
             className={cn(
               "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-base font-bold transition-colors",
-              isEmpresas ? "bg-white/25 text-white" : "text-white/95 hover:bg-white/15 hover:text-white",
+              empresasOpen ? "bg-white/25 text-white" : "text-white/95 hover:bg-white/15 hover:text-white",
             )}
             aria-expanded={empresasOpen}
             aria-controls="menu-empresas"
@@ -251,10 +258,15 @@ export default function Sidebar() {
           {/* Agenda */}
           <button
             type="button"
-            onClick={() => setAgendaOpen((prev) => !prev)}
+            onClick={() => {
+              setAgendaOpen((prev) => !prev);
+              setMenuOpen(false);
+              setEmpresasOpen(false);
+              setOrdenesOpen(false);
+            }}
             className={cn(
               "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-base font-bold transition-colors",
-              isAgenda ? "bg-white/25 text-white" : "text-white/95 hover:bg-white/15 hover:text-white",
+            agendaOpen ? "bg-white/25 text-white" : "text-white/95 hover:bg-white/15 hover:text-white",
             )}
             aria-expanded={agendaOpen}
             aria-controls="menu-agenda"
@@ -340,7 +352,12 @@ export default function Sidebar() {
           {/* Ordenes de Servicio */}
           <button
             type="button"
-            onClick={() => setOrdenesOpen((prev) => !prev)}
+            onClick={() => {
+              setOrdenesOpen((prev) => !prev);
+              setMenuOpen(false);
+              setEmpresasOpen(false);
+              setAgendaOpen(false);
+            }}
             className={cn(
               "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-base font-bold transition-colors",
               isOrdenes ? "bg-white/25 text-white" : "text-white/95 hover:bg-white/15 hover:text-white",

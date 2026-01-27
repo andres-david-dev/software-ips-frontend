@@ -1,14 +1,60 @@
+
 "use client";
-import { useEffect, useState } from "react";
+
+// Componente para mostrar cada requisito de contraseña
+function PasswordRequirement({ label, valid }) {
+  return (
+    <li className={valid ? "text-green-600 flex items-center" : "text-red-500 flex items-center"}>
+      {valid ? (
+        <svg className="mr-1" width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" d="M5 13l4 4L19 7"/></svg>
+      ) : (
+        <svg className="mr-1" width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      )}
+      {label}
+    </li>
+  );
+}
+
+import { useEffect, useState, useRef } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function RegistrarsePage() {
+    // Para autocompletado de ciudades/departamentos
+    const [cityQuery, setCityQuery] = useState("");
+    const [cityResults, setCityResults] = useState([]);
+    const [showCityDropdown, setShowCityDropdown] = useState(false);
+    const [municipiosColombia, setMunicipiosColombia] = useState([]);
+    const cityInputRef = useRef(null);
+    // Cargar municipios una sola vez
+    useEffect(() => {
+      fetch("/data/municipios-colombia.json")
+        .then((res) => res.json())
+        .then((data) => setMunicipiosColombia(data));
+    }, []);
+
+    // Buscar ciudades/departamentos según el query
+    useEffect(() => {
+      if (cityQuery.length > 1 && municipiosColombia.length > 0) {
+        const q = cityQuery.toLowerCase();
+        const results = municipiosColombia.filter(
+          (m) =>
+            m.nombre.toLowerCase().includes(q) ||
+            m.departamento.toLowerCase().includes(q)
+        ).slice(0, 10);
+        setCityResults(results);
+        setShowCityDropdown(results.length > 0);
+      } else {
+        setCityResults([]);
+        setShowCityDropdown(false);
+      }
+    }, [cityQuery, municipiosColombia]);
   const router = useRouter();
   const [logoError, setLogoError] = useState(false);
   const [form, setForm] = useState({
-    usuario: "",
+    // usuario: "",
     nombre: "",
     numeroIdentificacion: "",
     sexo: "",
@@ -49,14 +95,7 @@ export default function RegistrarsePage() {
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
 
-    // Validar usuario
-    if (!form.usuario.trim()) {
-      errors.usuario = "El usuario es requerido";
-    } else if (form.usuario.length < 4) {
-      errors.usuario = "Mínimo 4 caracteres";
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(form.usuario)) {
-      errors.usuario = "Solo letras, números, _ y -";
-    }
+    // Ya no se valida usuario, solo número de identificación
 
     // Validar contraseña
     if (!form.contrasena.trim()) {
@@ -95,7 +134,7 @@ export default function RegistrarsePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          usuario: form.usuario,
+          // usuario: form.usuario,
           nombre: form.nombre,
           numeroIdentificacion: form.numeroIdentificacion,
           sexo: form.sexo,
@@ -114,7 +153,7 @@ export default function RegistrarsePage() {
       } else {
         setSuccess(true);
         setForm({
-          usuario: "",
+          // usuario: "",
           nombre: "",
           numeroIdentificacion: "",
           sexo: "",
@@ -181,20 +220,7 @@ export default function RegistrarsePage() {
             </div>
 
             <form className="space-y-4" onSubmit={handleSubmit}>
-              <div>
-                <label className="block text-sm font-semibold text-zinc-900 mb-1">Usuario</label>
-                <input 
-                  name="usuario" 
-                  type="text" 
-                  placeholder="Digite su usuario aquí"
-                  className={`w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 ${fieldErrors.usuario ? 'border-red-500' : 'border-zinc-200'}`}
-                  value={form.usuario} 
-                  onChange={handleChange} 
-                  required 
-                />
-                {fieldErrors.usuario && <p className="text-xs text-red-600 mt-1">{fieldErrors.usuario}</p>}
-                <p className="text-xs text-zinc-500 mt-1">Mín. 4 caracteres. Solo letras, números, _ y -</p>
-              </div>
+
 
               <div>
                 <label className="block text-sm font-semibold text-zinc-900 mb-1">Nombre Usuario</label>
@@ -224,17 +250,18 @@ export default function RegistrarsePage() {
                 {fieldErrors.numeroIdentificacion && <p className="text-xs text-red-600 mt-1">{fieldErrors.numeroIdentificacion}</p>}
               </div>
 
+
               <div>
                 <label className="block text-sm font-semibold text-zinc-900 mb-1">Contraseña</label>
                 <div className="relative">
-                  <input 
-                    name="contrasena" 
+                  <input
+                    name="contrasena"
                     type={showPassword ? "text" : "password"}
                     placeholder="Digite su contraseña aquí"
                     className={`w-full h-12 pl-3 pr-12 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 ${fieldErrors.contrasena ? 'border-red-500' : 'border-zinc-200'}`}
-                    value={form.contrasena} 
-                    onChange={handleChange} 
-                    required 
+                    value={form.contrasena}
+                    onChange={handleChange}
+                    required
                   />
                   <button
                     type="button"
@@ -252,9 +279,29 @@ export default function RegistrarsePage() {
                     )}
                   </button>
                 </div>
+                {/* Validación visual de contraseña */}
+                <ul className="mt-2 space-y-1 text-xs">
+                  <PasswordRequirement
+                    label="Mínimo 8 caracteres"
+                    valid={form.contrasena.length >= 8}
+                  />
+                  <PasswordRequirement
+                    label="Al menos una mayúscula"
+                    valid={/[A-Z]/.test(form.contrasena)}
+                  />
+                  <PasswordRequirement
+                    label="Al menos un número"
+                    valid={/[0-9]/.test(form.contrasena)}
+                  />
+                  <PasswordRequirement
+                    label="Al menos un carácter especial (!@#$%^&*)"
+                    valid={/[!@#$%^&*]/.test(form.contrasena)}
+                  />
+                </ul>
                 {fieldErrors.contrasena && <p className="text-xs text-red-600 mt-1">{fieldErrors.contrasena}</p>}
-                <p className="text-xs text-zinc-500 mt-1">Mín. 8 caracteres, mayúscula, número y especial (!@#$%^&*)</p>
               </div>
+
+
 
               <div>
                 <label className="block text-sm font-semibold text-zinc-900 mb-1">Confirmar Contraseña</label>
@@ -334,17 +381,43 @@ export default function RegistrarsePage() {
                 {fieldErrors.fechaNacimiento && <p className="text-xs text-red-600 mt-1">{fieldErrors.fechaNacimiento}</p>}
               </div>
 
-              <div>
+
+              <div className="relative">
                 <label className="block text-sm font-semibold text-zinc-900 mb-1">Lugar Residencia</label>
-                <input 
-                  name="lugarResidencia" 
-                  type="text" 
-                  placeholder="Digite su ciudad aquí"
+                <input
+                  name="lugarResidencia"
+                  type="text"
+                  placeholder="Digite ciudad o departamento"
                   className={`w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 ${fieldErrors.lugarResidencia ? 'border-red-500' : 'border-zinc-200'}`}
-                  value={form.lugarResidencia} 
-                  onChange={handleChange} 
-                  required 
+                  value={form.lugarResidencia}
+                  onChange={e => {
+                    handleChange(e);
+                    setCityQuery(e.target.value);
+                  }}
+                  onFocus={() => setShowCityDropdown(cityResults.length > 0)}
+                  autoComplete="off"
+                  ref={cityInputRef}
+                  required
                 />
+                {showCityDropdown && (
+                  <ul className="absolute z-10 bg-white border border-zinc-200 rounded-xl mt-1 w-full max-h-56 overflow-y-auto shadow-lg">
+                    {cityResults.map((city, idx) => (
+                      <li
+                        key={city.codigo}
+                        className="px-4 py-2 cursor-pointer hover:bg-blue-100 text-sm"
+                        onClick={() => {
+                          setForm(f => ({ ...f, lugarResidencia: `${city.nombre}, ${city.departamento}` }));
+                          setCityQuery(`${city.nombre}, ${city.departamento}`);
+                          setShowCityDropdown(false);
+                          cityInputRef.current?.blur();
+                        }}
+                      >
+                        <span className="font-medium">{city.nombre}</span>
+                        <span className="text-zinc-500">, {city.departamento}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 {fieldErrors.lugarResidencia && <p className="text-xs text-red-600 mt-1">{fieldErrors.lugarResidencia}</p>}
               </div>
 
