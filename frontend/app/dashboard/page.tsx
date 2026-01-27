@@ -132,7 +132,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-[#eaf6fb] to-[#e6f7ef] flex">
       {/* Sidebar */}
       <aside
         className={`flex flex-col bg-gradient-to-b from-[var(--brand-blue)] to-[var(--brand-green)] text-white transition-all duration-300 shadow-xl ${
@@ -141,20 +141,6 @@ export default function Dashboard() {
       >
         <div className="flex items-center justify-between px-4 py-5 border-b border-white/10">
           <div className="flex items-center gap-3">
-            {!logoError ? (
-              <Image
-                src={logoCandidates[logoIndex]}
-                alt="Somedi IPS"
-                width={36}
-                height={36}
-                className="object-contain"
-                onError={handleLogoError}
-              />
-            ) : (
-              <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-sm font-semibold">
-                SI
-              </div>
-            )}
             {sidebarOpen && (
               <div>
                 <p className="text-sm uppercase tracking-widest text-white/80">Somedi</p>

@@ -33,49 +33,98 @@ export default function Home() {
   const [logoIndex, setLogoIndex] = useState(0);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center px-4">
-      <main className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
-        <div className="flex flex-col items-center space-y-4">
-          {logoError ? (
-            <h1 className="text-3xl font-semibold text-zinc-900">Somedi IPS</h1>
-          ) : (
-            <Image
-              src={logoCandidates[logoIndex]}
-              alt="Logo Somedi IPS"
-              width={260}
-              height={120}
-              priority
-              onError={() => {
-                if (logoIndex < logoCandidates.length - 1) {
-                  setLogoIndex((i) => i + 1);
-                } else {
-                  setLogoError(true);
-                }
-              }}
-            />
-          )}
-          <p className="text-zinc-600 text-center">Software para Seguridad y Salud Laboral</p>
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#eaf6fb] to-[#e6f7ef] overflow-hidden">
+      <div className="w-full flex h-screen overflow-hidden">
+        {/* Columna Izquierda - Imagen */}
+        <div className="hidden lg:flex w-1/2 bg-white items-center justify-center p-0 overflow-hidden">
+          <Image 
+            src="/images/imagen1.jpeg" 
+            alt="Imagen Login" 
+            width={600} 
+            height={900} 
+            className="w-full h-full object-cover" 
+            style={{ objectPosition: "center bottom" }}
+            priority
+          />
         </div>
 
-        <form
-          className="mt-8 space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (submitting) return;
-            if (!usuario.trim() || !contrasena.trim() || !cargo) {
-              setError("Completa usuario, contraseña y cargo.");
-              return;
-            }
+        {/* Columna Derecha - Formulario Centrado */}
+        <main className="w-full lg:w-1/2 bg-[#f0fdf4] flex flex-col items-center justify-center p-8 overflow-hidden">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+            <div className="flex flex-col items-center space-y-4 mb-8">
+              {logoError ? (
+                <h1 className="text-3xl font-semibold text-zinc-900">Somedi IPS</h1>
+              ) : (
+                <Image
+                  src={logoCandidates[logoIndex]}
+                  alt="Logo Somedi IPS"
+                  width={180}
+                  height={85}
+                  className="rounded-2xl"
+                  priority
+                  onError={() => {
+                    if (logoIndex < logoCandidates.length - 1) {
+                      setLogoIndex((i) => i + 1);
+                    } else {
+                      setLogoError(true);
+                    }
+                  }}
+                />
+              )}
+              <h2 className="text-2xl font-bold text-zinc-900">Iniciar Sesión</h2>
+              <p className="text-[var(--brand-blue)] text-center">Software para Seguridad y Salud Laboral</p>
+            </div>
 
-            setError("");
-            setSubmitting(true);
+            <form
+              className="space-y-4"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (submitting) return;
+                if (!usuario.trim() || !contrasena.trim() || !cargo) {
+                  setError("Completa usuario, contraseña y cargo.");
+                  return;
+                }
 
-            // Auth mock (local): cookie-based session for protected routes.
-            document.cookie = `somedi_session=1; Path=/; SameSite=Lax;`;
-            router.push(nextPath);
-            router.refresh();
-          }}
-        >
+                setError("");
+                setSubmitting(true);
+
+                try {
+                  // Enviar las credenciales al backend para autenticar
+                  const res = await fetch("http://localhost:4000/api/usuarios/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      usuario: usuario.trim(),
+                      contrasena: contrasena.trim(),
+                      cargo: cargo
+                    }),
+                  });
+
+                  if (!res.ok) {
+                    const data = await res.json();
+                    setError(data.error || "Usuario o contraseña incorrectos");
+                    setSubmitting(false);
+                    return;
+                  }
+
+                  // Si la autenticación es exitosa
+                  const data = await res.json();
+                  
+                  // Guardar sesión
+                  document.cookie = `somedi_session=1; Path=/; SameSite=Lax;`;
+                  document.cookie = `usuario_id=${data.id}; Path=/; SameSite=Lax;`;
+                  document.cookie = `tipo_usuario=${data.tipo_usuario}; Path=/; SameSite=Lax;`;
+                  
+                  // Redirecionar según el tipo de usuario
+                  const redirectPath = data.tipo_usuario === "Médico" ? "/medico" : "/nuevo-servicio";
+                  router.push(redirectPath);
+                  router.refresh();
+                } catch (err) {
+                  setError("Error de conexión con el servidor");
+                  setSubmitting(false);
+                }
+              }}
+            >
           <div className="relative">
             <label htmlFor="usuario" className="sr-only">Usuario</label>
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
@@ -161,22 +210,24 @@ export default function Home() {
           >
             {submitting ? "Ingresando..." : "Ingresar"}
           </button>
-        </form>
+            </form>
 
-        <div className="mt-4 text-center">
-          <Link href="/registrarse" className="text-[var(--brand-blue)] font-semibold hover:underline text-base">
-            ¿No tienes cuenta? <span className="underline">Registrarse</span>
-          </Link>
-        </div>
+            <div className="mt-4 text-center">
+              <Link href="/registrarse" className="text-[var(--brand-blue)] font-semibold hover:underline text-base">
+                ¿No tienes cuenta? <span className="underline">Registrarse</span>
+              </Link>
+            </div>
 
-        <p className="mt-6 text-sm text-center text-zinc-600">
-          Al hacer clic en ingresar está aceptando nuestros
-          {" "}
-          <Link href="/legal/terminos-y-condiciones" className="text-blue-600 hover:underline">Términos y Condiciones del servicio</Link>
-          {" "}y está aceptando nuestra{" "}
-          <Link href="/legal/politica-de-datos" className="text-blue-600 hover:underline">Política de tratamiento de datos</Link>.
-        </p>
-      </main>
+            <p className="mt-6 text-sm text-center text-zinc-600">
+              Al hacer clic en ingresar está aceptando nuestros
+              {" "}
+              <Link href="/legal/terminos-y-condiciones" className="text-blue-600 hover:underline">Términos y Condiciones del servicio</Link>
+              {" "}y está aceptando nuestra{" "}
+              <Link href="/legal/politica-de-datos" className="text-blue-600 hover:underline">Política de tratamiento de datos</Link>.
+            </p>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
