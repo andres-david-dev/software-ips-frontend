@@ -480,7 +480,7 @@ export default function RegistrarsePage() {
             </form>
 
             <div className="mt-4 text-center">
-              <Link href="/" className="text-[var(--brand-blue)] font-semibold hover:underline text-base">
+              <Link href="/login" className="text-[var(--brand-blue)] font-semibold hover:underline text-base">
                 ¿Ya tienes cuenta? <span className="underline">Inicia sesión</span>
               </Link>
             </div>
