@@ -9,7 +9,7 @@ function cn(...classes: Array<string | false | null | undefined>) {
 
 export default function ReasignarAgendaPage() {
   const [especialistaId, setEspecialistaId] = useState<string>("");
-  const [fechaInicio, setFechaInicio] = useState<string>("");
+  const [rangoFecha, setRangoFecha] = useState<string>("");
   const [apellidoTrabajador, setApellidoTrabajador] = useState<string>("");
   const [mostrarResultados, setMostrarResultados] = useState(false);
   const [resultados, setResultados] = useState<any[]>([]);
@@ -44,7 +44,7 @@ export default function ReasignarAgendaPage() {
   // Limpia los campos de búsqueda y errores
   const handleLimpiarBusqueda = () => {
     setEspecialistaId("");
-    setFechaInicio("");
+    setRangoFecha("");
     setApellidoTrabajador("");
     setMostrarResultados(false);
     setResultados([]);
@@ -57,7 +57,7 @@ export default function ReasignarAgendaPage() {
   // Resetea el formulario al montar la página para evitar persistencia tras recargar
   useEffect(() => {
     setEspecialistaId("");
-    setFechaInicio("");
+    setRangoFecha("");
     setApellidoTrabajador("");
     setMostrarResultados(false);
     setResultados([]);
@@ -78,8 +78,8 @@ export default function ReasignarAgendaPage() {
     let errorMsg = "";
     if (!especialistaId) {
       errorMsg = "Por favor seleccione un especialista";
-    } else if (!fechaInicio) {
-      errorMsg = "La fecha es obligatoria para realizar la búsqueda";
+    } else if (!rangoFecha) {
+      errorMsg = "El rango de fecha es obligatorio para realizar la búsqueda";
     } else if (!apellidoTrabajador.trim()) {
       errorMsg = "Debes ingresar el apellido del trabajador";
     }
@@ -214,19 +214,32 @@ export default function ReasignarAgendaPage() {
 
               {/* Rango Fecha */}
               <div>
-                <label htmlFor="fechaInicio" className="text-sm font-semibold text-zinc-900">
+                <label htmlFor="rangoFecha" className="text-sm font-semibold text-zinc-900">
                   Rango Fecha <span className="text-rose-600">*</span>
                 </label>
-                <input
-                  id="fechaInicio"
-                  type="date"
-                  className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
-                  value={fechaInicio}
-                  onChange={(e) => setFechaInicio(e.target.value)}
-                />
-                {errorFecha && (
-                  <div className="mt-1 text-xs text-red-600 font-semibold">{errorFecha}</div>
-                )}
+                <div className="mt-2 relative">
+                  <select
+                    id="rangoFecha"
+                    className="w-full h-11 rounded-xl border border-zinc-200 bg-white px-3 pr-10 text-sm outline-none appearance-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
+                    value={rangoFecha}
+                    onChange={(e) => setRangoFecha(e.target.value)}
+                  >
+                    <option value="" disabled>Elija...</option>
+                    <option value="Hoy">Hoy</option>
+                    <option value="Ayer">Ayer</option>
+                    <option value="Últimos 7 días">Últimos 7 días</option>
+                    <option value="Este mes">Este mes</option>
+                    <option value="Mes pasado">Mes pasado</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  {errorFecha && (
+                    <div className="mt-1 text-xs text-red-600 font-semibold">{errorFecha}</div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -358,19 +371,70 @@ export default function ReasignarAgendaPage() {
 
             {/* Body */}
             <div className="px-6 py-5 space-y-5">
-              {/* Resumen de la cita */}
+
+              {/* Resumen de la cita - datos desde BD o '--' */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
                   <p className="text-sm font-semibold text-zinc-800">Trabajador</p>
                   <p className="mt-2 text-base font-semibold text-zinc-900">
-                    {citaSeleccionada.trabajador || citaSeleccionada.asunto || "Trabajador no disponible"}
+                    {citaSeleccionada?.trabajador || '--'}
                   </p>
+                  <p className="text-xs text-zinc-500 mt-1">Documento: {citaSeleccionada?.documento || '--'}</p>
                 </div>
                 <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
                   <p className="text-sm font-semibold text-zinc-800">Examen</p>
                   <p className="mt-2 text-base font-semibold text-zinc-900">
-                    {citaSeleccionada.asunto || "Examen no disponible"}
+                    {citaSeleccionada?.asunto || '--'}
                   </p>
+                  <p className="text-xs text-zinc-500 mt-1">Fecha: {citaSeleccionada?.fechaCita || '--'}</p>
+                </div>
+              </div>
+
+              {/* Sección firma y foto - igual a crear orden paso 3 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                {/* Firma */}
+                <div className="rounded-xl border border-zinc-200 bg-white">
+                  <div className="px-4 py-3 border-b border-zinc-200 text-xs font-semibold text-zinc-600 uppercase tracking-wide">Firma Usuario</div>
+                  <div className="p-4">
+                    {/* Aquí irá la firma, por ahora '--' */}
+                    <div className="h-28 w-full rounded-lg border border-dashed border-zinc-200 bg-zinc-50 flex items-center justify-center text-xs text-zinc-500">
+                      --
+                    </div>
+                    <div className="mt-3 flex flex-wrap items-center justify-end gap-3">
+                      <button
+                        type="button"
+                        className="h-9 px-4 rounded-lg text-sm font-semibold text-white bg-[var(--brand-blue)] hover:opacity-95"
+                        // onClick={abrirModalFirma}
+                        disabled
+                      >
+                        Registrar Firma
+                      </button>
+                      <label className="flex items-center gap-2 text-xs text-zinc-600">
+                        <input type="checkbox" className="h-4 w-4 accent-[var(--brand-blue)]" disabled />
+                        Manifiesta NO saber firmar
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                {/* Foto */}
+                <div className="rounded-xl border border-zinc-200 bg-white">
+                  <div className="px-4 py-3 border-b border-zinc-200 text-xs font-semibold text-zinc-600 uppercase tracking-wide">Foto Usuario</div>
+                  <div className="p-4">
+                    {/* Aquí irá la foto, por ahora '--' */}
+                    <div className="h-28 w-full rounded-lg border border-dashed border-zinc-200 bg-zinc-50 flex items-center justify-center text-xs text-zinc-500">
+                      --
+                    </div>
+                    <div className="mt-3 flex items-center justify-end gap-3">
+                      <button
+                        type="button"
+                        className="h-9 px-4 rounded-lg text-sm font-semibold text-white bg-emerald-600 hover:opacity-95"
+                        // onClick={abrirModalFoto}
+                        disabled
+                      >
+                        Registrar Foto
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
