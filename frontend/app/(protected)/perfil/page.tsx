@@ -24,24 +24,34 @@ type DeleteAccountModalProps = {
   onClose: () => void;
   onConfirm: (input: string) => void;
   loading: boolean;
+  nombre: string;
+  email: string;
 };
 
-function DeleteAccountModal({ open, onClose, onConfirm, loading }: DeleteAccountModalProps) {
+function DeleteAccountModal({ open, onClose, onConfirm, loading, nombre, email }: DeleteAccountModalProps) {
   const [input, setInput] = useState("");
   useEffect(() => { if (!open) setInput(""); }, [open]);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.7)' }}>
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full flex flex-col">
-        <div className="rounded-t-2xl -mt-8 -mx-8 h-4 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)]" />
-        <h2 className="text-2xl font-bold text-zinc-900 mb-4 mt-4">Eliminar Cuenta</h2>
-        <p className="mb-2">¿Estás seguro de eliminar tu cuenta?</p>
-        <p className="font-semibold mb-2">Esta acción es irreversible.</p>
-        <label className="font-semibold mb-1">Escribe "ELIMINAR" para confirmar</label>
-        <input value={input} onChange={e => setInput(e.target.value)} className="border rounded p-2 mb-4" />
-        <div className="flex gap-4 mt-4">
-          <button onClick={onClose} className="bg-zinc-300 px-4 py-2 rounded">Cancelar</button>
-          <button onClick={() => onConfirm(input)} className="bg-red-600 text-white px-4 py-2 rounded" disabled={loading || input !== "ELIMINAR"}>Eliminar</button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full flex flex-col p-0">
+        <div className="rounded-t-2xl h-12 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] flex items-center justify-between px-6">
+          <h2 className="text-lg font-bold text-white">Eliminar Cuenta</h2>
+          <button onClick={onClose} className="text-white text-2xl font-bold focus:outline-none">×</button>
+        </div>
+        <div className="p-6">
+          <p className="mb-2 text-zinc-900">¿Estás seguro de eliminar tu cuenta?</p>
+          <div className="mb-2 text-sm text-zinc-700">
+            <b>Nombre:</b> {nombre || "-"} <br />
+            <b>Email:</b> {email || "-"}
+          </div>
+          <p className="mb-2 text-zinc-700">Esta acción es irreversible.</p>
+          <label className="font-semibold mb-1 block">Escribe "ELIMINAR" para confirmar</label>
+          <input value={input} onChange={e => setInput(e.target.value)} className="border rounded px-3 py-2 mb-4 w-full" />
+          <div className="flex gap-4 mt-4 justify-end">
+            <button onClick={onClose} className="bg-zinc-200 text-zinc-700 px-6 py-2 rounded font-semibold">Cancelar</button>
+            <button onClick={() => onConfirm(input)} className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded font-semibold" disabled={loading || input !== "ELIMINAR"}>Eliminar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -49,6 +59,8 @@ function DeleteAccountModal({ open, onClose, onConfirm, loading }: DeleteAccount
 }
 
 export default function PerfilPage() {
+  // Guardar datos del usuario en window para el modal (hack rápido, idealmente usar contexto o prop drilling)
+  useEffect(() => { window.perfilFormData = form; }, [form]);
   // Cargar datos del usuario desde Supabase al montar el componente
   useEffect(() => {
     const fetchUserData = async () => {
@@ -377,7 +389,9 @@ export default function PerfilPage() {
             </div>
           </div>
         </section>
-        <DeleteAccountModal open={showDeleteModal} onClose={() => setShowDeleteModal(false)} onConfirm={handleDeleteAccount} loading={deleteLoading} />
+        {showDeleteModal && (
+          <DeleteAccountModal open={showDeleteModal} onClose={() => setShowDeleteModal(false)} onConfirm={handleDeleteAccount} loading={deleteLoading} nombre={form.nombre} email={form.email} />
+        )}
       </div>
     </div>
   );

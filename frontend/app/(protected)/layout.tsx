@@ -1,7 +1,9 @@
 "use client";
 import Sidebar from "@/components/Sidebar";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import Link from "next/link";
 
 export default function ProtectedLayout({
   children,
@@ -10,6 +12,43 @@ export default function ProtectedLayout({
 }) {
   const [logoError, setLogoError] = useState(false);
   const [logoIndex, setLogoIndex] = useState(0);
+  const [user, setUser] = useState<any>(null);
+  const [userName, setUserName] = useState<string>("");
+  const [userError, setUserError] = useState("");
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) setUserError(error.message);
+        setUser(data?.user);
+        // Si hay usuario, buscar el nombre real en la tabla usuarios
+        if (data?.user?.email) {
+          const { data: userData, error: userDbError } = await supabase
+            .from('usuarios')
+            .select('nombre')
+            .eq('email', data.user.email)
+            .single();
+          if (!userDbError && userData?.nombre) {
+            setUserName(userData.nombre);
+          } else {
+            setUserName("");
+          }
+        }
+      } catch (err: any) {
+        setUserError(err?.message || "Error desconocido");
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const getInitials = (name: string) => {
+    if (!name) return "";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
 
   const logoCandidates = [
     "/images/logo.jpeg",
@@ -43,8 +82,22 @@ export default function ProtectedLayout({
               <span className="text-xl font-semibold text-zinc-900">Somedi IPS</span>
             )}
           </div>
-
-          {/* ...eliminado bloque de usuario... */}
+          {user && (
+            <Link href="/perfil" className="flex items-center gap-2 group">
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl transition-shadow group-hover:shadow-lg"
+                style={{
+                  background: "linear-gradient(135deg, #3b82f6 0%, #22c55e 100%)",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                }}
+              >
+                {getInitials(userName || user.user_metadata?.nombre || user.user_metadata?.full_name || user.email)}
+              </div>
+              <span className="font-semibold text-zinc-900 group-hover:text-[var(--brand-blue)]">
+                {userName || user.user_metadata?.nombre || user.user_metadata?.full_name || user.email}
+              </span>
+            </Link>
+          )}
         </div>
       </header>
 

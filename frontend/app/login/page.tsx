@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Login() {
   const router = useRouter();
@@ -109,12 +110,23 @@ export default function Login() {
 
                   // Si la autenticación es exitosa
                   const data = await res.json();
-                  
-                  // Guardar sesión
+
+                  // Autenticación con Supabase (email = numeroIdentificacion, password = contrasena)
+                  const { error: supabaseError } = await supabase.auth.signInWithPassword({
+                    email: data.email || numeroIdentificacion.trim(),
+                    password: contrasena.trim(),
+                  });
+                  if (supabaseError) {
+                    setError("Error autenticando con Supabase: " + supabaseError.message);
+                    setSubmitting(false);
+                    return;
+                  }
+
+                  // Guardar sesión personalizada
                   document.cookie = `somedi_session=1; Path=/; SameSite=Lax;`;
                   document.cookie = `usuario_id=${data.id}; Path=/; SameSite=Lax;`;
                   document.cookie = `tipo_usuario=${data.tipo_usuario}; Path=/; SameSite=Lax;`;
-                  
+
                   // Redirecionar según el tipo de usuario
                   const redirectPath = data.tipo_usuario === "Médico" ? "/medico" : "/nuevo-servicio";
                   router.push(redirectPath);
