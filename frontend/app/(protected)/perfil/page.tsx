@@ -1,4 +1,10 @@
 "use client";
+// Extiende el tipo Window para evitar error de TS con window.perfilFormData
+declare global {
+  interface Window {
+    perfilFormData?: any;
+  }
+}
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -59,9 +65,48 @@ function DeleteAccountModal({ open, onClose, onConfirm, loading, nombre, email }
 }
 
 export default function PerfilPage() {
-  // Guardar datos del usuario en window para el modal (hack rápido, idealmente usar contexto o prop drilling)
+  // 1. Declarar todos los hooks de estado al inicio
+  const [form, setForm] = useState({
+    nombre: "",
+    numero_identificacion: "",
+    sexo: "",
+    tipo_usuario: "",
+    fecha_nacimiento: "",
+    lugar_residencia: "",
+    direccion: "",
+    telefono: "",
+    email: ""
+  });
+  const [originalForm, setOriginalForm] = useState({
+    nombre: "",
+    numero_identificacion: "",
+    sexo: "",
+    tipo_usuario: "",
+    fecha_nacimiento: "",
+    lugar_residencia: "",
+    direccion: "",
+    telefono: "",
+    email: ""
+  });
+  const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  // Password states
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
+  const [passwordLoading, setPasswordLoading] = useState(false);
+
+  // 2. Efectos después de los hooks
   useEffect(() => { window.perfilFormData = form; }, [form]);
-  // Cargar datos del usuario desde Supabase al montar el componente
   useEffect(() => {
     const fetchUserData = async () => {
       const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -104,47 +149,7 @@ export default function PerfilPage() {
     fetchUserData();
   }, []);
 
-  const [form, setForm] = useState({
-    nombre: "",
-    numero_identificacion: "",
-    sexo: "",
-    tipo_usuario: "",
-    fecha_nacimiento: "",
-    lugar_residencia: "",
-    direccion: "",
-    telefono: "",
-    email: ""
-  });
-  // Guardar datos originales para restaurar si se cancela
-  const [originalForm, setOriginalForm] = useState({
-    nombre: "",
-    numero_identificacion: "",
-    sexo: "",
-    tipo_usuario: "",
-    fecha_nacimiento: "",
-    lugar_residencia: "",
-    direccion: "",
-    telefono: "",
-    email: ""
-  });
-  const [edit, setEdit] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  // Password states
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [passwordError, setPasswordError] = useState("");
-  const [passwordSuccess, setPasswordSuccess] = useState(false);
-  const [passwordLoading, setPasswordLoading] = useState(false);
-
-
+  // 3. Funciones del componente
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
   }
@@ -155,15 +160,49 @@ export default function PerfilPage() {
     setForm(originalForm); // Restaurar datos originales
   }
 
-  function handleDeleteAccount() {
+  async function handleDeleteAccount() {
     setDeleteLoading(true);
-    setTimeout(() => {
+    try {
+      // 1. Obtener usuario actual
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        setError("No se pudo identificar el usuario");
+        setDeleteLoading(false);
+        return;
+      }
+      // 2. Eliminar de la tabla 'usuarios'
+      const { error: dbError } = await supabase
+        .from('usuarios')
+        .delete()
+        .eq('email', user.email);
+      if (dbError) {
+        setError("Error al eliminar datos del usuario en la base de datos");
+        setDeleteLoading(false);
+        return;
+      }
+      // 3. Eliminar de Supabase Auth
+      const { error: authError } = await supabase.auth.admin.deleteUser(user.id);
+      if (authError) {
+        setError("Error al eliminar usuario de autenticación");
+        setDeleteLoading(false);
+        return;
+      }
+      // 4. Cerrar sesión
+      await supabase.auth.signOut();
       setDeleteLoading(false);
       setShowDeleteModal(false);
       setShowSuccessModal(true);
-    }, 1500);
+      // 5. Redirigir al home tras breve confirmación
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1200);
+    } catch (e) {
+      setError("Error inesperado al eliminar la cuenta");
+      setDeleteLoading(false);
+    }
   }
 
+  // 4. Renderizado
   return (
     <div className="space-y-8">
       <header className="space-y-3 mb-4">
