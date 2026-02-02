@@ -100,6 +100,8 @@ const modalidades: NavItem[] = [
 ];
 
 export default function Sidebar() {
+    const [informesOpen, setInformesOpen] = useState(false);
+    const [informesClientesOpen, setInformesClientesOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -120,6 +122,63 @@ export default function Sidebar() {
     <aside className="w-[280px] shrink-0 border-r border-zinc-200 bg-gradient-to-b from-[var(--brand-blue)] to-[var(--brand-green)] flex flex-col h-full shadow-lg">
       <nav className="p-3 flex-1 overflow-y-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="space-y-1">
+          {/* Informes y Reportes */}
+          <button
+            type="button"
+            onClick={() => {
+              setInformesOpen((prev) => !prev);
+              setInformesClientesOpen(false);
+            }}
+            className={cn(
+              "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-base font-bold transition-colors",
+              informesOpen ? "bg-white/25 text-white" : "text-white/95 hover:bg-white/15 hover:text-white",
+            )}
+            aria-expanded={informesOpen}
+            aria-controls="menu-informes"
+          >
+            <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h12v2H3v-2zm0 4h8v2H3v-2z" fill="currentColor" /></svg>
+            <span className="flex-1 text-left">Informes y Reportes</span>
+            <IconChevron className={cn("h-5 w-5 text-white/90 transition-transform", informesOpen && "rotate-90")}/>
+          </button>
+          {informesOpen && (
+            <div id="menu-informes" className="mt-1 ml-2 border-l-2 border-white/40 pl-2 space-y-1 bg-white/15 py-2 rounded-r-lg">
+              {/* Clientes */}
+              <button
+                type="button"
+                onClick={() => setInformesClientesOpen((prev) => !prev)}
+                className={cn(
+                  "w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
+                  informesClientesOpen ? "bg-white/20 text-white" : "text-white/95 hover:bg-white/20 hover:text-white",
+                )}
+                aria-expanded={informesClientesOpen}
+                aria-controls="submenu-informes-clientes"
+              >
+                <span className="flex-1 text-left">Clientes</span>
+                <IconChevron className={cn("h-4 w-4 text-white/90 transition-transform", informesClientesOpen && "rotate-90")}/>
+              </button>
+              {informesClientesOpen && (
+                <div id="submenu-informes-clientes" className="ml-2 border-l border-white/40 pl-2 space-y-1">
+                  <Link href="#" className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white">Informes de Salud</Link>
+                  <Link href="#" className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white">Restricciones Médicas</Link>
+                  <Link href="#" className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white">Recomendaciones Médicas</Link>
+                  <Link href="#" className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white">Riesgo Cardiovascular</Link>
+                  <Link href="#" className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white">Conceptos Generados</Link>
+                  <Link href="#" className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white">Estadísticas HC</Link>
+                  <Link href="#" className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white">Usuarios Registrados</Link>
+                  <Link href="#" className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white">Bases de Datos</Link>
+                </div>
+              )}
+              {/* Administrativos (placeholder expandible) */}
+              <button
+                type="button"
+                className="w-full flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-white/95 hover:bg-white/20 hover:text-white"
+                aria-expanded="false"
+              >
+                <span className="flex-1 text-left">Administrativos</span>
+                <IconChevron className="h-4 w-4 text-white/90 transition-transform"/>
+              </button>
+            </div>
+          )}
           <button
             type="button"
             onClick={() => {

@@ -16,10 +16,26 @@ type SuccessModalProps = {
 function SuccessModal({ open, onClose }: SuccessModalProps) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="bg-white p-6 rounded-xl shadow-xl">
-        <p className="text-green-700 font-bold mb-4">¡Operación exitosa!</p>
-        <button onClick={onClose} className="bg-green-600 text-white px-4 py-2 rounded">Cerrar</button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4">
+        <div className="flex flex-col items-center text-center">
+          <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mb-6">
+            <svg className="w-12 h-12 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-bold text-zinc-900 mb-3">¡Cambios Guardados!</h3>
+          <p className="text-base text-zinc-600 mb-8">
+            Tu cuenta ha sido eliminada exitosamente.
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full rounded-xl bg-gradient-to-br from-[var(--brand-blue)] to-[var(--brand-green)] px-6 py-3 text-base font-semibold text-white hover:opacity-90 shadow-md transition-all"
+          >
+            Aceptar
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -39,25 +55,59 @@ function DeleteAccountModal({ open, onClose, onConfirm, loading, nombre, email }
   useEffect(() => { if (!open) setInput(""); }, [open]);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="bg-white rounded-2xl shadow-xl max-w-md w-full flex flex-col p-0">
-        <div className="rounded-t-2xl h-12 bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] flex items-center justify-between px-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-2xl shadow-lg max-w-md w-full mx-4 overflow-hidden">
+        {/* Header con gradiente */}
+        <div className="bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] px-6 py-4 flex items-center justify-between">
           <h2 className="text-lg font-bold text-white">Eliminar Cuenta</h2>
-          <button onClick={onClose} className="text-white text-2xl font-bold focus:outline-none">×</button>
+          <button
+            onClick={onClose}
+            className="text-white hover:text-white/80 transition-colors"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-        <div className="p-6">
-          <p className="mb-2 text-zinc-900">¿Estás seguro de eliminar tu cuenta?</p>
-          <div className="mb-2 text-sm text-zinc-700">
-            <b>Nombre:</b> {nombre || "-"} <br />
-            <b>Email:</b> {email || "-"}
+        <div className="px-6 py-4 space-y-3">
+          <p className="text-sm text-zinc-800">
+            ¿Estás seguro de eliminar tu cuenta?
+          </p>
+          <p className="text-sm text-zinc-700 font-semibold">{nombre || "-"}</p>
+          <p className="text-sm text-zinc-700">
+            <strong>Email:</strong> {email || "-"}
+          </p>
+          <p className="text-sm text-zinc-700">Esta acción es irreversible.</p>
+          <div className="border-t border-zinc-200 pt-3">
+            <label htmlFor="confirm" className="text-sm font-semibold text-zinc-900">
+              Escribe "ELIMINAR" para confirmar
+            </label>
+            <input
+              id="confirm"
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+              placeholder="ELIMINAR"
+            />
           </div>
-          <p className="mb-2 text-zinc-700">Esta acción es irreversible.</p>
-          <label className="font-semibold mb-1 block">Escribe "ELIMINAR" para confirmar</label>
-          <input value={input} onChange={e => setInput(e.target.value)} className="border rounded px-3 py-2 mb-4 w-full" />
-          <div className="flex gap-4 mt-4 justify-end">
-            <button onClick={onClose} className="bg-zinc-200 text-zinc-700 px-6 py-2 rounded font-semibold">Cancelar</button>
-            <button onClick={() => onConfirm(input)} className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded font-semibold" disabled={loading || input !== "ELIMINAR"}>Eliminar</button>
-          </div>
+        </div>
+        <div className="px-6 py-4 border-t border-zinc-200 flex gap-3 justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-10 px-6 rounded-xl border border-zinc-300 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={() => onConfirm(input)}
+            className="h-10 px-6 rounded-xl text-white text-sm font-semibold bg-gradient-to-r from-rose-500 to-rose-600 hover:shadow-lg transition-all"
+            disabled={loading || input !== "ELIMINAR"}
+          >
+            Eliminar
+          </button>
         </div>
       </div>
     </div>
@@ -68,9 +118,7 @@ export default function PerfilPage() {
   // 1. Declarar todos los hooks de estado al inicio
   const [form, setForm] = useState({
     nombre: "",
-    numero_identificacion: "",
-    sexo: "",
-    tipo_usuario: "",
+      // Eliminado: estados de eliminar cuenta
     fecha_nacimiento: "",
     lugar_residencia: "",
     direccion: "",
@@ -98,6 +146,8 @@ export default function PerfilPage() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentPasswordValid, setCurrentPasswordValid] = useState(false);
+  const [checkingCurrent, setCheckingCurrent] = useState(false);
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -142,6 +192,7 @@ export default function PerfilPage() {
           telefono: data.telefono || "",
           email: data.email || ""
         });
+        setError("");
       } else {
         setError("No se pudo obtener los datos del usuario");
       }
@@ -160,7 +211,8 @@ export default function PerfilPage() {
     setForm(originalForm); // Restaurar datos originales
   }
 
-  async function handleDeleteAccount() {
+  async function handleDeleteAccount(confirmInput: string) {
+    if (confirmInput !== "ELIMINAR") return;
     setDeleteLoading(true);
     try {
       // 1. Obtener usuario actual
@@ -192,9 +244,9 @@ export default function PerfilPage() {
       setDeleteLoading(false);
       setShowDeleteModal(false);
       setShowSuccessModal(true);
-      // 5. Redirigir al home tras breve confirmación
+      // 5. Redirigir a /bienvenida tras breve confirmación
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/bienvenida";
       }, 1200);
     } catch (e) {
       setError("Error inesperado al eliminar la cuenta");
@@ -257,49 +309,81 @@ export default function PerfilPage() {
             }}>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Nombre Usuario</label>
-                <input type="text" name="nombre" placeholder="Digite su nombre completo aquí" value={form.nombre} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
+                <input type="text" name="nombre" placeholder="Digite su nombre completo aquí" value={form.nombre} onChange={handleChange} disabled={!edit} className={`w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 bg-white ${error && !form.nombre ? 'border-red-500 bg-red-50' : 'border-zinc-200'}`} />
+                {error && !form.nombre && (
+                  <div className="flex items-center mt-1 text-xs text-red-600">
+                    <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                    Ingresa el nombre.
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Número de Identificación</label>
-                <input type="text" name="numero_identificacion" placeholder="Digite su cédula o documento" value={form.numero_identificacion} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
+                <input type="text" name="numero_identificacion" placeholder="Digite su cédula o documento" value={form.numero_identificacion} onChange={handleChange} disabled={!edit} className={`w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 bg-white ${error && !form.numero_identificacion ? 'border-red-500 bg-red-50' : 'border-zinc-200'}`} />
+                {error && !form.numero_identificacion && (
+                  <div className="flex items-center mt-1 text-xs text-red-600">
+                    <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                    Ingresa el número de identificación.
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Sexo</label>
-                <select name="sexo" value={form.sexo} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none border-zinc-200 bg-white">
+                <select name="sexo" value={form.sexo} onChange={handleChange} disabled={!edit} className={`w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none bg-white ${error && !form.sexo ? 'border-red-500 bg-red-50' : 'border-zinc-200'}`}> 
+                                    <option value="">Selecciona</option>
                   <option value="">Selecciona</option>
                   <option value="M">Masculino</option>
                   <option value="F">Femenino</option>
                   <option value="O">Otro</option>
                 </select>
+                {error && !form.sexo && (
+                  <div className="flex items-center mt-1 text-xs text-red-600">
+                    <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                    Selecciona el sexo.
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Tipo de Usuario</label>
-                <select name="tipo_usuario" value={form.tipo_usuario} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none border-zinc-200 bg-white">
+                <select name="tipo_usuario" value={form.tipo_usuario} onChange={handleChange} disabled={!edit} className={`w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none bg-white ${error && !form.tipo_usuario ? 'border-red-500 bg-red-50' : 'border-zinc-200'}`}> 
+                                    <option value="">Selecciona</option>
                   <option value="">Selecciona</option>
                   <option value="paciente">Paciente</option>
                   <option value="medico">Médico</option>
                   <option value="admin">Administrador</option>
                 </select>
+                {error && !form.tipo_usuario && (
+                  <div className="flex items-center mt-1 text-xs text-red-600">
+                    <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                    Selecciona el tipo de usuario.
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Fecha Nacimiento</label>
-                <input type="date" name="fecha_nacimiento" placeholder="dd/mm/aaaa" value={form.fecha_nacimiento} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
+                <input type="date" name="fecha_nacimiento" placeholder="dd/mm/aaaa" value={form.fecha_nacimiento || ""} onChange={handleChange} disabled={!edit} className={`w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 bg-white ${error && !form.fecha_nacimiento ? 'border-red-500 bg-red-50' : 'border-zinc-200'}`} />
+                {error && !form.fecha_nacimiento && (
+                  <div className="flex items-center mt-1 text-xs text-red-600">
+                    <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                    Selecciona la fecha de nacimiento.
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Lugar Residencia</label>
-                <input type="text" name="lugar_residencia" placeholder="Digite ciudad o departamento" value={form.lugar_residencia} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
+                <input type="text" name="lugar_residencia" placeholder="Digite ciudad o departamento" value={form.lugar_residencia || ""} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
               </div>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Dirección</label>
-                <input type="text" name="direccion" placeholder="Digite su dirección aquí" value={form.direccion} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
+                <input type="text" name="direccion" placeholder="Digite su dirección aquí" value={form.direccion || ""} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
               </div>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Teléfono</label>
-                <input type="text" name="telefono" placeholder="Digite su número aquí" value={form.telefono} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
+                <input type="text" name="telefono" placeholder="Digite su número aquí" value={form.telefono || ""} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-zinc-700 font-semibold mb-1">e-Mail</label>
-                <input type="email" name="email" placeholder="Digite su correo aquí" value={form.email} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
+                <input type="email" name="email" placeholder="Digite su correo aquí" value={form.email || ""} onChange={handleChange} disabled={!edit} className="w-full h-12 pl-3 pr-4 rounded-xl border text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent placeholder-zinc-400 border-zinc-200 bg-white" />
               </div>
               <div className="md:col-span-2 flex justify-end gap-4 mt-8">
                 {!edit ? (
@@ -325,7 +409,11 @@ export default function PerfilPage() {
               e.preventDefault();
               setPasswordError("");
               setPasswordSuccess(false);
-              if (!currentPassword || !newPassword || !confirmPassword) {
+              if (!currentPasswordValid) {
+                setPasswordError("Debes ingresar la contraseña actual correcta");
+                return;
+              }
+              if (!newPassword || !confirmPassword) {
                 setPasswordError("Todos los campos son obligatorios");
                 return;
               }
@@ -338,26 +426,81 @@ export default function PerfilPage() {
                 return;
               }
               setPasswordLoading(true);
-              setTimeout(() => {
+              // Obtener email del usuario autenticado
+              const { data: { user } } = await supabase.auth.getUser();
+              if (!user) {
+                setPasswordError("No se pudo identificar el usuario");
                 setPasswordLoading(false);
-                setPasswordSuccess(true);
-                setShowSuccessModal(true);
-                setCurrentPassword("");
-                setNewPassword("");
-                setConfirmPassword("");
-              }, 1200);
+                return;
+              }
+              // Cambiar contraseña en Supabase
+              const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+              setPasswordLoading(false);
+              if (updateError) {
+                setPasswordError("Error actualizando la contraseña: " + updateError.message);
+                return;
+              }
+              setPasswordSuccess(true);
+              setShowSuccessModal(true);
+              setCurrentPassword("");
+              setNewPassword("");
+              setConfirmPassword("");
+              setCurrentPasswordValid(false);
             }}>
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Contraseña actual</label>
                 <div className="relative">
-                  <input type={showCurrent ? "text" : "password"} placeholder="Ingresa tu contraseña actual" className="w-full h-12 pl-3 pr-12 rounded-xl border text-sm outline-none border-zinc-200 bg-white" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} />
+                  <input
+                    type={showCurrent ? "text" : "password"}
+                    placeholder="Ingresa tu contraseña actual"
+                    className={`w-full h-12 pl-3 pr-12 rounded-xl border text-sm outline-none bg-white ${passwordError && !currentPasswordValid ? 'border-red-500 bg-red-50' : 'border-zinc-200'}`}
+                    value={currentPassword || ""}
+                    onChange={async e => {
+                      setCurrentPassword(e.target.value);
+                      setCurrentPasswordValid(false);
+                      setPasswordError("");
+                    }}
+                    onBlur={async () => {
+                      if (!currentPassword) return;
+                      setCheckingCurrent(true);
+                      setPasswordError("");
+                      // Obtener email del usuario autenticado
+                      const { data: { user } } = await supabase.auth.getUser();
+                      if (!user) {
+                        setPasswordError("No se pudo identificar el usuario");
+                        setCheckingCurrent(false);
+                        return;
+                      }
+                      // Intentar login con email y contraseña actual
+                      const { error: loginError } = await supabase.auth.signInWithPassword({
+                        email: user.email,
+                        password: currentPassword
+                      });
+                      setCheckingCurrent(false);
+                      if (loginError) {
+                        setCurrentPasswordValid(false);
+                        setPasswordError("Contraseña actual incorrecta");
+                      } else {
+                        setCurrentPasswordValid(true);
+                        setPasswordError("");
+                      }
+                    }}
+                  />
+                  {passwordError && !currentPasswordValid && (
+                    <div className="flex items-center mt-1 text-xs text-red-600">
+                      <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                      {passwordError}
+                    </div>
+                  )}
                   <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600" tabIndex={-1} onClick={() => setShowCurrent(v => !v)} aria-label="Mostrar/Ocultar contraseña">
-                    {showCurrent ? (
+                    {!showCurrent ? (
+                      // Ojo abierto (contraseña oculta)
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 12C2.73 7.61 7.09 4 12 4C16.91 4 21.27 7.61 23 12C21.27 16.39 16.91 20 12 20C7.09 20 2.73 16.39 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     ) : (
+                      // Ojo cerrado (contraseña visible)
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.94 17.94C16.13 19.25 14.13 20 12 20C7.09 20 2.73 16.39 1 12C1.73 10.19 2.91 8.6 4.44 7.35M9.53 9.53C10.07 9.19 10.78 9 12 9C14.21 9 16 10.79 16 13C16 14.22 15.81 14.93 15.47 15.47M9.53 9.53L4.44 4.44M9.53 9.53L15.47 15.47M15.47 15.47L19.56 19.56M15.47 15.47C15.81 14.93 16 14.22 16 13C16 10.79 14.21 9 12 9C10.78 9 10.07 9.19 9.53 9.53Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -368,14 +511,23 @@ export default function PerfilPage() {
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Nueva contraseña</label>
                 <div className="relative">
-                  <input type={showNew ? "text" : "password"} placeholder="Ingresa tu nueva contraseña" className="w-full h-12 pl-3 pr-12 rounded-xl border text-sm outline-none border-zinc-200 bg-white" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+                  <input
+                    type={showNew ? "text" : "password"}
+                    placeholder="Ingresa tu nueva contraseña"
+                    className={`w-full h-12 pl-3 pr-12 rounded-xl border text-sm outline-none bg-white ${passwordError && newPassword ? 'border-red-500 bg-red-50' : 'border-zinc-200'}`}
+                    value={newPassword || ""}
+                    onChange={e => setNewPassword(e.target.value)}
+                    disabled={!currentPasswordValid}
+                  />
                   <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600" tabIndex={-1} onClick={() => setShowNew(v => !v)} aria-label="Mostrar/Ocultar contraseña">
-                    {showNew ? (
+                    {!showNew ? (
+                      // Ojo abierto (contraseña oculta)
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 12C2.73 7.61 7.09 4 12 4C16.91 4 21.27 7.61 23 12C21.27 16.39 16.91 20 12 20C7.09 20 2.73 16.39 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     ) : (
+                      // Ojo cerrado (contraseña visible)
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.94 17.94C16.13 19.25 14.13 20 12 20C7.09 20 2.73 16.39 1 12C1.73 10.19 2.91 8.6 4.44 7.35M9.53 9.53C10.07 9.19 10.78 9 12 9C14.21 9 16 10.79 16 13C16 14.22 15.81 14.93 15.47 15.47M9.53 9.53L4.44 4.44M9.53 9.53L15.47 15.47M15.47 15.47L19.56 19.56M15.47 15.47C15.81 14.93 16 14.22 16 13C16 10.79 14.21 9 12 9C10.78 9 10.07 9.19 9.53 9.53Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -392,14 +544,23 @@ export default function PerfilPage() {
               <div>
                 <label className="block text-zinc-700 font-semibold mb-1">Confirmar nueva contraseña</label>
                 <div className="relative">
-                  <input type={showConfirm ? "text" : "password"} placeholder="Confirma tu nueva contraseña" className="w-full h-12 pl-3 pr-12 rounded-xl border text-sm outline-none border-zinc-200 bg-white" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+                  <input
+                    type={showConfirm ? "text" : "password"}
+                    placeholder="Confirma tu nueva contraseña"
+                    className={`w-full h-12 pl-3 pr-12 rounded-xl border text-sm outline-none bg-white ${passwordError && confirmPassword ? 'border-red-500 bg-red-50' : 'border-zinc-200'}`}
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    disabled={!currentPasswordValid}
+                  />
                   <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600" tabIndex={-1} onClick={() => setShowConfirm(v => !v)} aria-label="Mostrar/Ocultar contraseña">
-                    {showConfirm ? (
+                    {!showConfirm ? (
+                      // Ojo abierto (contraseña oculta)
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 12C2.73 7.61 7.09 4 12 4C16.91 4 21.27 7.61 23 12C21.27 16.39 16.91 20 12 20C7.09 20 2.73 16.39 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     ) : (
+                      // Ojo cerrado (contraseña visible)
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.94 17.94C16.13 19.25 14.13 20 12 20C7.09 20 2.73 16.39 1 12C1.73 10.19 2.91 8.6 4.44 7.35M9.53 9.53C10.07 9.19 10.78 9 12 9C14.21 9 16 10.79 16 13C16 14.22 15.81 14.93 15.47 15.47M9.53 9.53L4.44 4.44M9.53 9.53L15.47 15.47M15.47 15.47L19.56 19.56M15.47 15.47C15.81 14.93 16 14.22 16 13C16 10.79 14.21 9 12 9C10.78 9 10.07 9.19 9.53 9.53Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -407,30 +568,19 @@ export default function PerfilPage() {
                   </button>
                 </div>
               </div>
-              {passwordError && <div className="text-red-600 font-semibold mt-2">{passwordError}</div>}
+              {passwordError && currentPasswordValid && (
+                <div className="flex items-center mt-1 text-xs text-red-600">
+                  <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
+                  {passwordError}
+                </div>
+              )}
               <div className="flex justify-end mt-6">
                 <button type="submit" className="bg-gradient-to-r from-[var(--brand-blue)] to-[var(--brand-green)] text-white px-6 py-2 rounded-xl font-semibold shadow" disabled={passwordLoading}>Actualizar contraseña</button>
               </div>
             </form>
           </div>
-          {/* Panel blanco de zona de peligro */}
-          <div className="rounded-2xl border border-red-200 bg-white p-6 mt-8">
-            <header className="mb-4">
-              <h2 className="text-lg font-bold text-zinc-800">Zona de peligro</h2>
-              <p className="text-zinc-500 text-base mt-1">Acciones irreversibles que afectarán permanentemente tu cuenta.</p>
-            </header>
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-6 flex flex-col gap-2">
-              <h3 className="text-lg font-semibold text-red-700 mb-1">Eliminar cuenta</h3>
-              <p className="text-red-600 mb-4">Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, asegúrate de que esto es lo que deseas.</p>
-              <div className="flex justify-end mt-2">
-                <button className="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-xl shadow" onClick={() => setShowDeleteModal(true)}>Eliminar cuenta</button>
-              </div>
-            </div>
-          </div>
+          {/* Fin zona de peligro eliminada */}
         </section>
-        {showDeleteModal && (
-          <DeleteAccountModal open={showDeleteModal} onClose={() => setShowDeleteModal(false)} onConfirm={handleDeleteAccount} loading={deleteLoading} nombre={form.nombre} email={form.email} />
-        )}
       </div>
     </div>
   );

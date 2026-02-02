@@ -16,6 +16,7 @@ function PasswordRequirement({ label, valid }) {
 }
 
 import { useEffect, useState, useRef } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -121,24 +122,45 @@ export default function RegistrarsePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-
     setLoading(true);
     setError("");
     setSuccess(false);
     try {
+      // 1. Registrar en Supabase Auth
+      const { data: signUpData, error: supabaseError } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.contrasena
+      });
+      if (supabaseError) {
+        setError("Error registrando en Supabase: " + supabaseError.message);
+        setLoading(false);
+        return;
+      }
+      if (!signUpData || !signUpData.user) {
+        setError("No se pudo crear el usuario en Supabase. Intenta de nuevo.");
+        setLoading(false);
+        return;
+      }
+      // 2. Registrar en la base de datos propia
+      let sexoNormalizado = "";
+      if (form.sexo === "Femenino") sexoNormalizado = "F";
+      else if (form.sexo === "Masculino") sexoNormalizado = "M";
+      else if (form.sexo === "Indeterminado/Intersexual" || form.sexo === "Otro") sexoNormalizado = "O";
+
+      let tipoUsuarioNormalizado = form.tipoUsuario;
+      if (tipoUsuarioNormalizado === "administrador") tipoUsuarioNormalizado = "admin";
+
       const res = await fetch("http://localhost:4000/api/usuarios/registrar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          // usuario: form.usuario,
           nombre: form.nombre,
           numeroIdentificacion: form.numeroIdentificacion,
-          sexo: form.sexo,
-          tipoUsuario: form.tipoUsuario,
+          sexo: sexoNormalizado,
+          tipoUsuario: tipoUsuarioNormalizado,
           fechaNacimiento: form.fechaNacimiento,
           lugarResidencia: form.lugarResidencia,
           direccion: form.direccion,
@@ -149,11 +171,11 @@ export default function RegistrarsePage() {
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Error en el registro");
+        setError(data.error || "Error en el registro de datos personales");
+        // Si falla aquí, podrías considerar eliminar el usuario de Supabase Auth para evitar inconsistencias
       } else {
         setSuccess(true);
         setForm({
-          // usuario: "",
           nombre: "",
           numeroIdentificacion: "",
           sexo: "",
@@ -167,7 +189,7 @@ export default function RegistrarsePage() {
           confirmContrasena: ""
         });
         setTimeout(() => {
-          router.push("/");
+          router.push("/login");
         }, 2000);
       }
     } catch (err) {

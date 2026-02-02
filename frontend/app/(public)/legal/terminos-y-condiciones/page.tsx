@@ -10,7 +10,7 @@ export default function TerminosCondiciones() {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white border-b border-zinc-200 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto pl-0 pr-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center">
             {logoError ? (
               <span className="text-xl font-bold text-zinc-900">Somedi IPS</span>

@@ -17,32 +17,21 @@ export default function AgregarEmpresaPage() {
     direccion: "",
     telefono: "",
     email: "",
-    granContribuyente: false,
-    autorretenedor: false,
-    agenteRetencion: false,
-    simpleTributacion: false,
-    noAplica: false,
-    personaContacto: "",
-    cargoContacto: "",
-    telefonoContacto: "",
-    emailContacto: "",
-    personaFacturacion: "",
-    cargoFacturacion: "",
-    telefonoFacturacion: "",
-    emailFacturacion: "",
-    observaciones: ""
+    observaciones: "",
+    // ...agrega aquí los demás campos necesarios
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Falta la función handleChange, agrégala si no existe
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
-  };
+  }
 
   return (
-    <div className="space-y-8">
+    <div>
       <header className="space-y-3 mb-4">
         <div className="flex items-center gap-3 flex-wrap">
           <h1 className="text-3xl font-bold text-zinc-900">Empresas</h1>
@@ -52,216 +41,215 @@ export default function AgregarEmpresaPage() {
       </header>
       <section className="bg-[#f7fafc] rounded-2xl border border-zinc-200 shadow-sm p-6">
         <form className="space-y-8">
-          {/* Datos principales */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="nit">NIT *</label>
-              <input id="nit" name="nit" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.nit} onChange={handleChange} required />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="razonSocial">Razón Social *</label>
-              <input id="razonSocial" name="razonSocial" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.razonSocial} onChange={handleChange} required />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="nombreComercial">Nombre Comercial *</label>
-              <input id="nombreComercial" name="nombreComercial" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.nombreComercial} onChange={handleChange} required />
-              <div className="flex items-center mt-2">
-                <input id="igualRazon" name="igualRazon" type="checkbox" className="mr-2" />
-                <label htmlFor="igualRazon" className="text-xs text-zinc-600">El nombre comercial es igual a la razón social</label>
-              </div>
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="fechaInicio">Fecha Inicio Relación Comercial</label>
-              <input id="fechaInicio" name="fechaInicio" type="date" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.fechaInicio} onChange={handleChange} />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="asesor">Asesor Comercial Asignado</label>
-              <input id="asesor" name="asesor" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.asesor} onChange={handleChange} />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="actividad">Actividad Económica *</label>
-              <input id="actividad" name="actividad" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.actividad} onChange={handleChange} required />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="regimenIva">Tipo Régimen IVA</label>
-              <input id="regimenIva" name="regimenIva" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.regimenIva} onChange={handleChange} />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="responsableIva">Responsable de IVA</label>
-              <input id="responsableIva" name="responsableIva" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.responsableIva} onChange={handleChange} />
-            </div>
-          </div>
-
-          {/* Responsabilidad Fiscal */}
-          <div>
-            <label className="text-sm font-semibold text-zinc-900">Responsabilidad Fiscal</label>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mt-2">
-              <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="granContribuyente" checked={form.granContribuyente} onChange={handleChange} />Gran contribuyente</label>
-              <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="autorretenedor" checked={form.autorretenedor} onChange={handleChange} />Autorretenedor</label>
-              <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="agenteRetencion" checked={form.agenteRetencion} onChange={handleChange} />Agente de retención IVA</label>
-              <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="simpleTributacion" checked={form.simpleTributacion} onChange={handleChange} />Régimen simple de tributación</label>
-              <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="noAplica" checked={form.noAplica} onChange={handleChange} />No aplica - Otros</label>
-            </div>
-          </div>
-
-          {/* Ciudad, dirección, teléfono, email */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="ciudad">Ciudad *</label>
-              <input id="ciudad" name="ciudad" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.ciudad} onChange={handleChange} required />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="direccion">Dirección</label>
-              <input id="direccion" name="direccion" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.direccion} onChange={handleChange} />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="telefono">Teléfono</label>
-              <input id="telefono" name="telefono" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.telefono} onChange={handleChange} />
-            </div>
-            <div>
-              <label className="text-sm font-semibold text-zinc-900" htmlFor="email">e-Mail</label>
-              <input id="email" name="email" type="email" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.email} onChange={handleChange} />
-            </div>
-          </div>
-
-          {/* Información del Servicio */}
+          {/* Información de la Empresa */}
           <div className="rounded-xl border border-zinc-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-[var(--brand-blue)] mb-4">Información del Servicio</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h2 className="text-lg font-semibold text-[var(--brand-blue)] mb-8">Información de la Empresa</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
               <div>
-                <label className="text-sm font-semibold text-zinc-900" htmlFor="personaContacto">Persona de Contacto</label>
-                <input id="personaContacto" name="personaContacto" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.personaContacto} onChange={handleChange} />
+                <label className="text-sm font-semibold text-zinc-900" htmlFor="nit">NIT <span className="text-red-600">*</span></label>
+                <input id="nit" name="nit" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.nit} onChange={handleChange} required />
               </div>
               <div>
-                <label className="text-sm font-semibold text-zinc-900" htmlFor="cargoContacto">Cargo</label>
-                <input id="cargoContacto" name="cargoContacto" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.cargoContacto} onChange={handleChange} />
+                <label className="text-sm font-semibold text-zinc-900" htmlFor="razonSocial">Razón Social <span className="text-red-600">*</span></label>
+                <input id="razonSocial" name="razonSocial" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.razonSocial} onChange={handleChange} required />
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-sm font-semibold text-zinc-900" htmlFor="nombreComercial">Nombre Comercial <span className="text-red-600">*</span></label>
+                <input id="nombreComercial" name="nombreComercial" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.nombreComercial} onChange={handleChange} required />
+                <div className="flex items-center mt-2">
+                  <input id="igualRazon" name="igualRazon" type="checkbox" className="mr-2" />
+                  <label htmlFor="igualRazon" className="text-xs text-zinc-600">El nombre comercial es igual a la razón social</label>
+                </div>
               </div>
               <div>
-                <label className="text-sm font-semibold text-zinc-900" htmlFor="telefonoContacto">Teléfono</label>
-                <input id="telefonoContacto" name="telefonoContacto" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.telefonoContacto} onChange={handleChange} />
+                <label className="text-sm font-semibold text-zinc-900" htmlFor="fechaInicio">Fecha Inicio Relación Comercial</label>
+                <input id="fechaInicio" name="fechaInicio" type="date" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.fechaInicio} onChange={handleChange} />
               </div>
               <div>
-                <label className="text-sm font-semibold text-zinc-900" htmlFor="emailContacto">e-Mail</label>
-                <input id="emailContacto" name="emailContacto" type="email" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.emailContacto} onChange={handleChange} />
+                <label className="text-sm font-semibold text-zinc-900" htmlFor="asesor">Asesor Comercial Asignado</label>
+                <select id="asesor" name="asesor" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.asesor} onChange={handleChange}>
+                  <option value="">...</option>
+                  <option value="Asesor 1">Asesor 1</option>
+                  <option value="Asesor 2">Asesor 2</option>
+                  <option value="Asesor 3">Asesor 3</option>
+                  <option value="Asesor 4">Asesor 4</option>
+                  <option value="Asesor 5">Asesor 5</option>
+                  <option value="Asesor 6">Asesor 6</option>
+                  <option value="Asesor 7">Asesor 7</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-sm font-semibold text-zinc-900" htmlFor="actividad">Actividad Económica <span className="text-red-600">*</span></label>
+                <input id="actividad" name="actividad" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.actividad} onChange={handleChange} required />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-semibold text-zinc-900 mb-2">Tipo Régimen IVA</label>
+                <div className="flex gap-8 items-center mt-2">
+                  <label className="flex items-center gap-2 text-xs text-zinc-900 font-normal">
+                    <input type="radio" name="regimenIva" value="responsable" checked={form.regimenIva === 'responsable'} onChange={handleChange} className="w-4 h-4 accent-[var(--brand-blue)]" /> Responsable de IVA
+                  </label>
+                  <label className="flex items-center gap-2 text-xs text-zinc-900 font-normal">
+                    <input type="radio" name="regimenIva" value="no_responsable" checked={form.regimenIva === 'no_responsable'} onChange={handleChange} className="w-4 h-4 accent-[var(--brand-blue)]" /> No responsable de IVA
+                  </label>
+                </div>
               </div>
             </div>
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Entrega del certificado</label>
-                <div className="flex flex-col gap-2 mt-2">
-                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" />Entregar en físico</label>
-                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" />Enviar x E-mail de la IPS</label>
-                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" />Tiene acceso a SIMEON</label>
-                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" />Envío automático</label>
+              {/* Responsabilidad Fiscal */}
+              <div className="mt-6">
+                <label className="text-sm font-semibold text-zinc-900">Responsabilidad Fiscal</label>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mt-2">
+                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="granContribuyente" checked={form.granContribuyente} onChange={handleChange} />Gran contribuyente</label>
+                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="autorretenedor" checked={form.autorretenedor} onChange={handleChange} />Autorretenedor</label>
+                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="agenteRetencion" checked={form.agenteRetencion} onChange={handleChange} />Agente de retención IVA</label>
+                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="simpleTributacion" checked={form.simpleTributacion} onChange={handleChange} />Régimen simple de tributación</label>
+                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" name="noAplica" checked={form.noAplica} onChange={handleChange} />No aplica - Otros</label>
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Entrega de resultados HC</label>
-                <div className="flex gap-4 mt-2">
-                  <label className="flex items-center gap-2 text-xs"><input type="radio" name="entregaHC" />Sí</label>
-                  <label className="flex items-center gap-2 text-xs"><input type="radio" name="entregaHC" />No</label>
+              {/* Ciudad, dirección, teléfono, email */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="ciudad">Ciudad <span className="text-red-600">*</span></label>
+                  <input id="ciudad" name="ciudad" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.ciudad} onChange={handleChange} required />
                 </div>
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Cliente entregó Perfil del Cargo</label>
-                <div className="flex gap-4 mt-2">
-                  <label className="flex items-center gap-2 text-xs"><input type="radio" name="perfilCargo" />Sí</label>
-                  <label className="flex items-center gap-2 text-xs"><input type="radio" name="perfilCargo" />No</label>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="direccion">Dirección</label>
+                  <input id="direccion" name="direccion" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.direccion} onChange={handleChange} />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="telefono">Teléfono</label>
+                  <input id="telefono" name="telefono" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.telefono} onChange={handleChange} />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="email">e-Mail</label>
+                  <input id="email" name="email" type="email" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.email} onChange={handleChange} />
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Información de Facturación */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-[var(--brand-blue)] mb-4">Información de Facturación</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="text-sm font-semibold text-zinc-900" htmlFor="personaFacturacion">Persona de Contacto</label>
-                <input id="personaFacturacion" name="personaFacturacion" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.personaFacturacion} onChange={handleChange} />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900" htmlFor="cargoFacturacion">Cargo</label>
-                <input id="cargoFacturacion" name="cargoFacturacion" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.cargoFacturacion} onChange={handleChange} />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900" htmlFor="telefonoFacturacion">Teléfono</label>
-                <input id="telefonoFacturacion" name="telefonoFacturacion" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.telefonoFacturacion} onChange={handleChange} />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900" htmlFor="emailFacturacion">e-Mail</label>
-                <input id="emailFacturacion" name="emailFacturacion" type="email" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" value={form.emailFacturacion} onChange={handleChange} />
-              </div>
-            </div>
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Fechas para radicación</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Soportes exigidos por el cliente</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
-              </div>
-            </div>
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Forma de pago</label>
-                <div className="flex gap-4 mt-2">
-                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" />Crédito</label>
-                  <label className="flex items-center gap-2 text-xs"><input type="checkbox" />Contado</label>
+            {/* Información del Servicio */}
+            <div className="rounded-xl border border-zinc-200 bg-white p-6">
+              <h2 className="text-lg font-semibold text-[var(--brand-blue)] mb-4">Información del Servicio</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="servicioPersonaContacto">Persona de Contacto</label>
+                  <input id="servicioPersonaContacto" name="servicioPersonaContacto" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="servicioCargo">Cargo</label>
+                  <input id="servicioCargo" name="servicioCargo" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="servicioTelefono">Teléfono</label>
+                  <input id="servicioTelefono" name="servicioTelefono" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="servicioEmail">e-Mail</label>
+                  <input id="servicioEmail" name="servicioEmail" type="email" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Plazo pago a crédito</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Usar solo tarifarios exclusivos</label>
-                <div className="flex gap-4 mt-2">
-                  <label className="flex items-center gap-2 text-xs"><input type="radio" name="tarifario" />Sí</label>
-                  <label className="flex items-center gap-2 text-xs"><input type="radio" name="tarifario" />No</label>
+              {/* Línea separadora eliminada */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <span className="block text-zinc-900 font-semibold mb-2">Entrega del certificado</span>
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-center gap-2 text-sm"><input type="checkbox" />Entregar en físico</label>
+                    <label className="flex items-center gap-2 text-sm"><input type="checkbox" />Enviar x E-mail de la IPS</label>
+                    <label className="flex items-center gap-2 text-sm"><input type="checkbox" />Tiene acceso a SIMEON</label>
+                    <label className="flex items-center gap-2 text-sm"><input type="checkbox" />Envío automático</label>
+                  </div>
+                </div>
+                <div>
+                  <span className="block text-zinc-900 font-semibold mb-2">Entrega de resultados HC</span>
+                  <div className="flex gap-4 mt-2">
+                    <label className="flex items-center gap-2 text-sm"><input type="radio" name="entregaHC" />Si</label>
+                    <label className="flex items-center gap-2 text-sm"><input type="radio" name="entregaHC" />No</label>
+                  </div>
+                </div>
+                <div>
+                  <span className="block text-zinc-900 font-semibold mb-2">Cliente entregó Perfil del Cargo</span>
+                  <div className="flex gap-4 mt-2">
+                    <label className="flex items-center gap-2 text-sm"><input type="radio" name="perfilCargo" />Si</label>
+                    <label className="flex items-center gap-2 text-sm"><input type="radio" name="perfilCargo" />No</label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Información Factura Salud */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-[var(--brand-blue)] mb-4">Información Factura Salud</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Tipo de Operación en Salud</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+            {/* Información de Facturación */}
+            <div className="rounded-xl border border-zinc-200 bg-white p-6">
+              <h2 className="text-lg font-semibold text-[var(--brand-blue)] mb-4">Información de Facturación</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="facturacionPersonaContacto">Persona de Contacto</label>
+                  <input id="facturacionPersonaContacto" name="facturacionPersonaContacto" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="facturacionCargo">Cargo</label>
+                  <input id="facturacionCargo" name="facturacionCargo" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="facturacionTelefono">Teléfono</label>
+                  <input id="facturacionTelefono" name="facturacionTelefono" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="facturacionEmail">e-Mail</label>
+                  <input id="facturacionEmail" name="facturacionEmail" type="email" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Modalidad de Pago</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+              {/* Línea separadora eliminada */}
+            </div>
+
+            {/* Información de Factura Salud */}
+            <div className="rounded-xl border border-zinc-200 bg-white p-6">
+              <h2 className="text-lg font-semibold text-[var(--brand-blue)] mb-4">Información Factura Salud</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="tipoOperacionSalud">Tipo de Operación en Salud</label>
+                  <select id="tipoOperacionSalud" name="tipoOperacionSalud" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent">
+                    <option value="">...</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="modalidadPago">Modalidad de Pago</label>
+                  <select id="modalidadPago" name="modalidadPago" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent">
+                    <option value="">...</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="coberturaPlan">Cobertura Plan de Beneficios</label>
+                  <select id="coberturaPlan" name="coberturaPlan" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent">
+                    <option value="">...</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="noContrato">No. Contrato</label>
+                  <input id="noContrato" name="noContrato" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="noPoliza">No. Póliza</label>
+                  <input id="noPoliza" name="noPoliza" type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Cobertura Plan de Beneficios</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">No. Contrato</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">No. Póliza</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
-              </div>
-              <div>
-                <label className="text-sm font-semibold text-zinc-900">Tipo Usuario en RIPS</label>
-                <input type="text" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="text-sm font-semibold text-zinc-900" htmlFor="tipoUsuarioRips">Tipo Usuario en RIPS</label>
+                  <select id="tipoUsuarioRips" name="tipoUsuarioRips" className="mt-2 w-full h-11 rounded-xl border border-zinc-200 px-3 text-sm outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent">
+                    <option value="">...</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
+
+
 
           {/* Información para Envíos automáticos */}
           <div className="rounded-xl border border-zinc-200 bg-white p-6">
             <h2 className="text-lg font-semibold text-[var(--brand-blue)] mb-4">Información para Envíos automáticos</h2>
-            <button type="button" className="mb-4 px-4 py-2 rounded-lg bg-green-600 text-white font-semibold flex items-center gap-2 hover:bg-green-700 transition-all">
-              + Agregar e-Mail
-            </button>
+            <div className="flex justify-end mb-4">
+              <button type="button" className="px-4 py-2 rounded-lg bg-green-600 text-white font-semibold flex items-center gap-2 hover:bg-green-700 transition-all">
+                + Agregar e-Mail
+              </button>
+            </div>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm border border-zinc-200 rounded-xl">
                 <thead className="bg-zinc-100">
@@ -301,8 +289,9 @@ export default function AgregarEmpresaPage() {
               Agregar Empresa
             </button>
           </div>
-        </form>
-      </section>
-    </div>
+          </form>
+        </section>
+      </div>
+    
   );
 }

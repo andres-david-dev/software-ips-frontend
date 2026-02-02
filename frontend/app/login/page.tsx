@@ -10,9 +10,8 @@ export default function Login() {
   const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [logoError, setLogoError] = useState(false);
-  const [numeroIdentificacion, setNumeroIdentificacion] = useState("");
+  const [email, setEmail] = useState("");
   const [contrasena, setContrasena] = useState("");
-  const [cargo, setCargo] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -81,55 +80,32 @@ export default function Login() {
               onSubmit={async (e) => {
                 e.preventDefault();
                 if (submitting) return;
-                if (!numeroIdentificacion.trim() || !contrasena.trim() || !cargo) {
-                  setError("Completa número de identificación, contraseña y cargo.");
+                if (!email.trim() || !contrasena.trim()) {
+                  setError("Completa email y contraseña.");
                   return;
                 }
 
                 setError("");
                 setSubmitting(true);
-
                 try {
-                  // Enviar las credenciales al backend para autenticar
-                  const res = await fetch("http://localhost:4000/api/usuarios/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      numeroIdentificacion: numeroIdentificacion.trim(),
-                      contrasena: contrasena.trim(),
-                      cargo: cargo
-                    }),
-                  });
-
-                  if (!res.ok) {
-                    const data = await res.json();
-                    setError(data.error || "Usuario o contraseña incorrectos");
-                    setSubmitting(false);
-                    return;
-                  }
-
-                  // Si la autenticación es exitosa
-                  const data = await res.json();
-
-                  // Autenticación con Supabase (email = numeroIdentificacion, password = contrasena)
-                  const { error: supabaseError } = await supabase.auth.signInWithPassword({
-                    email: data.email || numeroIdentificacion.trim(),
+                  // Autenticación directa con Supabase Auth
+                  const { data, error: supabaseError } = await supabase.auth.signInWithPassword({
+                    email: email.trim(),
                     password: contrasena.trim(),
                   });
                   if (supabaseError) {
-                    setError("Error autenticando con Supabase: " + supabaseError.message);
+                    if (supabaseError.message === "Email not confirmed") {
+                      setError("Debes confirmar tu correo electrónico antes de poder acceder. Revisa tu bandeja de entrada y haz clic en el enlace de confirmación.");
+                    } else {
+                      setError("Error autenticando con Supabase: " + supabaseError.message);
+                    }
                     setSubmitting(false);
                     return;
                   }
-
                   // Guardar sesión personalizada
                   document.cookie = `somedi_session=1; Path=/; SameSite=Lax;`;
-                  document.cookie = `usuario_id=${data.id}; Path=/; SameSite=Lax;`;
-                  document.cookie = `tipo_usuario=${data.tipo_usuario}; Path=/; SameSite=Lax;`;
-
-                  // Redirecionar según el tipo de usuario
-                  const redirectPath = data.tipo_usuario === "Médico" ? "/medico" : "/nuevo-servicio";
-                  router.push(redirectPath);
+                  // Redireccionar al dashboard o perfil
+                  router.push("/nuevo-servicio");
                   router.refresh();
                 } catch (err) {
                   setError("Error de conexión con el servidor");
@@ -138,20 +114,20 @@ export default function Login() {
               }}
             >
           <div className="relative">
-            <label htmlFor="numeroIdentificacion" className="sr-only">Número de Identificación</label>
+            <label htmlFor="email" className="sr-only">Correo electrónico</label>
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.418 0-8 2.239-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.761-3.582-5-8-5Z" fill="#9ca3af" />
+                <path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0v.01L12 13l8-6.99V6H4Zm16 2.236-7.447 6.49a2 2 0 0 1-2.106 0L4 8.236V18h16V8.236Z" fill="#9ca3af" />
               </svg>
             </span>
             <input
-              id="numeroIdentificacion"
-              name="numeroIdentificacion"
-              type="text"
-              placeholder="Número de identificación"
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Correo electrónico"
               autoComplete="username"
-              value={numeroIdentificacion}
-              onChange={(e) => setNumeroIdentificacion(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full h-12 pl-10 pr-4 rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
             />
           </div>
@@ -191,25 +167,7 @@ export default function Login() {
             </button>
           </div>
 
-          <div className="relative">
-            <label htmlFor="cargo" className="sr-only">Cargo</label>
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 4h14v2H5zM5 18h14v2H5zM9 9h10v2H9zM9 13h10v2H9zM5 9h2v2H5zM5 13h2v2H5z" fill="#9ca3af" />
-              </svg>
-            </span>
-            <select
-              id="cargo"
-              name="cargo"
-              value={cargo}
-              onChange={(e) => setCargo(e.target.value)}
-              className="w-full h-12 pl-10 pr-4 rounded-xl border border-zinc-200 bg-white text-zinc-800 focus:outline-none focus:ring-2 focus:ring-[var(--brand-blue)] focus:border-transparent"
-            >
-              <option value="">Selecciona tu cargo</option>
-              <option value="medico">Médico</option>
-              <option value="administrador">Administrador</option>
-            </select>
-          </div>
+          {/* Eliminado campo de cargo para login solo con email y contraseña */}
 
           {error && (
             <p className="text-sm text-red-600">{error}</p>
