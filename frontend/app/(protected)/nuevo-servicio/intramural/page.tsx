@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useWizard } from "@/context/WizardContext";
 import { useRouter } from "next/navigation";
 import Fuse from "fuse.js";
 
@@ -2445,15 +2446,8 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
   const router = useRouter();
   const [showBanner, setShowBanner] = useState(true);
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(defaultStep);
-  
-  // Paso 1 state
-  const [paso1, setPaso1] = useState<Paso1Data>({
-    tipoIdentificacion: "",
-    numeroIdentificacion: "",
-  });
+  const { wizardData, setWizardData } = useWizard();
   const [touchedPaso1, setTouchedPaso1] = useState(false);
-
-  // Paso 2 state
   const [paso2, setPaso2] = useState<Paso2Data>({
     primerNombre: "",
     segundoNombre: "",
@@ -2509,7 +2503,7 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
     [],
   );
 
-  const isValidPaso1 = Boolean(paso1.tipoIdentificacion) && paso1.numeroIdentificacion.trim().length >= 4;
+  const isValidPaso1 = Boolean(wizardData.tipoDocumento) && wizardData.numeroIdentificacion.trim().length >= 4;
   const isValidPaso2 =
     paso2.primerNombre.trim().length >= 2 &&
     paso2.primerApellido.trim().length >= 2 &&
@@ -2565,26 +2559,21 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="tipoIdentificacion" className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                  <label htmlFor="tipoDocumento" className="text-sm font-bold text-zinc-900 flex items-center gap-2">
                     Tipo de Identificación
                     <span className="text-rose-600">*</span>
                   </label>
                   <div className="relative">
                     <select
-                      id="tipoIdentificacion"
-                      name="tipoIdentificacion"
-                      value={paso1.tipoIdentificacion}
-                      onChange={(e) => {
-                        setPaso1({
-                          ...paso1,
-                          tipoIdentificacion: e.target.value as TipoIdentificacion,
-                        });
-                      }}
+                      id="tipoDocumento"
+                      name="tipoDocumento"
+                      value={wizardData.tipoDocumento}
+                      onChange={(e) => setWizardData((prev) => ({ ...prev, tipoDocumento: e.target.value }))}
                       className={cn(
                         "w-full h-12 rounded-xl border-2 bg-white px-4 pr-10 text-sm text-zinc-900 outline-none appearance-none font-medium transition-all duration-200",
                         "focus:ring-2 focus:ring-[rgb(var(--brand-blue-rgb)/0.3)] focus:border-[var(--brand-blue)] focus:shadow-md",
                         "hover:border-[var(--brand-blue)]/30",
-                        touchedPaso1 && !paso1.tipoIdentificacion 
+                        touchedPaso1 && !wizardData.tipoDocumento 
                           ? "border-rose-400 bg-rose-50" 
                           : "border-zinc-300",
                       )}
@@ -2607,7 +2596,7 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                   <p className="text-xs text-zinc-600 italic">
                     Selecciona cédula, pasaporte u otro documento válido
                   </p>
-                  {touchedPaso1 && !paso1.tipoIdentificacion && (
+                  {touchedPaso1 && !wizardData.tipoDocumento && (
                     <InlineError message="Por favor, selecciona el tipo de identificación." />
                   )}
                 </div>
@@ -2623,10 +2612,10 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                     inputMode="numeric"
                     pattern="[0-9]*"
                     placeholder="Ej: 1109542604"
-                    value={paso1.numeroIdentificacion}
+                    value={wizardData.numeroIdentificacion}
                     onChange={(e) => {
                       const onlyDigits = e.target.value.replace(/\D+/g, "");
-                      setPaso1({ ...paso1, numeroIdentificacion: onlyDigits });
+                      setWizardData((prev) => ({ ...prev, numeroIdentificacion: onlyDigits }));
                     }}
                     onKeyDown={(e) => {
                       const allowed = [
@@ -2638,7 +2627,7 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                         "Home",
                         "End",
                       ];
-                      if (e.ctrlKey || e.metaKey) return; // permitir copiar/pegar, seleccionar todo
+                      if (e.ctrlKey || e.metaKey) return;
                       const isDigit = /[0-9]/.test(e.key);
                       const isAllowed = allowed.includes(e.key);
                       if (!isDigit && !isAllowed) {
@@ -2652,25 +2641,25 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
                       const start = target.selectionStart ?? target.value.length;
                       const end = target.selectionEnd ?? target.value.length;
                       const next = target.value.slice(0, start) + text + target.value.slice(end);
-                      setPaso1({ ...paso1, numeroIdentificacion: next });
+                      setWizardData((prev) => ({ ...prev, numeroIdentificacion: next }));
                     }}
                     className={cn(
                       "w-full h-12 rounded-xl border-2 px-4 outline-none transition-all duration-200 font-medium",
                       "focus:ring-2 focus:ring-[rgb(var(--brand-blue-rgb)/0.3)] focus:border-[var(--brand-blue)] focus:shadow-md",
                       "hover:border-[var(--brand-blue)]/30",
-                      touchedPaso1 && !paso1.numeroIdentificacion.trim()
+                      touchedPaso1 && !wizardData.numeroIdentificacion.trim()
                         ? "border-rose-400 bg-rose-50"
-                        : touchedPaso1 && paso1.numeroIdentificacion.trim().length > 0 && paso1.numeroIdentificacion.trim().length < 4
+                        : touchedPaso1 && wizardData.numeroIdentificacion.trim().length > 0 && wizardData.numeroIdentificacion.trim().length < 4
                           ? "border-amber-400 bg-amber-50"
                           : "border-zinc-300 bg-white",
                     )}
                   />
-                  {touchedPaso1 && !paso1.numeroIdentificacion.trim() && (
+                  {touchedPaso1 && !wizardData.numeroIdentificacion.trim() && (
                     <InlineError message="Por favor, ingresa el número de identificación." />
                   )}
                   {touchedPaso1 &&
-                    paso1.numeroIdentificacion.trim().length > 0 &&
-                    paso1.numeroIdentificacion.trim().length < 4 && (
+                    wizardData.numeroIdentificacion.trim().length > 0 &&
+                    wizardData.numeroIdentificacion.trim().length < 4 && (
                       <InlineError message="Mínimo 4 caracteres requeridos." />
                     )}
                   <p className="text-xs text-zinc-600 italic">Sin puntos ni guiones.</p>
@@ -2705,7 +2694,10 @@ export function IntramuralWizard({ defaultStep = 1 }: { defaultStep?: 1 | 2 | 3 
         {currentStep === 2 && (
           <Paso2Form
             data={paso2}
-            paso1={paso1}
+            paso1={{
+              tipoIdentificacion: wizardData.tipoDocumento as TipoIdentificacion,
+              numeroIdentificacion: wizardData.numeroIdentificacion,
+            }}
             touched={touchedPaso2}
             isValid={isValidPaso2}
             onBack={() => {
